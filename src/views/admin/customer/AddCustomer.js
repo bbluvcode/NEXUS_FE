@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React from 'react'
 
-const StocksList = () => {
+const AddCustomer = () => {
   return (
-    <div>StocksList</div>
+    <div>AddCustomer</div>
   )
 }
 
-export default StocksList
+export default AddCustomer

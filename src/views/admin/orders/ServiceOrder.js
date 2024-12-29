@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react'
 
 const ServiceOrder = () => {
@@ -6,4 +7,5 @@ const ServiceOrder = () => {
   )
 }
 
+// eslint-disable-next-line prettier/prettier
 export default ServiceOrder

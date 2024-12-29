@@ -1,10 +1,25 @@
-import { element } from 'prop-types'
+import { element, exact } from 'prop-types'
 import React from 'react'
 
 //=================================================================================
 //ADMIN START
 //=================================================================================
+//customer
+const CustomerList = React.lazy(() => import('../views/admin/customer/CustomerList'))
+const CustomerDetail = React.lazy(() => import('../views/admin/customer/CustomerDetail'))
+const CustomerRequest = React.lazy(() => import('../views/admin/customer/CustomerRequest'))
+const UpdateCustomer = React.lazy(() => import('../views/admin/customer/UpdateCustomer'))
+const AddCustomer = React.lazy(() => import('../views/admin/customer/AddCustomer'))
+const SupportRequest = React.lazy(() => import('../views/admin/customer/SupportRequest'))
+const Feedbacks = React.lazy(() => import('../views/admin/customer/Feedbacks'))
+//employee
+
+//order
+const ConnectionList = React.lazy(() => import('../views/admin/connections/ConnectionList'))
+const ServiceOrder = React.lazy(() => import('../views/admin/orders/ServiceOrder'))
 const ServiceBillList = React.lazy(() => import('../views/admin/bills/ServiceBillList'))
+const Discount = React.lazy(() => import('../views/admin/discount/Discount'))
+//stock
 
 //=================================================================================
 //ADMIN END
@@ -69,10 +84,24 @@ const Widgets = React.lazy(() => import('../views/template/widgets/Widgets'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/servicebill', exact: true, name: 'ServiceBill', element: ServiceBillList },
+  //customer
+  { path: '/AddCustomer', exact: true, name: 'AddCustomer', element: AddCustomer },
+  { path: '/CustomerDetail', exact: true, name: 'CustomerDetail', element: CustomerDetail },
+  { path: '/CustomerList', exact: true, name: 'CustomerList', element: CustomerList },
+  { path: '/CustomerRequest', exact: true, name: 'CustomerRequest', element: CustomerRequest },
+  { path: '/CustomerRequest', exact: true, name: 'CustomerRequest', element: CustomerRequest },
+  { path: '/UpdateCustomer', exact: true, name: 'UpdateCustomer', element: UpdateCustomer },
+  { path: '/Feedbacks', exact: true, name: 'Feedbacks', element: Feedbacks },
+  { path: '/SupportRequest', exact: true, name: 'SupportRequest', element: SupportRequest },
+
+  //order
+  { path: '/ConnectionList', exact: true, name: 'ConnectionList', element: ConnectionList },
+  { path: '/ServiceOrder', exact: true, name: 'ServiceOrder', element: ServiceOrder },
+  { path: '/ServiceBillList', exact: true, name: 'ServiceBillList', element: ServiceBillList },
+  { path: '/Discount', exact: true, name: 'Discount', element: Discount },
   //=================================================================================
-//TEMPLATE
-//=================================================================================
+  //TEMPLATE
+  //=================================================================================
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },

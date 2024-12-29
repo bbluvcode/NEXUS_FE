@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React from 'react'
 
-const StocksList = () => {
+const Discount = () => {
   return (
-    <div>StocksList</div>
+    <div>Discount</div>
   )
 }
 
-export default StocksList
+export default Discount
