@@ -65,6 +65,24 @@ const _nav = [
     name: 'Customer',
   },
   {
+    component: CNavGroup,
+    name: 'Action',
+    to: '/admin',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'AddCustomer',
+        to: '/admin/AddCustomer',
+      },
+      {
+        component: CNavItem,
+        name: 'CustomerDetail',
+        to: '/admin/CustomerDetail',
+      },
+    ],
+  },
+  {
     component: CNavItem,
     name: 'CustomerList',
     to: '/admin/CustomerList',
@@ -88,24 +106,15 @@ const _nav = [
     to: '/admin/Feedbacks',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   },
-  {
-    component: CNavGroup,
-    name: 'Action',
-    to: '/admin/base',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'AddCustomer',
-        to: '/admin/AddCustomer',
-      },
-      {
-        component: CNavItem,
-        name: 'CustomerDetail',
-        to: '/admin/CustomerDetail',
-      },
-    ],
-  },
+
+  //employee
+  //plan
+  //equipment
+  //connection
+  //others
+  //retainshop
+  //stock
+  //vendor
 ]
 // const _nav = [
 //   {

@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React from 'react'
 
-const EquimentType = () => {
+const Region = () => {
   return (
-    <div>EquimentType</div>
+    <div>Region</div>
   )
 }
 
-export default EquimentType
+export default Region
