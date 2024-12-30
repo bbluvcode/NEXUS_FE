@@ -7,6 +7,10 @@ import './scss/style.scss'
 
 // We use those styles to show code examples, you should remove them in your application.
 import './scss/examples.scss'
+import './style/BinhStyle.css'
+import './style/HuyStyle.css'
+import './style/NhatStyle.css'
+import './style/ManStyle.css'
 
 // Containers
 const AdminLayout = React.lazy(() => import('./layout/AdminLayout'))
