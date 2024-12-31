@@ -10,7 +10,7 @@ import './scss/examples.scss'
 
 // Containers
 const AdminLayout = React.lazy(() => import('./layout/AdminLayout'))
-
+//mandacomment
 // Pages
 const Login = React.lazy(() => import('./views/pages/login/Login'))
 const Register = React.lazy(() => import('./views/pages/register/Register'))

@@ -30,7 +30,7 @@ const ServiceOrder = React.lazy(() => import('../views/admin/orders/ServiceOrder
 //connection
 const ConnectionList = React.lazy(() => import('../views/admin/connections/ConnectionList'))
 const AddConnection = React.lazy(() => import('../views/admin/connections/AddConnection'))
-const UpdateConnection = React.lazy(() => import('../views/admin/connections/UpdateConnection'))
+// const UpdateConnection = React.lazy(() => import('../views/admin/connections/UpdateConnection'))
 
 //bill
 const ServiceBillList = React.lazy(() => import('../views/admin/bills/ServiceBillList'))
@@ -72,6 +72,9 @@ const Dashboard = React.lazy(() => import('../views/template/dashboard/Dashboard
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
+  { path: '/dashboard', name: 'Dashboard', element: Dashboard },
+  // { path: '/', exact: true, name: '', element:  },
+
   //customer
   { path: '/Account', exact: true, name: 'Account', element: Account },
   { path: '/AddCustomer', exact: true, name: 'AddCustomer', element: AddCustomer },
@@ -100,16 +103,37 @@ const routes = [
   { path: '/ServiceBillList', exact: true, name: 'ServiceBillList', element: ServiceBillList },
   { path: '/Discount', exact: true, name: 'Discount', element: Discount },
   //equipment
+  { path: '/AddEquipment', exact: true, name: 'AddEquipment', element: AddEquipment },
+  { path: '/EquipmentList', exact: true, name: 'EquipmentList', element: EquipmentList },
+  { path: '/AddEmployee', exact: true, name: 'AddEmployee', element: AddEmployee },
+  { path: '/EquipmentType', exact: true, name: 'EquipmentType', element: EquipmentType },
 
   //connection
+  { path: '/AddConnection', exact: true, name: 'AddConnection', element: AddConnection },
+
   //others
+  { path: '/Region', exact: true, name: 'Region', element: Region },
+  { path: '/NewsList', exact: true, name: 'NewsList', element: NewsList },
+
   //retainshop
+  { path: '/AddRetainShop', exact: true, name: 'AddRetainShop', element: AddRetainShop },
+  { path: '/RetainShopList', exact: true, name: 'RetainShopList', element: RetainShopList },
+  { path: '/UpdateRetainShop', exact: true, name: 'UpdateRetainShop', element: UpdateRetainShop },
+
   //stock
+  { path: '/InStockOrder', exact: true, name: 'InStockOrder', element: InStockOrder },
+  { path: '/OutStockOrder', exact: true, name: 'OutStockOrder', element: OutStockOrder },
+  { path: '/StockList', exact: true, name: 'StockList', element: StockList },
+  { path: '/StockRequest', exact: true, name: 'StockRequest', element: StockRequest },
+
   //vendor
+  { path: '/AddVendor', exact: true, name: 'AddVendor', element: AddVendor },
+  { path: '/UpdateVendor', exact: true, name: 'UpdateVendor', element: UpdateVendor },
+  { path: '/VendorList', exact: true, name: 'VendorList', element: VendorList },
+
   //=================================================================================
   //TEMPLATE
   //=================================================================================
-  { path: '/dashboard', name: 'Dashboard', element: Dashboard },
 ]
 
 export default routes
