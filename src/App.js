@@ -14,7 +14,7 @@ import './style/ManStyle.css'
 
 // Containers
 const AdminLayout = React.lazy(() => import('./layout/AdminLayout'))
-//mandacomment
+
 // Pages
 const Login = React.lazy(() => import('./views/pages/login/Login'))
 const Register = React.lazy(() => import('./views/pages/register/Register'))
@@ -35,8 +35,7 @@ const App = () => {
     if (isColorModeSet()) {
       return
     }
-    //test Push 1
-    //test Push 2
+
     setColorMode(storedTheme)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   // eslint-disable-line react-hooks/exhaustive-deps
