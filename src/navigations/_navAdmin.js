@@ -1,6 +1,7 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
+  cilAirplay,
   cilBell,
   cilCalculator,
   cilChartPie,
@@ -43,7 +44,6 @@ const _nav = [
     to: '/admin/ServiceOrder',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   },
-
   {
     component: CNavTitle,
     name: 'Bill Payment',
@@ -108,12 +108,161 @@ const _nav = [
   },
 
   //employee
+  {
+    component: CNavTitle,
+    name: 'Employee Payment',
+  },
+  {
+    component: CNavItem,
+    name: 'EmployeeType',
+    to: '/admin/EmployeeType',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'EmployeeList',
+    to: '/admin/EmployeeList',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'EmployeeDetail',
+    to: '/admin/EmployeeDetail',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'AddEmployee',
+    to: '/admin/AddEmployee',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
+
   //plan
+  {
+    component: CNavTitle,
+    name: ' PLAN',
+  },
+  {
+    component: CNavItem,
+    name: 'PlanList',
+    to: '/admin/PlanList',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'UpdatePlan',
+    to: '/admin/UpdatePlan',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'AddPlan',
+    to: '/admin/AddPlan',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
   //equipment
+  {
+    component: CNavTitle,
+    name: ' equipment',
+  },
+  {
+    component: CNavItem,
+    name: 'AddEquipment',
+    to: '/admin/AddEquipment',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'EquipmentList',
+    to: '/admin/EquipmentList',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'EquipmentType',
+    to: '/admin/EquipmentType',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
   //connection
+  {
+    component: CNavTitle,
+    name: 'connection',
+  },
+  {
+    component: CNavItem,
+    name: 'ConnectionList',
+    to: '/admin/ConnectionList',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'AddConnection',
+    to: '/admin/AddConnection',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
   //others
+  {
+    component: CNavTitle,
+    name: 'others',
+  },
+  {
+    component: CNavItem,
+    name: 'Region',
+    to: '/admin/Region',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'NewsList',
+    to: '/admin/NewsList',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
   //retainshop
+  {
+    component: CNavTitle,
+    name: 'retainshop',
+  },
+  {
+    component: CNavItem,
+    name: 'AddRetainShop',
+    to: '/admin/AddRetainShop',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'RetainShopList',
+    to: '/admin/RetainShopList',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
   //stock
+  {
+    component: CNavTitle,
+    name: 'stock',
+  },
+  {
+    component: CNavItem,
+    name: 'StockList',
+    to: '/admin/StockList',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'OutStockOrder',
+    to: '/admin/OutStockOrder',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'InStockOrder',
+    to: '/admin/InStockOrder',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'StockRequest',
+    to: '/admin/StockRequest',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
   //vendor
 ]
 // const _nav = [
