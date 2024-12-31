@@ -31,6 +31,7 @@ const App = () => {
     if (isColorModeSet()) {
       return
     }
+    //test Push 1
     //test Push 2
     setColorMode(storedTheme)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
