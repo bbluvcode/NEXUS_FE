@@ -29,22 +29,58 @@ const data = [
 
 const EmployeesList = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("name");
+  const [agencies, setAgencies] = useState(data);
 
-  const handleSearchClick = () => {
-    setIsSearchVisible((prev) => !prev);
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value.toLowerCase());
   };
 
   const handleSortChange = (event) => {
     setSortOption(event.target.value);
   };
 
+  const toggleStatus = (agencyName, userName) => {
+    const updatedAgencies = agencies.map((agency) => {
+      if (agency.agency === agencyName) {
+        return {
+          ...agency,
+          users: agency.users.map((user) =>
+            user.name === userName
+              ? { ...user, status: user.status === "active" ? "inactive" : "active" }
+              : user
+          ),
+        };
+      }
+      return agency;
+    });
+    setAgencies(updatedAgencies);
+  };
+
+  const filteredAgencies = agencies.map((agency) => ({
+    ...agency,
+    users: agency.users.filter((user) =>
+      user.name.toLowerCase().includes(searchTerm)
+    ),
+  }));
+
   return (
     <div className={styles.container}>
-      <SearchBar isSearchVisible={isSearchVisible} handleSearchClick={handleSearchClick} />
+      <SearchBar
+        isSearchVisible={isSearchVisible}
+        handleSearchClick={() => setIsSearchVisible((prev) => !prev)}
+        handleSearchChange={handleSearchChange}
+      />
       <SortDropdown handleSortChange={handleSortChange} />
-      {data.map((agency) => (
-        <AgencySection key={agency.agency} agency={agency} sortOption={sortOption} />
+      {filteredAgencies.map((agency) => (
+        <AgencySection
+          key={agency.agency}
+          agencyName={agency.agency}
+          users={agency.users}
+          sortOption={sortOption}
+          toggleStatus={toggleStatus}
+        />
       ))}
     </div>
   );

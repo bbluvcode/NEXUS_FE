@@ -101,7 +101,7 @@
 }
 
 .agency h2 {
-    margin-bottom: 10px;
+    margin: 30px 0px 30px 0px;
 }
 
 /* Cards Wrapper */
@@ -113,28 +113,60 @@
 
 /* Card Item */
 .card {
-    width: 150px;
-    padding: 10px;
-    border-radius: 8px;
+    width: 200px;
+    height: 260px;
+    padding: 20px;
+    border: 1px solid #ddd; /* Viền nhẹ giống tập hồ sơ */
+    border-radius: 12px; /* Bo góc mềm mại */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng tạo chiều sâu */
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    transition: transform 0.3s;
-}
+    background: #fff; /* Nền trắng giống giấy */
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .card::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 6px;
+    background: #007bff; /* Màu header hoặc nhấn mạnh */
+    border-radius: 3px;
+  }
+  
+  .card:hover {
+    transform: translateY(-10px); /* Hiệu ứng nhấc lên */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng đậm hơn */
+  }
 
-.card:hover {
-    transform: translateY(-5px);
+.card .name{
+    font-family: Arial, sans-serif;
+    padding-bottom: 5px;
 }
 
 /* Active/Inactive Status */
 .active {
-    background-color: #d4edda;
+    background-color: #9afcb0;
     border: 1px solid #c3e6cb;
 }
 
 .inactive {
-    background-color: #f8d7da;
+    background-color: #ffb6bc;
+    border: 1px solid #f5c6cb;
+}
+.active:hover {
+    background-color: #44fd6c;
+    border: 1px solid #c3e6cb;
+}
+
+.inactive:hover {
+    background-color: #ff5a67;
     border: 1px solid #f5c6cb;
 }
 
@@ -167,7 +199,7 @@
     display: inline-block;
     font-size: 15px;
     line-height: 15px;
-    padding: 10px 40px; /* Tăng chiều ngang bằng cách chỉnh sửa padding bên trái và bên phải */
+    padding: 20px 50px; /* Tăng chiều ngang bằng cách chỉnh sửa padding bên trái và bên phải */
     text-decoration: none;
     cursor: pointer;
     background: #fff;
@@ -175,6 +207,7 @@
     -webkit-user-select: none;
     touch-action: manipulation;
     border-radius: 100px;
+    height: 50px;
   }
   
   .buttonStActive {
@@ -234,4 +267,42 @@
     opacity: 1;
     transition: all 900ms cubic-bezier(0.48, 0, 0.12, 1);
   }
+  .customselect {
+    min-width: 350px;
+    position: relative;
+  }
   
+  .customselect select {
+    appearance: none;
+    width: 100%;
+    font-size: 1.15rem;
+    padding: 0.675em 6em 0.675em 1em;
+    background-color: #fff;
+    border: 1px solid #caced1;
+    border-radius: 0.25rem;
+    color: #000;
+    cursor: pointer;
+  }
+  
+  .customselect::before,
+  .customselect::after {
+    --size: 0.3rem;
+    content: "";
+    position: absolute;
+    right: 1rem;
+    pointer-events: none;
+  }
+  
+  .customselect::before {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-bottom: var(--size) solid black;
+    top: 40%;
+  }
+  
+  .customselect::after {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-top: var(--size) solid black;
+    top: 55%;
+  }

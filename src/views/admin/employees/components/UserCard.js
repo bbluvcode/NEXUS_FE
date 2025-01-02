@@ -5,21 +5,22 @@
 import React from "react";
 import styles from "../../../../style/ManStyle.module.css";
 
-const UserCard = ({ user }) => (
-    <div
-        className={`${styles.card} ${user.status === "active" ? styles.active : styles.inactive}`}
+const UserCard = ({ user, toggleStatus }) => (
+  <div
+    className={`${styles.card} ${user.status === "active" ? styles.active : styles.inactive}`}
+  >
+    <div className={styles.image}></div>
+    <div className={styles.name}>{user.name}</div>
+    <select className={styles.role}>
+      <option>{user.role}</option>
+    </select>
+    <button
+      className={`${styles.buttonSt} ${user.status === "active" ? styles.buttonStActive : styles.buttonStInactive}`}
+      onClick={toggleStatus}
     >
-        <div className={styles.image}></div>
-        <p>{user.name}</p>
-        <select className={styles.role}>
-            <option>{user.role}</option>
-        </select>
-        <button
-            className={`${styles.buttonSt} ${user.status === "active" ? styles.buttonStActive : styles.buttonStInactive}`}
-        >
-            <span>Deactivate</span> {/* Chỉ hiển thị "Alternate text" */}
-        </button>
-    </div>
+        <span>{user.status === "active" ? "Deactivate" : "Activate"}</span> 
+    </button>
+  </div>
 );
 
 export default UserCard;
