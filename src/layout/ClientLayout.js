@@ -1,8 +1,9 @@
+/* eslint-disable prettier/prettier */
 import React from 'react'
 
 const ClientLayout = () => {
   return (
-    <div>ClientLayout</div>
+   <div>abc</div>
   )
 }
 
