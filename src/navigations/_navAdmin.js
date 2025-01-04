@@ -234,6 +234,23 @@ const _nav = [
     to: '/admin/RetainShopList',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   },
+  //vendor
+  {
+    component: CNavTitle,
+    name: 'vendor',
+  },
+  {
+    component: CNavItem,
+    name: 'AddVendor',
+    to: '/admin/AddVendor',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'VendorList',
+    to: '/admin/VendorList',
+    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  },
   //stock
   {
     component: CNavTitle,
