@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
-// import { configureStore } from "@reduxjs/toolkit";
-// import productReducer from "./productSlice";
+import { configureStore } from "@reduxjs/toolkit";
+import customerReducer from "./customerSlice";
 
-// const myStore = configureStore({
-//     reducer:{
-//         products:productReducer
-//     }
-// })
-// export default myStore;
+const myStore = configureStore({
+    reducer:{
+        customers:customerReducer
+    }
+})
+export default myStore;
