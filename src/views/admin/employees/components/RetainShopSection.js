@@ -3,8 +3,8 @@ import UserCard from './UserCard'
 import styles from '../../../../style/ManStyle.module.css'
 import PropTypes from 'prop-types'
 
-const RetainshopSection = ({
-  retainshopName,
+const RetailshopSection = ({
+  retailshopName,
   employees,
   sortOption,
   toggleStatus,
@@ -37,8 +37,8 @@ const RetainshopSection = ({
 
   return (
     <div className={styles.agency}>
-      <div className={styles.retainshopHeader}>
-        <h2 style={{ color: titleColor }}>{retainshopName}</h2>
+      <div className={styles.retailshopHeader}>
+        <h2 style={{ color: titleColor }}>{retailshopName}</h2>
         <button className={styles.colorPickerButton}>
           <input
             type="color"
@@ -55,7 +55,7 @@ const RetainshopSection = ({
             key={employee.employeeId}
             user={employee}
             roles={roles} // Truyền danh sách roles
-            toggleStatus={() => toggleStatus(retainshopName, employee)}
+            toggleStatus={() => toggleStatus(retailshopName, employee)}
             onUpdateRole={onUpdateRole} // Gọi hàm xử lý khi thay đổi role
           />
         ))}
@@ -64,8 +64,8 @@ const RetainshopSection = ({
   )
 }
 
-RetainshopSection.propTypes = {
-  retainshopName: PropTypes.string.isRequired,
+RetailshopSection.propTypes = {
+  retailshopName: PropTypes.string.isRequired,
   employees: PropTypes.array.isRequired,
   sortOption: PropTypes.string.isRequired,
   toggleStatus: PropTypes.func.isRequired,
@@ -73,4 +73,4 @@ RetainshopSection.propTypes = {
   onUpdateRole: PropTypes.func.isRequired,
 }
 
-export default RetainshopSection
+export default RetailshopSection

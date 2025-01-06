@@ -2,16 +2,16 @@
 import React, { useState, useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import SortDropdown from "./components/SortDropdown";
-import RetainShopSection from "./components/RetainShopSection";
+import RetailShopSection from "./components/RetailShopSection";
 import styles from "../../../style/ManStyle.module.css";
-import { getAllRetainShops } from "../../../services/retainShopSerivce";
+import { getAllRetailShops } from "../../../services/retailShopSerivce";
 import { getAllEmployeeRoles, getAllEmployees, updateRole, toggleEmployeeStatus } from "../../../services/employeeService";
 
 const EmployeesList = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("name");
-  const [retainShopData, setRetainShopData] = useState([]);
+  const [retailShopData, setRetailShopData] = useState([]);
   const [employeeData, setEmployeeData] = useState([]);
   const [originalEmployeeData, setOriginalEmployeeData] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -22,14 +22,14 @@ const EmployeesList = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const [retainShopsResponse, employeesResponse, rolesResponse] = await Promise.all([
-          getAllRetainShops(),
+        const [retailShopsResponse, employeesResponse, rolesResponse] = await Promise.all([
+          getAllRetailShops(),
           getAllEmployees(),
           getAllEmployeeRoles(),
         ]);
 
         const employees = employeesResponse.data || [];
-        setRetainShopData(retainShopsResponse.data || []);
+        setRetailShopData(retailShopsResponse.data || []);
         setEmployeeData(employees); // Lưu dữ liệu employees vào state
         setOriginalEmployeeData(JSON.parse(JSON.stringify(employees))); // Tạo bản sao gốc của dữ liệu employees
         setRoles(rolesResponse.data || []);
@@ -53,7 +53,7 @@ const EmployeesList = () => {
   };
    
 
-  const toggleStatus = async (retainshopName, employee) => {
+  const toggleStatus = async (retailshopName, employee) => {
     try {
       const updatedEmployee = await toggleEmployeeStatus(employee.employeeId);
 
@@ -129,10 +129,10 @@ const EmployeesList = () => {
   };
 
 
-  const groupedData = retainShopData.map((shop) => ({
+  const groupedData = retailShopData.map((shop) => ({
     ...shop,
     employees: employeeData
-      .filter((employee) => employee.retainShopId === shop.retainShopId)
+      .filter((employee) => employee.retailShopId === shop.retailShopId)
       .map((employee) => {
         const originalEmployee = originalEmployeeData.find(
           (original) => original.employeeId === employee.employeeId
@@ -185,9 +185,9 @@ const EmployeesList = () => {
       <SortDropdown handleSortChange={handleSortChange} />
       {groupedData.length > 0 ? (
         groupedData.map((shop) => (
-          <RetainShopSection
-            key={shop.retainShopId}
-            retainshopName={shop.retainShopName}
+          <RetailShopSection
+            key={shop.retailShopId}
+            retailshopName={shop.retailShopName}
             employees={shop.employees}
             roles={roles}
             sortOption={sortOption}

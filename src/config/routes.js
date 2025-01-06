@@ -46,10 +46,10 @@ const EquipmentType = React.lazy(() => import('../views/admin/equiments/Equipmen
 const Region = React.lazy(() => import('../views/admin/others/Region'))
 const NewsList = React.lazy(() => import('../views/admin/others/NewsList'))
 
-//retainshop
-const AddRetainShop = React.lazy(() => import('../views/admin/retainshop/AddRetainShop'))
-const RetainShopList = React.lazy(() => import('../views/admin/retainshop/RetainShopList'))
-const UpdateRetainShop = React.lazy(() => import('../views/admin/retainshop/UpdateRetainShop'))
+//retailshop
+const AddRetailShop = React.lazy(() => import('../views/admin/retailshop/AddRetailShop'))
+const RetailShopList = React.lazy(() => import('../views/admin/retailshop/RetailShopList'))
+const UpdateRetailShop = React.lazy(() => import('../views/admin/retailshop/UpdateRetailShop'))
 
 //stock
 const InStockOrder = React.lazy(() => import('../views/admin/stocks/InStockOrder'))
@@ -115,10 +115,10 @@ const routes = [
   { path: '/Region', exact: true, name: 'Region', element: Region },
   { path: '/NewsList', exact: true, name: 'NewsList', element: NewsList },
 
-  //retainshop
-  { path: '/AddRetainShop', exact: true, name: 'AddRetainShop', element: AddRetainShop },
-  { path: '/RetainShopList', exact: true, name: 'RetainShopList', element: RetainShopList },
-  { path: '/UpdateRetainShop', exact: true, name: 'UpdateRetainShop', element: UpdateRetainShop },
+  //retailshop
+  { path: '/AddRetailShop', exact: true, name: 'AddRetailShop', element: AddRetailShop },
+  { path: '/RetailShopList', exact: true, name: 'RetailShopList', element: RetailShopList },
+  { path: '/UpdateRetailShop', exact: true, name: 'UpdateRetailShop', element: UpdateRetailShop },
 
   //stock
   { path: '/InStockOrder', exact: true, name: 'InStockOrder', element: InStockOrder },

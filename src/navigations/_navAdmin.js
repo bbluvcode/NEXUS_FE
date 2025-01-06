@@ -217,21 +217,21 @@ const _nav = [
     to: '/admin/NewsList',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   },
-  //retainshop
+  //retailshop
   {
     component: CNavTitle,
-    name: 'retainshop',
+    name: 'retailshop',
   },
   {
     component: CNavItem,
-    name: 'AddRetainShop',
-    to: '/admin/AddRetainShop',
+    name: 'AddRetailShop',
+    to: '/admin/AddRetailShop',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
-    name: 'RetainShopList',
-    to: '/admin/RetainShopList',
+    name: 'RetailShopList',
+    to: '/admin/RetailShopList',
     icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   },
   //vendor

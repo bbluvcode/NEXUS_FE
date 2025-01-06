@@ -6,14 +6,14 @@ export const DataContext = createContext()
 
 export const DataProvider = ({ children }) => {
     const [employees, setEmployees] = useState([]);
-    const [retainShops, setRetainShops] = useState([]);
+    const [retailShops, setRetailShops] = useState([]);
     const [employeeTypes, setEmployeeTypes] = useState([]);
 
     const data = {
         employees,
         setEmployees,
-        retainShops,
-        setRetainShops,
+        retailShops,
+        setRetailShops,
         employeeTypes,
         setEmployeeTypes
     };
