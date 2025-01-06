@@ -1,19 +1,21 @@
-/* eslint-disable prettier/prettier */
 // components/SortDropdown.js
-import React from "react";
-import styles from "../../../../style/ManStyle.module.css";
+import React from 'react'
+import PropTypes from 'prop-types'
+import styles from '../../../../style/ManStyle.module.css'
 
-// eslint-disable-next-line react/prop-types
 const SortDropdown = ({ handleSortChange }) => (
   <div>
     <div className={styles.customselect}>
-      <select id="sortOptions"  onChange={handleSortChange}>
+      <select id="sortOptions" onChange={handleSortChange}>
         <option value="name">Name</option>
-        <option value="date">Date</option>
-        <option value="price">Price</option>
+        <option value="status">Active/Inactive</option>
+        <option value="role">Role</option>
       </select>
     </div>
   </div>
-);
+)
+SortDropdown.propTypes = {
+  handleSortChange: PropTypes.func.isRequired,
+}
 
-export default SortDropdown;
+export default SortDropdown

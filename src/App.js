@@ -12,6 +12,8 @@ import './style/HuyStyle.module.css'
 import './style/NhatStyle.module.css'
 import './style/ManStyle.module.css'
 import ClientLayout from './layout/ClientLayout'
+import { DataProvider } from './context/DataContext'
+import ErrorBoundary from './Error Boundary'
 
 // Containers
 const AdminLayout = React.lazy(() => import('./layout/AdminLayout'))
@@ -41,25 +43,29 @@ const App = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   // eslint-disable-line react-hooks/exhaustive-deps
   return (
-    <BrowserRouter>
-      <Suspense
-        fallback={
-          <div className="pt-3 text-center">
-            <CSpinner color="primary" variant="grow" />
-          </div>
-        }
-      >
-        <Routes>
-          <Route exact path="/login" name="Login Page" element={<Login />} />
-          <Route exact path="/register" name="Register Page" element={<Register />} />
-          <Route exact path="/404" name="Page 404" element={<Page404 />} />
-          <Route exact path="/500" name="Page 500" element={<Page500 />} />
-          <Route path="/admin/*" name="Home" element={<AdminLayout />} />
-          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
-          <Route path="/*" name="Home" element={<ClientLayout />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <DataProvider>
+        <BrowserRouter>
+          <Suspense
+            fallback={
+              <div className="pt-3 text-center">
+                <CSpinner color="primary" variant="grow" />
+              </div>
+            }
+          >
+            <Routes>
+              <Route exact path="/login" name="Login Page" element={<Login />} />
+              <Route exact path="/register" name="Register Page" element={<Register />} />
+              <Route exact path="/404" name="Page 404" element={<Page404 />} />
+              <Route exact path="/500" name="Page 500" element={<Page500 />} />
+              <Route path="/admin/*" name="Home" element={<AdminLayout />} />
+              <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+              <Route path="/*" name="Home" element={<ClientLayout />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </DataProvider>
+    </ErrorBoundary>
   )
 }
 
