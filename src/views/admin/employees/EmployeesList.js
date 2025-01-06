@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import SearchBar from "./components/SearchBar";
 import SortDropdown from "./components/SortDropdown";
-import RetainshopSection from "./components/RetainshopSection";
+import RetainShopSection from "./components/RetainShopSection";
 import styles from "../../../style/ManStyle.module.css";
 import { getAllRetainShops } from "../../../services/retainShopSerivce";
-import { getAllEmployeeRoles, getAllEmployees, updateEmployeeRole, toggleEmployeeStatus } from "../../../services/employeeService";
+import { getAllEmployeeRoles, getAllEmployees, updateRole, toggleEmployeeStatus } from "../../../services/employeeService";
 
 const EmployeesList = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -48,8 +48,10 @@ const EmployeesList = () => {
   };
 
   const handleSortChange = (event) => {
-    setSortOption(event.target.value);
+    const newSortOption = event.target.value;
+    setSortOption(newSortOption);
   };
+   
 
   const toggleStatus = async (retainshopName, employee) => {
     try {
@@ -99,7 +101,7 @@ const EmployeesList = () => {
 
     // Apply all valid role changes to the server
     const updatePromises = Object.entries(roleChanges).map(([employeeId, newRoleId]) =>
-      updateEmployeeRole(parseInt(employeeId, 10), newRoleId)
+      updateRole(parseInt(employeeId, 10), newRoleId)
     );
 
     try {
@@ -135,31 +137,36 @@ const EmployeesList = () => {
         const originalEmployee = originalEmployeeData.find(
           (original) => original.employeeId === employee.employeeId
         );
-
+  
         return {
           ...employee,
           employeeRoleId: roleChanges[employee.employeeId] || employee.employeeRoleId,
           originalEmployeeRoleId: originalEmployee?.employeeRoleId,
           role: Array.isArray(roles)
             ? roles.find(
-              (role) =>
-                role.roleId ===
-                (roleChanges[employee.employeeId] || employee.employeeRoleId)
-            )?.roleName || "No Role Assigned"
+                (role) =>
+                  role.roleId ===
+                  (roleChanges[employee.employeeId] || employee.employeeRoleId)
+              )?.roleName || "No Role Assigned"
             : "No Role Assigned",
         };
       })
       .filter((employee) =>
-        employee.fullName.toLowerCase().includes(searchTerm) // Lọc theo tên
+        employee.fullName.toLowerCase().includes(searchTerm)
       )
       .sort((a, b) => {
-        if (sortOption === "name") {
-          return a.fullName.localeCompare(b.fullName);
+        switch (sortOption) {
+          case "name":
+            return a.fullName.localeCompare(b.fullName);
+          case "status":
+            return a.status === "Active" && b.status !== "Active" ? -1 : 1;
+          case "role":
+            return (a.role || "").localeCompare(b.role || "");
+          default:
+            return 0;
         }
-        return 0;
       }),
-  }));
-
+  }));  
 
 
   if (isLoading) {
@@ -178,7 +185,7 @@ const EmployeesList = () => {
       <SortDropdown handleSortChange={handleSortChange} />
       {groupedData.length > 0 ? (
         groupedData.map((shop) => (
-          <RetainshopSection
+          <RetainShopSection
             key={shop.retainShopId}
             retainshopName={shop.retainShopName}
             employees={shop.employees}

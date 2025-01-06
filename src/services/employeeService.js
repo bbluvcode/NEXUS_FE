@@ -6,7 +6,6 @@ import { apiEmployee } from '../constant/apiConstant';
 export const getAllEmployees = async () => {
     try {
         let response = await axios.get(apiEmployee);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching employees", error);
@@ -17,7 +16,6 @@ export const getAllEmployees = async () => {
 export const getAllEmployeeRoles = async () => {
     try {
         let response = await axios.get(apiEmployee + 'role');
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching employees", error);
@@ -29,7 +27,6 @@ export const getAllEmployeeRoles = async () => {
 export const getEmployeeById = async (id) => {
     try {
         let response = await axios.get(`${apiEmployee}${id}`);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error(`Error fetching employee with ID ${id}`, error);
@@ -41,7 +38,6 @@ export const getEmployeeById = async (id) => {
 export const addEmployee = async (employee) => {
     try {
         let response = await axios.post(apiEmployee, employee);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error("Error adding employee", error);
@@ -50,7 +46,7 @@ export const addEmployee = async (employee) => {
 };
 
 // Update employee role
-export const updateEmployeeRole = async (employeeId, roleId) => {
+export const updateRole = async (employeeId, roleId) => {
     try {
         const response = await axios.put(`${apiEmployee}${employeeId}/role`, {
             employeeId,
@@ -70,5 +66,32 @@ export const toggleEmployeeStatus = async (id) => {
         return response.data;
     } catch (error) {
         throw error;
+    }
+};
+
+export const updateEmployeeRole = async (employeeId, roleId, roleName) => {
+    try {
+        let response = await axios.put(`http://localhost:5185/api/Employee/2/employeeRole`, {
+            roleId: roleId,
+            roleName: roleName
+        });
+
+        return response.data; // Return the response data from the backend
+    } catch (error) {
+        console.error("Failed to update employee role:", error);
+        throw error;
+    }
+};
+
+// Add a new employee role
+export const addEmployeeRole = async (employeeRole) => {
+    try {
+        // Send POST request to add a new employee role
+        let response = await axios.post('http://localhost:5185/api/Employee/addRole', employeeRole);
+        console.log(response.data); // Log the response for debugging
+        return response.data; // Return the response from the backend
+    } catch (error) {
+        console.error("Error adding employee role", error);
+        throw error; // Throw error to propagate it further if needed
     }
 };

@@ -336,3 +336,59 @@
   cursor: pointer;
   background-color: transparent;
 }
+/* Center the container in the middle of the screen */
+.containerDetail {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f4f4f9;
+}
+
+/* Style for the employee detail card */
+.cardDetail {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 600px;
+}
+
+/* Card title */
+.cardTitleDetail {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+/* Style for the fields inside the card */
+.fieldDetail {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.fieldDetail strong {
+  font-weight: bold;
+}
+
+/* Style for the back button */
+.backButtonDetail {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.backButtonDetail:hover {
+  background-color: #0056b3;
+}

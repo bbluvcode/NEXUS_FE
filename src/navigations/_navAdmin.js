@@ -124,12 +124,12 @@ const _nav = [
     to: '/admin/EmployeeList',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'EmployeeDetail',
-    to: '/admin/EmployeeDetail',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'EmployeeDetail',
+  //   to: '/admin/EmployeeDetail',
+  //   icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  // },
   {
     component: CNavItem,
     name: 'AddEmployee',

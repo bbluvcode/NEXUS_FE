@@ -7,12 +7,15 @@ export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
     const [employees, setEmployees] = useState([]);
     const [retainShops, setRetainShops] = useState([]);
+    const [employeeTypes, setEmployeeTypes] = useState([]);
 
     const data = {
         employees,
         setEmployees,
         retainShops,
-        setRetainShops
+        setRetainShops,
+        employeeTypes,
+        setEmployeeTypes
     };
 
     return <DataContext.Provider value={data}>{children}</DataContext.Provider>;

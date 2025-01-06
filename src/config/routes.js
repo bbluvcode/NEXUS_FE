@@ -87,7 +87,7 @@ const routes = [
   { path: '/SupportRequest', exact: true, name: 'SupportRequest', element: SupportRequest },
   //employee
   { path: '/EmployeeList', exact: true, name: 'EmployeeList', element: EmployeeList },
-  { path: '/EmployeeDetail', exact: true, name: 'EmployeeDetail', element: EmployeeDetail },
+  { path: '/EmployeeDetail/:id', exact: true, name: 'EmployeeDetail', element: EmployeeDetail },
   { path: '/AddEmployee', exact: true, name: 'AddEmployee', element: AddEmployee },
   { path: '/EmployeeType', exact: true, name: 'EmployeeType', element: EmployeeType },
   { path: '/UpdateEmployee', exact: true, name: 'UpdateEmployee', element: UpdateEmployee },

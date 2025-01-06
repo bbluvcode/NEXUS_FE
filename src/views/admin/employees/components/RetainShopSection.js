@@ -11,25 +11,28 @@ const RetainshopSection = ({
   roles,
   onUpdateRole,
 }) => {
-  const [titleColor, setTitleColor] = useState('#000') // Màu mặc định là đen (#000)
+  const [titleColor, setTitleColor] = useState('') // Màu mặc định là đen (#000)
 
   const handleColorChange = (event) => {
     setTitleColor(event.target.value) // Cập nhật màu sắc dựa trên lựa chọn
   }
 
   const sortEmployees = (employees) => {
-    return [...employees].sort((a, b) => {
+    const sortedEmployees = [...employees].sort((a, b) => {
       if (sortOption === 'name') {
         return a.fullName.localeCompare(b.fullName)
-      } else if (sortOption === 'status') {
-        return b.status - a.status // Sắp xếp Active trước, Inactive sau
-      } else if (sortOption === 'role') {
-        const roleA = roles.find((role) => role.roleId === a.employeeRoleId)?.roleName || ''
-        const roleB = roles.find((role) => role.roleId === b.employeeRoleId)?.roleName || ''
-        return roleA.localeCompare(roleB) // Sắp xếp theo tên Role
+      }
+      if (sortOption === 'status') {
+        return a.status === true && b.status !== true ? -1 : 1
+      }
+      if (sortOption === 'role') {
+        const roleA = roles.find((role) => role.roleId === a.employeeRoleId)?.roleName || 'Z'
+        const roleB = roles.find((role) => role.roleId === b.employeeRoleId)?.roleName || 'Z'
+        return roleA.localeCompare(roleB)
       }
       return 0
     })
+    return sortedEmployees
   }
 
   return (

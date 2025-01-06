@@ -6,7 +6,6 @@ import { apiRetainShop } from '../constant/apiConstant';
 export const getAllRetainShops = async () => {
     try {
         let response = await axios.get(apiRetainShop);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching RetainShops", error);
@@ -18,7 +17,6 @@ export const getAllRetainShops = async () => {
 export const getRetainShopById = async (id) => {
     try {
         let response = await axios.get(`${apiRetainShop}${id}`);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error(`Error fetching RetainShop with ID ${id}`, error);
@@ -30,7 +28,6 @@ export const getRetainShopById = async (id) => {
 export const addRetainShop = async (retainShop) => {
     try {
         let response = await axios.post(apiRetainShop, retainShop);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error("Error adding RetainShop", error);
@@ -42,7 +39,6 @@ export const addRetainShop = async (retainShop) => {
 export const updateRetainShop = async (id, retainShop) => {
     try {
         let response = await axios.put(`${apiRetainShop}${id}`, retainShop);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error(`Error updating RetainShop with ID ${id}`, error);
