@@ -115,7 +115,7 @@ const FormControl = () => {
             <p className="text-body-secondary small">
               Add the <code>readOnly</code> boolean attribute on an input to prevent modification of
               the input&#39;s value. Read-only inputs appear lighter (just like disabled inputs),
-              but retain the standard cursor.
+              but retail the standard cursor.
             </p>
             <DocsExample href="forms/form-control#readonly">
               <CFormInput

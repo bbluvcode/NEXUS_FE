@@ -185,24 +185,24 @@ var NewsList = _react["default"].lazy(function () {
   return Promise.resolve().then(function () {
     return _interopRequireWildcard(require('../views/admin/others/NewsList'));
   });
-}); //retainshop
+}); //retailshop
 
 
-var AddRetainShop = _react["default"].lazy(function () {
+var AddRetailShop = _react["default"].lazy(function () {
   return Promise.resolve().then(function () {
-    return _interopRequireWildcard(require('../views/admin/retainshop/AddRetainShop'));
+    return _interopRequireWildcard(require('../views/admin/retailshop/AddRetailShop'));
   });
 });
 
-var RetainShopList = _react["default"].lazy(function () {
+var RetailShopList = _react["default"].lazy(function () {
   return Promise.resolve().then(function () {
-    return _interopRequireWildcard(require('../views/admin/retainshop/RetainShopList'));
+    return _interopRequireWildcard(require('../views/admin/retailshop/RetailShopList'));
   });
 });
 
-var UpdateRetainShop = _react["default"].lazy(function () {
+var UpdateRetailShop = _react["default"].lazy(function () {
   return Promise.resolve().then(function () {
-    return _interopRequireWildcard(require('../views/admin/retainshop/UpdateRetainShop'));
+    return _interopRequireWildcard(require('../views/admin/retailshop/UpdateRetailShop'));
   });
 }); //stock
 
@@ -418,22 +418,22 @@ var routes = [{
   exact: true,
   name: 'NewsList',
   element: NewsList
-}, //retainshop
+}, //retailshop
 {
-  path: '/AddRetainShop',
+  path: '/AddRetailShop',
   exact: true,
-  name: 'AddRetainShop',
-  element: AddRetainShop
+  name: 'AddRetailShop',
+  element: AddRetailShop
 }, {
-  path: '/RetainShopList',
+  path: '/RetailShopList',
   exact: true,
-  name: 'RetainShopList',
-  element: RetainShopList
+  name: 'RetailShopList',
+  element: RetailShopList
 }, {
-  path: '/UpdateRetainShop',
+  path: '/UpdateRetailShop',
   exact: true,
-  name: 'UpdateRetainShop',
-  element: UpdateRetainShop
+  name: 'UpdateRetailShop',
+  element: UpdateRetailShop
 }, //stock
 {
   path: '/InStockOrder',

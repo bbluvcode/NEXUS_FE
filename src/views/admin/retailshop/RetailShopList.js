@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const RetainShopList = () => {
+const RetailShopList = () => {
   const [shops, setShops] = useState([]);
   const [regions, setRegions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -58,12 +58,12 @@ const RetainShopList = () => {
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center mb-4">Retain Shop List</h2>
+      <h2 className="text-center mb-4">Retail Shop List</h2>
 
       <div className="d-flex justify-content-between mb-3">
         <button
           className="btn btn-primary"
-          onClick={() => navigate('/admin/AddRetainShop')}
+          onClick={() => navigate('/admin/AddRetailShop')}
         >
           Add Shop
         </button>
@@ -127,4 +127,4 @@ const RetainShopList = () => {
   );
 };
 
-export default RetainShopList;
+export default RetailShopList;
