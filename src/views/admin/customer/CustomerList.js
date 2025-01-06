@@ -30,7 +30,6 @@ const CustomerList = () => {
               <th>PhoneNumber</th>
               <th>IdentificationNo</th>
               {/* <th>Image</th>
-              <th>AccountId</th>
               <th>Password</th> */}
             </tr>
           </thead>
@@ -48,7 +47,6 @@ const CustomerList = () => {
                     <td>{item.phoneNumber}</td>
                     <td>{item.identificationNo}</td>
                     {/* <td>{item.image}</td>
-                    <td>{item.accountId}</td>
                     <td>{item.password}</td> */}
                   </tr>
                 )
