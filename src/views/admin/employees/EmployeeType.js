@@ -1,61 +1,58 @@
-/* eslint-disable prettier/prettier */
-import React, { useState } from 'react'; 
+import React, { useState, useEffect } from 'react'
+import { getAllEmployeeRoles } from '../../../services/employeeService'
+import EmployeeTypeList from './components/EmployeeTypeList'
+import EmployeeTypeCreate from './components/EmployeeTypeCreate'
 
 const EmployeeType = () => {
-  // Dữ liệu tạm thời
-  const [employeeTypes, setEmployeeTypes] = useState([
-    { RoleID: 1, RoleName: 'Manager', isActive: true },
-    { RoleID: 2, RoleName: 'Engineer', isActive: false },
-    { RoleID: 3, RoleName: 'HR', isActive: true },
-    { RoleID: 4, RoleName: 'Intern', isActive: false },
-  ]);
+  const [employeeTypes, setEmployeeTypes] = useState([])
+  const [activeTab, setActiveTab] = useState('list') // 'list' or 'create'
 
-  // Xử lý kích hoạt/deactivate
-  const toggleActive = (roleID) => {
-    setEmployeeTypes((prev) =>
-      prev.map((type) =>
-        type.RoleID === roleID ? { ...type, isActive: !type.isActive } : type
-      )
-    );
-  };
+  useEffect(() => {
+    const fetchEmployeeTypes = async () => {
+      try {
+        const response = await getAllEmployeeRoles()
+        setEmployeeTypes(response.data)
+      } catch (error) {
+        console.error('Error fetching employee types', error)
+      }
+    }
+
+    fetchEmployeeTypes()
+  }, [])
 
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h1>Employee Types</h1>
-        <button className="btn btn-primary">Create</button>
+        <ul className="nav nav-tabs">
+          <li className="nav-item">
+            <a
+              className={`nav-link ${activeTab === 'list' ? 'active' : ''}`}
+              onClick={() => setActiveTab('list')}
+              href="#"
+            >
+              List
+            </a>
+          </li>
+          <li className="nav-item">
+            <a
+              className={`nav-link ${activeTab === 'create' ? 'active' : ''}`}
+              onClick={() => setActiveTab('create')}
+              href="#"
+            >
+              Create
+            </a>
+          </li>
+        </ul>
       </div>
-      <table className="table table-bordered table-hover">
-        <thead className="thead-dark">
-          <tr>
-            <th>Role ID</th>
-            <th>Role Name</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {employeeTypes.map((type) => (
-            <tr key={type.RoleID}>
-              <td>{type.RoleID}</td>
-              <td>{type.RoleName}</td>
-              <td>{type.isActive ? 'Active' : 'Inactive'}</td>
-              <td>
-                <button
-                  className={`btn ${
-                    type.isActive ? 'btn-danger' : 'btn-success'
-                  }`}
-                  onClick={() => toggleActive(type.RoleID)}
-                >
-                  {type.isActive ? 'Deactivate' : 'Activate'}
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-};
 
-export default EmployeeType;
+      {activeTab === 'list' ? (
+        <EmployeeTypeList employeeTypes={employeeTypes} setEmployeeTypes={setEmployeeTypes} />
+      ) : (
+        <EmployeeTypeCreate setEmployeeTypes={setEmployeeTypes} setActiveTab={setActiveTab} />
+      )}
+    </div>
+  )
+}
+
+export default EmployeeType

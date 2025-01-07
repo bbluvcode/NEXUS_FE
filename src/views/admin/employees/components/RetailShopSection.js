@@ -3,39 +3,42 @@ import UserCard from './UserCard'
 import styles from '../../../../style/ManStyle.module.css'
 import PropTypes from 'prop-types'
 
-const RetainshopSection = ({
-  retainshopName,
+const RetailshopSection = ({
+  retailshopName,
   employees,
   sortOption,
   toggleStatus,
   roles,
   onUpdateRole,
 }) => {
-  const [titleColor, setTitleColor] = useState('#000') // Màu mặc định là đen (#000)
+  const [titleColor, setTitleColor] = useState('') // Màu mặc định là đen (#000)
 
   const handleColorChange = (event) => {
     setTitleColor(event.target.value) // Cập nhật màu sắc dựa trên lựa chọn
   }
 
   const sortEmployees = (employees) => {
-    return [...employees].sort((a, b) => {
+    const sortedEmployees = [...employees].sort((a, b) => {
       if (sortOption === 'name') {
         return a.fullName.localeCompare(b.fullName)
-      } else if (sortOption === 'status') {
-        return b.status - a.status // Sắp xếp Active trước, Inactive sau
-      } else if (sortOption === 'role') {
-        const roleA = roles.find((role) => role.roleId === a.employeeRoleId)?.roleName || ''
-        const roleB = roles.find((role) => role.roleId === b.employeeRoleId)?.roleName || ''
-        return roleA.localeCompare(roleB) // Sắp xếp theo tên Role
+      }
+      if (sortOption === 'status') {
+        return a.status === true && b.status !== true ? -1 : 1
+      }
+      if (sortOption === 'role') {
+        const roleA = roles.find((role) => role.roleId === a.employeeRoleId)?.roleName || 'Z'
+        const roleB = roles.find((role) => role.roleId === b.employeeRoleId)?.roleName || 'Z'
+        return roleA.localeCompare(roleB)
       }
       return 0
     })
+    return sortedEmployees
   }
 
   return (
     <div className={styles.agency}>
-      <div className={styles.retainshopHeader}>
-        <h2 style={{ color: titleColor }}>{retainshopName}</h2>
+      <div className={styles.retailshopHeader}>
+        <h2 style={{ color: titleColor }}>{retailshopName}</h2>
         <button className={styles.colorPickerButton}>
           <input
             type="color"
@@ -52,7 +55,7 @@ const RetainshopSection = ({
             key={employee.employeeId}
             user={employee}
             roles={roles} // Truyền danh sách roles
-            toggleStatus={() => toggleStatus(retainshopName, employee)}
+            toggleStatus={() => toggleStatus(retailshopName, employee)}
             onUpdateRole={onUpdateRole} // Gọi hàm xử lý khi thay đổi role
           />
         ))}
@@ -61,8 +64,8 @@ const RetainshopSection = ({
   )
 }
 
-RetainshopSection.propTypes = {
-  retainshopName: PropTypes.string.isRequired,
+RetailshopSection.propTypes = {
+  retailshopName: PropTypes.string.isRequired,
   employees: PropTypes.array.isRequired,
   sortOption: PropTypes.string.isRequired,
   toggleStatus: PropTypes.func.isRequired,
@@ -70,4 +73,4 @@ RetainshopSection.propTypes = {
   onUpdateRole: PropTypes.func.isRequired,
 }
 
-export default RetainshopSection
+export default RetailshopSection

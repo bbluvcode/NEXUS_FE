@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-const retainShopValidationSchema = Yup.object().shape({
-  RetainShopName: Yup.string()
+const retailShopValidationSchema = Yup.object().shape({
+  RetailShopName: Yup.string()
     .max(15, 'Name must be at most 15 characters')
     .required('Name is required'),
   Address: Yup.string()
@@ -25,7 +25,7 @@ const retainShopValidationSchema = Yup.object().shape({
     .typeError('Region ID must be a number'),
 });
 
-const AddRetainShop = () => {
+const AddRetailShop = () => {
   const [regions, setRegions] = useState([]);
 
   // Lấy danh sách vùng từ backend
@@ -48,10 +48,10 @@ const AddRetainShop = () => {
 
   return (
     <div className="container">
-      <h2>Add Retain Shop</h2>
+      <h2>Add Retail Shop</h2>
       <Formik
         initialValues={{
-          RetainShopName: '',
+          RetailShopName: '',
           Address: '',
           Email: '',
           Phone: '',
@@ -59,15 +59,15 @@ const AddRetainShop = () => {
           Fax: '',
           RegionId: '',
         }}
-        validationSchema={retainShopValidationSchema}
+        validationSchema={retailShopValidationSchema}
         onSubmit={handleSubmit}
       >
         {({ isSubmitting }) => (
           <Form>
             <div className="mb-3">
-              <label htmlFor="RetainShopName">Name</label>
-              <Field name="RetainShopName" className="form-control" />
-              <ErrorMessage name="RetainShopName" component="div" className="text-danger" />
+              <label htmlFor="RetailShopName">Name</label>
+              <Field name="RetailShopName" className="form-control" />
+              <ErrorMessage name="RetailShopName" component="div" className="text-danger" />
             </div>
 
             <div className="mb-3">
@@ -122,4 +122,4 @@ const AddRetainShop = () => {
   );
 };
 
-export default AddRetainShop;
+export default AddRetailShop;
