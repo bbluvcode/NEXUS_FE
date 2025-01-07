@@ -149,17 +149,37 @@ const _nav = [
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
-    component: CNavItem,
-    name: 'UpdatePlan',
-    to: '/admin/UpdatePlan',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+    component: CNavGroup,
+    name: 'Orther',
+    to: '/admin',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'UpdatePlan',
+        to: '/admin/UpdatePlan',
+        icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavItem,
+        name: 'AddPlan',
+        to: '/admin/AddPlan',
+        icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+      },
+    ],
   },
-  {
-    component: CNavItem,
-    name: 'AddPlan',
-    to: '/admin/AddPlan',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'UpdatePlan',
+  //   to: '/admin/UpdatePlan',
+  //   icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'AddPlan',
+  //   to: '/admin/AddPlan',
+  //   icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  // },
   //equipment
   {
     component: CNavTitle,
