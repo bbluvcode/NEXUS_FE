@@ -10,7 +10,10 @@ export const fetchCustomers = createAsyncThunk('Customers/fetchCustomers', async
     const response = await axios.get(apiCustomer)
     return response.data.data
   } catch (error) {
-    console.log('error: ', error)
+    console.log('1. customer slice: loi roi, ket noi API nghiem tuc di')
+
+    // console.log('error: ', error)
+    return true;
   }
 })
 export const createCustomer = createAsyncThunk('Customers/createCustomer', async (Customer) => {
@@ -19,7 +22,10 @@ export const createCustomer = createAsyncThunk('Customers/createCustomer', async
     console.log('response: ', response)
     return response.data.data
   } catch (error) {
+    console.log('2. customer slice: loi roi, ket noi API nghiem tuc di')
     console.log('error: ', error)
+    return true;
+
   }
 })
 const customerSlice = createSlice({
@@ -27,7 +33,6 @@ const customerSlice = createSlice({
   initialState: {
     items: [],
     isUpdate: false,
-    // Customer: {name:"",price:"",quantity:"",status:false},
     customer: {
       fullName: '',
       gender: '',

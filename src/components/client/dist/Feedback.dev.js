@@ -1,1 +1,2 @@
-"use strict";
+/* eslint-disable prettier/prettier */
+// "use strict";
