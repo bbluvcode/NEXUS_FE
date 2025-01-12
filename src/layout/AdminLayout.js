@@ -1,5 +1,7 @@
 import React from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader, ModalComponent } from '../components/index'
+import CustomerCreateForm from '../components/form/CustomerCreateForm'
+import CustomerEditForm from '../components/form/CustomerEditForm'
 
 const AdminLayout = () => {
   return (
@@ -12,7 +14,10 @@ const AdminLayout = () => {
         </div>
         <AppFooter />
       </div>
-      <ModalComponent />
+      <ModalComponent>
+        <CustomerCreateForm />
+        <CustomerEditForm />
+      </ModalComponent>{' '}
     </div>
   )
 }

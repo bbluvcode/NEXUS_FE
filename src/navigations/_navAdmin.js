@@ -2,20 +2,26 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilAirplay,
+  cilAudio,
   cilBell,
+  cilBolt,
   cilCalculator,
+  cilCenterFocus,
   cilChartPie,
+  cilCog,
   cilCursor,
   cilDescription,
   cilDrop,
   cilExternalLink,
+  cilFire,
   cilNotes,
   cilPencil,
+  cilPeople,
   cilPuzzle,
   cilSpeedometer,
   cilStar,
 } from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import { CNav, CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
 const _nav = [
   {
@@ -29,142 +35,125 @@ const _nav = [
     },
   },
   {
-    component: CNavTitle,
-    name: 'Order',
-  },
-  {
-    component: CNavItem,
-    name: 'ConnectionList',
-    to: '/admin/ConnectionList',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'ServiceOrder',
-    to: '/admin/ServiceOrder',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavTitle,
-    name: 'Bill Payment',
-  },
-  {
-    component: CNavItem,
-    name: 'ServiceBillList',
-    to: '/admin/ServiceBillList',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Discount',
-    to: '/admin/Discount',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavTitle,
-    name: 'Customer',
-  },
-  {
     component: CNavGroup,
-    name: 'Action',
-    to: '/admin',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    name: 'ORDER',
+    icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'AddCustomer',
-        to: '/admin/AddCustomer',
+        name: 'ConnectionList',
+        to: '/admin/ConnectionList',
       },
       {
         component: CNavItem,
-        name: 'CustomerDetail',
-        to: '/admin/CustomerDetail',
+        name: 'ServiceOrder',
+        to: '/admin/ServiceOrder',
       },
     ],
   },
+
   {
-    component: CNavItem,
-    name: 'CustomerList',
-    to: '/admin/CustomerList',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+    component: CNavGroup,
+    name: 'BILL PAYMENT',
+    icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'ServiceBillList',
+        to: '/admin/ServiceBillList',
+      },
+      {
+        component: CNavItem,
+        name: 'Discount',
+        to: '/admin/Discount',
+      },
+    ],
   },
+
+  // {
+  //   component: CNavTitle,
+  //   name: 'Customer',
+  // },
   {
-    component: CNavItem,
-    name: 'CustomerRequest',
-    to: '/admin/CustomerRequest',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'SupportRequest',
-    to: '/admin/SupportRequest',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Feedbacks',
-    to: '/admin/Feedbacks',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+    component: CNavGroup,
+    name: 'CUSTOMER',
+    to: '/admin',
+    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'CustomerList',
+        to: '/admin/CustomerList',
+      },
+      {
+        component: CNavItem,
+        name: 'CustomerRequest',
+        to: '/admin/CustomerRequest',
+      },
+      {
+        component: CNavItem,
+        name: 'SupportRequest',
+        to: '/admin/SupportRequest',
+      },
+      {
+        component: CNavItem,
+        name: 'Feedbacks',
+        to: '/admin/Feedbacks',
+      },
+    ],
   },
 
   //employee
   {
-    component: CNavTitle,
-    name: 'Employee Payment',
-  },
-  {
-    component: CNavItem,
-    name: 'EmployeeType',
-    to: '/admin/EmployeeType',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'EmployeeList',
-    to: '/admin/EmployeeList',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  // {
-  //   component: CNavItem,
-  //   name: 'EmployeeDetail',
-  //   to: '/admin/EmployeeDetail',
-  //   icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  // },
-  {
-    component: CNavItem,
-    name: 'AddEmployee',
-    to: '/admin/AddEmployee',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+    component: CNavGroup,
+    name: 'EMPLOYEE',
+    icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'EmployeeType',
+        to: '/admin/EmployeeType',
+        // icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavItem,
+        name: 'EmployeeList',
+        to: '/admin/EmployeeList',
+      }, // {
+      //   component: CNavItem,
+      //   name: 'EmployeeDetail',
+      //   to: '/admin/EmployeeDetail',
+      //   icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+      // },
+      {
+        component: CNavItem,
+        name: 'AddEmployee',
+        to: '/admin/AddEmployee',
+      },
+    ],
   },
 
   //plan
-  {
-    component: CNavTitle,
-    name: ' PLAN',
-  },
-  {
-    component: CNavItem,
-    name: 'PlanList',
-    to: '/admin/PlanList',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
+
   {
     component: CNavGroup,
-    name: 'Orther',
-    to: '/admin',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    name: 'PLAN',
+    icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
     items: [
+      {
+        component: CNavItem,
+        name: 'PlanList',
+        to: '/admin/PlanList',
+      },
       {
         component: CNavItem,
         name: 'UpdatePlan',
         to: '/admin/UpdatePlan',
-        icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
       },
       {
         component: CNavItem,
         name: 'AddPlan',
         to: '/admin/AddPlan',
-        icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
       },
     ],
   },
@@ -182,136 +171,135 @@ const _nav = [
   // },
   //equipment
   {
-    component: CNavTitle,
-    name: ' equipment',
+    component: CNavGroup,
+    name: 'EQUIPMENT',
+    icon: <CIcon icon={cilCog} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'AddEquipment',
+        to: '/admin/AddEquipment',
+      },
+      {
+        component: CNavItem,
+        name: 'EquipmentList',
+        to: '/admin/EquipmentList',
+      },
+      {
+        component: CNavItem,
+        name: 'EquipmentType',
+        to: '/admin/EquipmentType',
+      },
+    ],
   },
-  {
-    component: CNavItem,
-    name: 'AddEquipment',
-    to: '/admin/AddEquipment',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'EquipmentList',
-    to: '/admin/EquipmentList',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'EquipmentType',
-    to: '/admin/EquipmentType',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
+
   //connection
   {
-    component: CNavTitle,
-    name: 'connection',
+    component: CNavGroup,
+    name: 'CONNECTION',
+    icon: <CIcon icon={cilAudio} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'ConnectionList',
+        to: '/admin/ConnectionList',
+      },
+      {
+        component: CNavItem,
+        name: 'AddConnection',
+        to: '/admin/AddConnection',
+      },
+    ],
   },
-  {
-    component: CNavItem,
-    name: 'ConnectionList',
-    to: '/admin/ConnectionList',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'AddConnection',
-    to: '/admin/AddConnection',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
+
   //others
   {
-    component: CNavTitle,
-    name: 'others',
+    component: CNavGroup,
+    name: 'OTHERS',
+    icon: <CIcon icon={cilAirplay} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Region',
+        to: '/admin/Region',
+      },
+      {
+        component: CNavItem,
+        name: 'NewsList',
+        to: '/admin/NewsList',
+      },
+    ],
   },
-  {
-    component: CNavItem,
-    name: 'Region',
-    to: '/admin/Region',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'NewsList',
-    to: '/admin/NewsList',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
+
   //retailshop
   {
-    component: CNavTitle,
-    name: 'retailshop',
+    component: CNavGroup,
+    name: 'RETAILSHOPS',
+    icon: <CIcon icon={cilBolt} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'AddRetailShop',
+        to: '/admin/AddRetailShop',
+      },
+      {
+        component: CNavItem,
+        name: 'RetailShopList',
+        to: '/admin/RetailShopList',
+      },
+    ],
   },
-  {
-    component: CNavItem,
-    name: 'AddRetailShop',
-    to: '/admin/AddRetailShop',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'RetailShopList',
-    to: '/admin/RetailShopList',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
+
   //vendor
   {
-    component: CNavTitle,
-    name: 'vendor',
+    component: CNavGroup,
+    name: 'VENDOR',
+    icon: <CIcon icon={cilCenterFocus} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'AddVendor',
+        to: '/admin/AddVendor',
+      },
+      {
+        component: CNavItem,
+        name: 'VendorList',
+        to: '/admin/VendorList',
+      },
+    ],
   },
-  {
-    component: CNavItem,
-    name: 'AddVendor',
-    to: '/admin/AddVendor',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'VendorList',
-    to: '/admin/VendorList',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
+
   //stock
   {
-    component: CNavTitle,
-    name: 'stock',
+    component: CNavGroup,
+    name: 'STOCK',
+    icon: <CIcon icon={cilFire} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'StockList',
+        to: '/admin/StockList',
+      },
+      {
+        component: CNavItem,
+        name: 'OutStockOrder',
+        to: '/admin/OutStockOrder',
+      },
+      {
+        component: CNavItem,
+        name: 'InStockOrder',
+        to: '/admin/InStockOrder',
+      },
+      {
+        component: CNavItem,
+        name: 'StockRequest',
+        to: '/admin/StockRequest',
+      },
+    ],
   },
-  {
-    component: CNavItem,
-    name: 'StockList',
-    to: '/admin/StockList',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'OutStockOrder',
-    to: '/admin/OutStockOrder',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'InStockOrder',
-    to: '/admin/InStockOrder',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'StockRequest',
-    to: '/admin/StockRequest',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
-  //vendor
 
-  {
-    component: CNavItem,
-    name: 'Dashboard',
-    to: '/admin/dashboard',
-    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
-  },
+  //TEMPLATE============================================================================
+
   {
     component: CNavTitle,
     name: 'Theme',
