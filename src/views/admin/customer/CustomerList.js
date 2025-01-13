@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchCustomers } from '../../../redux/customerSlice'
+import { fetchCustomers } from '../../../redux/customer/customerSlice'
 import BtnModal from '../../../components/button/BtnModal'
 
 const CustomerList = () => {
@@ -18,8 +18,8 @@ const CustomerList = () => {
   return (
     <div>
       <div className="d-flex justify-content-between">
-        <h2>CustomerList</h2>
-        <BtnModal name="Create New Customer" />
+        <h2>List of customer</h2>
+        <BtnModal name="Create New Customer" iform='0' style='primary'/>
       </div>
       <div className="row">
         <table className="table">
@@ -52,7 +52,9 @@ const CustomerList = () => {
                   <td>{item.identificationNo}</td>
                   {/* <td>{item.image}</td>
         <td>{item.password}</td> */}
-                  <td></td>
+                  <td>
+                    <BtnModal name={<i className="fa fa-edit"></i>} iform='1' style='warning'/>
+                  </td>
                 </tr>
               ))
             ) : (
@@ -69,7 +71,7 @@ const CustomerList = () => {
                   {/* <td>{item.image}</td>
         <td>{item.password}</td> */}
                   <td>
-                    <BtnModal name={<i className="fa fa-edit"></i>} />
+                    <BtnModal name={<i className="fa fa-edit"></i>} iform='1' style='warning'/>
                   </td>
                 </tr>
                 <tr key={'2'}>
@@ -86,4 +88,4 @@ const CustomerList = () => {
   )
 }
 
-export default CustomerList
+export default React.memo(CustomerList)

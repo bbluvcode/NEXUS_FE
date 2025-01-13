@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { configureStore } from "@reduxjs/toolkit";
-import customerReducer from "./customerSlice";
+import customerReducer from "./customer/customerSlice";
+import cusRequestReducer from "./customer/cusRequestSlice";
 
 const myStore = configureStore({
     reducer:{
-        customers:customerReducer
+        customers:customerReducer,
+        cusRequests:cusRequestReducer
     }
 })
 export default myStore;

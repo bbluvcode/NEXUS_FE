@@ -2,7 +2,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-import { apiCustomer } from '../constant/apiConstant'
+import { apiCustomer } from '../../constant/apiConstant'
 
 //redux thunk(middleware) su ly bat dong bo
 export const fetchCustomers = createAsyncThunk('Customers/fetchCustomers', async () => {
@@ -11,8 +11,7 @@ export const fetchCustomers = createAsyncThunk('Customers/fetchCustomers', async
     return response.data.data
   } catch (error) {
     console.log('1. customer slice: loi roi, ket noi API nghiem tuc di')
-
-    // console.log('error: ', error)
+    console.log('error: ', error)
     return true;
   }
 })

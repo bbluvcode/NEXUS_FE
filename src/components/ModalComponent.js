@@ -1,7 +1,9 @@
 /* eslint-disable prettier/prettier */
-import React from 'react'
+import React, { useContext } from 'react'
+import { DataContext } from '../context/DataContext'
 
 function ModalComponent(props) {
+  const { iform } = useContext(DataContext)
   return (
     <div>
       {/* The Modal */}
@@ -14,7 +16,7 @@ function ModalComponent(props) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" />
             </div>
             {/* Modal body */}
-            <div className="modal-body">{props.children[0]}</div>
+            <div className="modal-body">{props.children[iform]}</div>
           </div>
         </div>
       </div>

@@ -1,14 +1,17 @@
 /* eslint-disable prettier/prettier */
-import React from 'react'
+import React, { useContext } from 'react'
+import { DataContext } from '../../context/DataContext'
 
 function BtnModal(props) {
+  const {setIform} = useContext(DataContext);
   return (
     <div>
       <button
         type="button"
-        className="btn btn-primary"
+        className={`btn btn-${props.style}`}
         data-bs-toggle="modal"
         data-bs-target="#myModal"
+        onClick={()=>setIform(props.iform)}        
       >
         {props.name}
       </button>

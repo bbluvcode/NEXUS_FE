@@ -56,7 +56,7 @@ function CustomerEditForm(props) {
 
   return (
     <div className="customer-edit-form">
-      <h2>Edit Customer</h2>
+      <h2 className='text-center'>Edit Customer</h2>
       <form onSubmit={handleSubmit} className="row g-3">
         <div className="col-md-6">
           <label htmlFor="fullName" className="form-label">
