@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import { apiCustomer } from '../../constant/apiConstant'
 
-//redux thunk(middleware) su ly bat dong bo
+//redux thunk(middleware) xu ly bat dong bo
 export const fetchCustomers = createAsyncThunk('Customers/fetchCustomers', async () => {
   try {
     const response = await axios.get(apiCustomer)
@@ -12,19 +12,28 @@ export const fetchCustomers = createAsyncThunk('Customers/fetchCustomers', async
   } catch (error) {
     console.log('1. customer slice: loi roi, ket noi API nghiem tuc di')
     console.log('error: ', error)
-    return true;
+    return null
   }
 })
-export const createCustomer = createAsyncThunk('Customers/createCustomer', async (Customer) => {
+export const createCustomer = createAsyncThunk('Customers/createCustomer', async (customer) => {
   try {
-    const response = await axios.post(apiCustomer, Customer)
+    const formData = new FormData()
+    formData.append('fullName', customer.fullName)
+    formData.append('gender', customer.gender)
+    formData.append('dateOfBirth', customer.dateOfBirth)
+    formData.append('address', customer.address)
+    formData.append('email', customer.email)
+    formData.append('phoneNumber', customer.phoneNumber)
+    formData.append('identificationNo', customer.identificationNo)
+    formData.append('image', customer.image)
+    formData.append('password', customer.password)
+    const response = await axios.post(apiCustomer, formData)
     console.log('response: ', response)
     return response.data.data
   } catch (error) {
-    console.log('2. customer slice: loi roi, ket noi API nghiem tuc di')
+    console.log('2. customer slice: loi API')
     console.log('error: ', error)
-    return true;
-
+    return null
   }
 })
 const customerSlice = createSlice({
@@ -48,24 +57,25 @@ const customerSlice = createSlice({
     error: null,
   },
   reducers: {
-    //su ly dong bo
+    //xu ly dong bo
     handleSetCustomer: (state, action) => {
-      console.log('action: ', action)
-      state.Customer = action.payload
+      // console.log('handleSetCustomer-action: ', action)
+      state.customer = action.payload
     },
   },
   extraReducers: (builder) => {
-    //su ly bat dong bo
+    //xu ly bat dong bo
     builder
       .addCase(fetchCustomers.fulfilled, (state, action) => {
         state.status = 'succeeded'
         state.items = action.payload
       })
       .addCase(createCustomer.fulfilled, (state, action) => {
-        console.log('action: ', action)
-
+        console.log('extraReducers-createCustomer: ', action)
         state.status = 'succeeded'
-        state.items.unshift(action.payload)
+        // state.items.shift(action.payload)
+        const item = action.payload
+        item != null ? state.items.unshift(item) : console.log('cannot add')
       })
   },
 })

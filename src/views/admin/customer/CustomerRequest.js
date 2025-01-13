@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchCusRequests } from '../../../redux/customer/cusRequestSlice'
 import BtnModal from '../../../components/button/BtnModal'
 import CIcon from '@coreui/icons-react'
-import { cilFrown, cilHappy, cilStar, cilUser } from '@coreui/icons'
+import { cilCheck, cilUser, cilWarning } from '@coreui/icons'
 
 const CustomerRequest = () => {
   const dispatch = useDispatch()
@@ -33,8 +33,8 @@ const CustomerRequest = () => {
               <th>equipmentRequest</th>
               <th>dateCreate</th>
               <th>dateResolve</th>
-              <th>isResponse</th>
-              <th></th>
+              <th className="text-center">Action</th>
+              {/* <th></th> */}
               {/* <th>Image</th>
               <th>Password</th> */}
             </tr>
@@ -48,17 +48,23 @@ const CustomerRequest = () => {
                   <td>{item.serviceRequest}</td>
                   <td>{item.equipmentRequest}</td>
                   <td>{formatDateSystem(item.dateCreate)}</td>
-                  <td>{formatDateSystem(item.dateResolve)}</td>
-                  <td>
-                    <button className={`btn btn-outline-${item.isResponse ? "success" : "danger"}`}>
-                      <CIcon icon={item.isResponse ? cilHappy : cilFrown} size="sm" />
+                  <td>{item.dateResolve ? formatDateSystem(item.dateResolve) : 'Waiting'}</td>
+                  <td className="d-flex">
+                    <button
+                      className={`text-white me-1 btn btn-${item.isResponse ? 'success' : 'danger'}`}
+                    >
+                      <CIcon icon={item.isResponse ? cilCheck : cilWarning} />
                     </button>
-                  </td>
-                  {/* <td>{item.image}</td>
+                    {/* </td> */}
+                    {/* <td>{item.image}</td>
         <td>{item.password}</td> */}
-                  <td className="d-flex ">
-                    <BtnModal name={<CIcon icon={cilUser} size="sm" />} iform="1" style="primary" />
-                    <BtnModal name={<i className="fa fa-edit"></i>} iform="1" style="warning" />
+                    {/* <td className="d-flex "> */}
+                    <BtnModal name={<CIcon icon={cilUser} />} iform="1" style="outline-primary" />
+                    <BtnModal
+                      name={<i className="fa fa-edit"></i>}
+                      iform="1"
+                      style="outline-warning"
+                    />
                   </td>
                 </tr>
               ))

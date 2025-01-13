@@ -1,8 +1,12 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
-import BtnModalClose from '../button/BtnModalClose';
+import React, { useState } from 'react'
+import BtnModalClose from '../button/BtnModalClose'
+import { useDispatch, useSelector } from 'react-redux'
+import { createCustomer, handleSetCustomer } from '../../redux/customer/customerSlice'
 
 function CustomerCreateForm(props) {
+  const dispatch = useDispatch()
+  const customer = useSelector((state) => state.customers.customer)
   const [formData, setFormData] = useState({
     fullName: '',
     gender: '',
@@ -13,22 +17,37 @@ function CustomerCreateForm(props) {
     identificationNo: '',
     image: null,
     password: '',
-  });
+  })
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setFormData({
       ...formData,
       [name]: value,
-    });
-  };
+    })
+    dispatch(handleSetCustomer({ ...customer, [name]: value }))
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // if (props.onSubmit) {
-    //     props.onSubmit(formData);
-    // }
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      // Đảm bảo gọi hàm bất đồng bộ với await
+      const response = await dispatch(createCustomer(customer))
+
+      console.log(response.status)
+      // Kiểm tra mã trạng thái (status) từ response
+      if (response.status == 201) {
+        console.log('Create succeeded')
+      } else {
+        console.log('Create failed')
+      }
+    } catch (error) {
+      // Xử lý lỗi nếu có
+      console.error('Error occurred while creating customer:', error)
+    }
+
+    console.log('Submit')
+  }
 
   const handleFileChange = (e) => {
     // const file = e.target.files[0];
@@ -36,11 +55,11 @@ function CustomerCreateForm(props) {
     //     ...formData,
     //     image: file
     // });
-  };
+  }
 
   return (
     <div className="customer-create-form">
-      <h2 className='text-center'>Create New Customer</h2>
+      <h2 className="text-center">Create New Customer</h2>
       <form onSubmit={handleSubmit} className="row g-3">
         <div className="col-md-6">
           <label htmlFor="fullName" className="form-label">
@@ -151,7 +170,7 @@ function CustomerCreateForm(props) {
           />
         </div>
 
-        <div className="col-md-6">
+        {/* <div className="col-md-6">
           <label htmlFor="image" className="form-label">
             Image
           </label>
@@ -161,6 +180,19 @@ function CustomerCreateForm(props) {
             name="image"
             className="form-control"
             onChange={handleFileChange}
+            required
+          />
+        </div> */}
+        <div className="col-md-6">
+          <label htmlFor="image" className="form-label">
+            Image
+          </label>
+          <input
+            type="text"
+            id="image"
+            name="image"
+            className="form-control"
+            onChange={handleChange}
             required
           />
         </div>
@@ -178,11 +210,10 @@ function CustomerCreateForm(props) {
             required
           />
         </div>
-
         <BtnModalClose />
       </form>
     </div>
-  );
+  )
 }
 
-export default React.memo(CustomerCreateForm);
+export default React.memo(CustomerCreateForm)

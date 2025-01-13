@@ -8,7 +8,7 @@ function BtnModal(props) {
     <div>
       <button
         type="button"
-        className={`btn btn-${props.style}`}
+        className={`me-1 btn btn-${props.style}`}
         data-bs-toggle="modal"
         data-bs-target="#myModal"
         onClick={()=>setIform(props.iform)}        
