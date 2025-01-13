@@ -6,6 +6,7 @@ import { apiEmployee } from '../constant/apiConstant';
 export const getAllEmployees = async () => {
     try {
         let response = await axios.get(apiEmployee);
+        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching employees", error);
@@ -16,6 +17,8 @@ export const getAllEmployees = async () => {
 export const getAllEmployeeRoles = async () => {
     try {
         let response = await axios.get(apiEmployee + 'role');
+        console.log(response.data);
+        
         return response.data;
     } catch (error) {
         console.error("Error fetching employees", error);
@@ -71,7 +74,7 @@ export const toggleEmployeeStatus = async (id) => {
 
 export const updateEmployeeRole = async (employeeId, roleId, roleName) => {
     try {
-        let response = await axios.put(`http://localhost:5185/api/Employee/2/employeeRole`, {
+        let response = await axios.put(`${apiEmployee}${employeeId}/EmployeeRole`, {
             roleId: roleId,
             roleName: roleName
         });
