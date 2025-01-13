@@ -19,6 +19,9 @@ const EmployeeDetail = React.lazy(() => import('../views/admin/employees/Employe
 const AddEmployee = React.lazy(() => import('../views/admin/employees/AddEmployee'))
 const EmployeeType = React.lazy(() => import('../views/admin/employees/EmployeeType'))
 const UpdateEmployee = React.lazy(() => import('../views/admin/employees/UpdateEmployee'))
+const RetailShopDetail = React.lazy(
+  () => import('../views/admin/employees/components/RetailShopDetail'),
+)
 //plan
 const AddPlan = React.lazy(() => import('../views/admin/plan/AddPlan'))
 const UpdatePlan = React.lazy(() => import('../views/admin/plan/UpdatePlan'))
@@ -148,6 +151,12 @@ const routes = [
   { path: '/AddEmployee', exact: true, name: 'AddEmployee', element: AddEmployee },
   { path: '/EmployeeType', exact: true, name: 'EmployeeType', element: EmployeeType },
   { path: '/UpdateEmployee', exact: true, name: 'UpdateEmployee', element: UpdateEmployee },
+  {
+    path: '/RetailShop/:id',
+    exact: true,
+    name: 'RetailShopDetail',
+    element: RetailShopDetail,
+  },
 
   //plan
   { path: '/AddPlan', exact: true, name: 'AddPlan', element: AddPlan },

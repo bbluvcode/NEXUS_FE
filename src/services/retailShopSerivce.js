@@ -6,6 +6,8 @@ import { apiRetailShop } from '../constant/apiConstant';
 export const getAllRetailShops = async () => {
     try {
         let response = await axios.get(apiRetailShop);
+        console.log(response.data);
+        
         return response.data;
     } catch (error) {
         console.error("Error fetching RetailShops", error);
