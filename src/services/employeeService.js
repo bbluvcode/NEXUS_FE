@@ -71,7 +71,7 @@ export const toggleEmployeeStatus = async (id) => {
 
 export const updateEmployeeRole = async (employeeId, roleId, roleName) => {
     try {
-        let response = await axios.put(`http://localhost:5185/api/Employee/2/employeeRole`, {
+        let response = await axios.put(`${apiEmployee}${employeeId}/EmployeeRole`, {
             roleId: roleId,
             roleName: roleName
         });
