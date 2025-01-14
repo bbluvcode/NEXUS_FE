@@ -12,7 +12,7 @@ export const fetchFeedbacks = createAsyncThunk('feedbacks/fetchFeedbacks', async
   } catch (error) {
     console.log('1. Feedback slice: loi roi, ket noi API nghiem tuc di')
     console.log('error: ', error)
-    return true
+    return false
   }
 })
 export const createFeedback = createAsyncThunk('Feedbacks/createFeedback', async (Feedback) => {
@@ -24,6 +24,16 @@ export const createFeedback = createAsyncThunk('Feedbacks/createFeedback', async
     console.log('2. Feedback slice: loi roi, ket noi API nghiem tuc di')
     console.log('error: ', error)
     return true
+  }
+})
+export const changeStatusFeedback = createAsyncThunk('feedbacks/changeStatusFeedback',async(fbid)=>{
+  try {
+    const response = await axios.put(apiCustomer+'change-status-feedback-status/'+fbid)
+    return response.data.data
+  } catch (error) {
+    console.log('3. Feedback slice: loi roi')
+    console.log('error: ', error)
+    return false
   }
 })
 const feedbackSlice = createSlice({
@@ -63,10 +73,21 @@ const feedbackSlice = createSlice({
         state.items = action.payload
       })
       .addCase(createFeedback.fulfilled, (state, action) => {
-        console.log('action: ', action)
-
+        // console.log('action: ', action)
         state.status = 'succeeded'
         state.items.unshift(action.payload)
+      })
+      .addCase(changeStatusFeedback.fulfilled,(state,action)=>{
+        console.log('extraReducers-updateFeedback: ', action)
+        state.status = 'succeeded'
+        const updatedItem = action.payload
+        if (updatedItem) {
+          // Tìm và thay thế khách hàng cũ với khách hàng đã cập nhật
+          const index = state.items.findIndex((item) => item.feedBackId === updatedItem.feedBackId)
+          if (index !== -1) {
+            state.items[index] = updatedItem // Cập nhật khách hàng trong state.items
+          }
+        }
       })
   },
 })

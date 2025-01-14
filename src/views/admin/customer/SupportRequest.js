@@ -21,17 +21,18 @@ const SupportRequest = () => {
     <div>
       <div className="d-flex justify-content-between">
         <h2>List of Support Request</h2>
-        <BtnModal name="Create New Support Request" iform="0" style="primary" />
+        <BtnModal name="Create New Support Request" iform="6" style="primary" />
       </div>
       <div className="row">
-        <table className="table">
+        <table className="table table-hover">
           <thead>
             <tr>
               <th>Id</th>
               <th>Date Request</th>
-              <th>Customer ID</th>
+              <th>Customer Name</th>
               <th>Title</th>
               <th>Detail</th>
+              <th>Resolver</th>
               <th>Date Resolve</th>
               <th className="text-center">Action</th>
             </tr>
@@ -42,9 +43,10 @@ const SupportRequest = () => {
                 <tr key={index}>
                   <td>{item.supportRequestId}</td>
                   <td>{formatDateSystem(item.dateRequest)}</td>
-                  <td className='text-center'>{item.customerId}</td>
+                  <td className='text-center'>{item.fullName}</td>
                   <td>{item.title}</td>
                   <td>{item.detailContent}</td>
+                  <td>Emp001</td>
                   <td>{item.dateResolve ? formatDateSystem(item.dateResolved) : 'Waiting'}</td>
                   <td className="d-flex">
                     <button
@@ -52,10 +54,10 @@ const SupportRequest = () => {
                     >
                       <CIcon icon={item.isResponse ? cilCheck : cilWarning} />
                     </button>
-                    <BtnModal name={<CIcon icon={cilUser} />} iform="1" style="outline-primary" />
+                    <BtnModal name={<CIcon icon={cilUser} />} iform="6" style="outline-primary" />
                     <BtnModal
                       name={<i className="fa fa-edit"></i>}
-                      iform="1"
+                      iform="6"
                       style="outline-warning"
                     />
                   </td>

@@ -1,8 +1,11 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react'
-import BtnModalClose from '../button/BtnModalClose'
+import BtnModalCloseSubmit from '../button/BtnModalCloseSubmit'
 import { useDispatch, useSelector } from 'react-redux'
 import { createCustomer, handleSetCustomer } from '../../redux/customer/customerSlice'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
 
 function CustomerCreateForm(props) {
   const dispatch = useDispatch()
@@ -18,6 +21,32 @@ function CustomerCreateForm(props) {
     image: null,
     password: '',
   })
+  const schema = yup.object().shape({
+    fullName: yup.string().min(3).max(12).required('Full name is required'),
+    gender: yup.string().required('Gender is required'),
+    dateOfBirth: yup.date().required('Date of birth is required'),
+    address: yup.string().optional(),
+    email: yup.string().email('Invalid email address').required(),
+    phoneNumber: yup
+      .string()
+      .matches(/^[0-9]+$/, 'Phone number must be numeric')
+      .optional(),
+    identificationNo: yup.string().optional(),
+    image: yup.string().optional(), // Add validation if needed for images (e.g., file type)
+    password: yup
+      .string()
+      .min(6, 'Password must be at least 6 characters')
+      .required('Password is required'),
+  })
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onTouched',
+  })
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -28,25 +57,11 @@ function CustomerCreateForm(props) {
     dispatch(handleSetCustomer({ ...customer, [name]: value }))
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      // Đảm bảo gọi hàm bất đồng bộ với await
-      const response = await dispatch(createCustomer(customer))
+  const onSubmit = async (e) => {
+    // e.preventDefault()
 
-      console.log(response.status)
-      // Kiểm tra mã trạng thái (status) từ response
-      if (response.status == 201) {
-        console.log('Create succeeded')
-      } else {
-        console.log('Create failed')
-      }
-    } catch (error) {
-      // Xử lý lỗi nếu có
-      console.error('Error occurred while creating customer:', error)
-    }
-
-    console.log('Submit')
+    // Đảm bảo gọi hàm bất đồng bộ với await
+    dispatch(createCustomer(customer))
   }
 
   const handleFileChange = (e) => {
@@ -60,20 +75,20 @@ function CustomerCreateForm(props) {
   return (
     <div className="customer-create-form">
       <h2 className="text-center">Create New Customer</h2>
-      <form onSubmit={handleSubmit} className="row g-3">
+      <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
         <div className="col-md-6">
           <label htmlFor="fullName" className="form-label">
             Full Name
           </label>
           <input
+            {...register('fullName')}
             type="text"
             id="fullName"
             name="fullName"
             className="form-control"
-            value={formData.fullName}
             onChange={handleChange}
-            required
           />
+          {errors.fullName && <p className="text-danger">{errors.fullName.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -81,18 +96,18 @@ function CustomerCreateForm(props) {
             Gender
           </label>
           <select
+            {...register('gender')}
             id="gender"
             name="gender"
             className="form-select"
-            value={formData.gender}
             onChange={handleChange}
-            required
           >
             <option value="">Select Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
+          {errors.gender && <p className="text-danger">{errors.gender.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -100,14 +115,14 @@ function CustomerCreateForm(props) {
             Date of Birth
           </label>
           <input
+            {...register('dateOfBirth')}
             type="date"
             id="dateOfBirth"
             name="dateOfBirth"
             className="form-control"
-            value={formData.dateOfBirth}
             onChange={handleChange}
-            required
           />
+          {errors.dateOfBirth && <p className="text-danger">{errors.dateOfBirth.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -115,14 +130,14 @@ function CustomerCreateForm(props) {
             Password
           </label>
           <input
+            {...register('password')}
             type="password"
             id="password"
             name="password"
             className="form-control"
-            value={formData.password}
             onChange={handleChange}
-            required
           />
+          {errors.password && <p className="text-danger">{errors.password.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -130,14 +145,14 @@ function CustomerCreateForm(props) {
             Email
           </label>
           <input
+            {...register('email')}
             type="email"
             id="email"
             name="email"
             className="form-control"
-            value={formData.email}
             onChange={handleChange}
-            required
           />
+          {errors.email && <p className="text-danger">{errors.email.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -145,14 +160,14 @@ function CustomerCreateForm(props) {
             Phone Number
           </label>
           <input
+            {...register('phoneNumber')}
             type="text"
             id="phoneNumber"
             name="phoneNumber"
             className="form-control"
-            value={formData.phoneNumber}
             onChange={handleChange}
-            required
           />
+          {errors.phoneNumber && <p className="text-danger">{errors.phoneNumber.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -160,57 +175,51 @@ function CustomerCreateForm(props) {
             Identification Number
           </label>
           <input
+            {...register('identificationNo')}
             type="text"
             id="identificationNo"
             name="identificationNo"
             className="form-control"
-            value={formData.identificationNo}
             onChange={handleChange}
-            required
           />
+          {errors.identificationNo && (
+            <p className="text-danger">{errors.identificationNo.message}</p>
+          )}
         </div>
 
-        {/* <div className="col-md-6">
-          <label htmlFor="image" className="form-label">
-            Image
-          </label>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            className="form-control"
-            onChange={handleFileChange}
-            required
-          />
-        </div> */}
         <div className="col-md-6">
           <label htmlFor="image" className="form-label">
             Image
           </label>
           <input
-            type="text"
+            {...register('image')}
+            type="file"
             id="image"
             name="image"
             className="form-control"
             onChange={handleChange}
-            required
           />
+          {errors.image && <p className="text-danger">{errors.image.message}</p>}
         </div>
+
         <div className="col-md-12">
           <label htmlFor="address" className="form-label">
             Address
           </label>
           <input
+            {...register('address')}
             type="text"
             id="address"
             name="address"
             className="form-control"
-            value={formData.address}
             onChange={handleChange}
-            required
           />
+          {errors.address && <p className="text-danger">{errors.address.message}</p>}
         </div>
-        <BtnModalClose />
+
+        <div className="col-md-12">
+          <BtnModalCloseSubmit />
+        </div>
       </form>
     </div>
   )

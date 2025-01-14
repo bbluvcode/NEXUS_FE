@@ -1,8 +1,14 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react'
-import BtnModalClose from '../button/BtnModalClose'
+import BtnModalCloseSubmit from '../button/BtnModalCloseSubmit'
+import { useDispatch, useSelector } from 'react-redux'
+import { handleSetCustomer, updateCustomer } from '../../redux/customer/customerSlice'
 
 function CustomerEditForm(props) {
+  const dispatch = useDispatch()
+
+  // Lấy dữ liệu customer từ Redux
+  const customer = useSelector((state) => state.customers.customer)
   const [formData, setFormData] = useState({
     fullName: '',
     gender: '',
@@ -14,38 +20,48 @@ function CustomerEditForm(props) {
     image: null,
     password: '',
   })
-
-//   useEffect(() => {
-//     if (props.customer) {
-//       setFormData({
-//         fullName: props.customer.fullName || '',
-//         gender: props.customer.gender || '',
-//         dateOfBirth: props.customer.dateOfBirth || '',
-//         address: props.customer.address || '',
-//         email: props.customer.email || '',
-//         phoneNumber: props.customer.phoneNumber || '',
-//         identificationNo: props.customer.identificationNo || '',
-//         image: props.customer.image || null,
-//         password: props.customer.password || '',
-//       })
-//     }
-//   }, [props.customer])
-
+  const formatDate = (date) => {
+    if (!date) return ''
+    const d = new Date(date)
+    const year = d.getFullYear()
+    const month = String(d.getMonth() + 1).padStart(2, '0') // Thêm 0 trước tháng nếu tháng có 1 chữ số
+    const day = String(d.getDate()).padStart(2, '0') // Thêm 0 trước ngày nếu ngày có 1 chữ số
+    return `${year}-${month}-${day}` // Định dạng theo yyyy-MM-dd
+  }
+  // Cập nhật formData khi customer thay đổi
+  useEffect(() => {
+    if (customer) {
+      setFormData({
+        fullName: customer.fullName || '',
+        gender: customer.gender || '',
+        dateOfBirth: formatDate(customer.dateOfBirth) || '',
+        address: customer.address || '',
+        email: customer.email || '',
+        phoneNumber: customer.phoneNumber || '',
+        identificationNo: customer.identificationNo || '',
+        image: customer.image || null,
+        password: customer.password || '',
+      })
+    }
+  }, [customer]) // Dependency array để chạy lại khi customer thay đổi
+  
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData({
       ...formData,
       [name]: value,
     })
+    dispatch(handleSetCustomer({ ...customer, [name]: value })) // Đồng bộ lại dữ liệu vào Redux
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // if (props.onSubmit) {
-    //     props.onSubmit(formData);
-    // }
-  }
+    // Gửi yêu cầu cập nhật khách hàng, có thể gọi hành động updateCustomer
+    console.log('Submit updated customer form:', formData)
+    console.log('Submit updated customer:', customer)
+    dispatch(updateCustomer({ id: customer.customerId, customer }))
 
+  }
   const handleFileChange = (e) => {
     const file = e.target.files[0]
     setFormData({
@@ -56,7 +72,7 @@ function CustomerEditForm(props) {
 
   return (
     <div className="customer-edit-form">
-      <h2 className='text-center'>Edit Customer</h2>
+      <h2 className="text-center">Edit Customer</h2>
       <form onSubmit={handleSubmit} className="row g-3">
         <div className="col-md-6">
           <label htmlFor="fullName" className="form-label">
@@ -195,7 +211,7 @@ function CustomerEditForm(props) {
           />
         </div>
 
-        <BtnModalClose />
+        <BtnModalCloseSubmit />
       </form>
     </div>
   )

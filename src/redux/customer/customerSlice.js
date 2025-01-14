@@ -10,7 +10,7 @@ export const fetchCustomers = createAsyncThunk('Customers/fetchCustomers', async
     const response = await axios.get(apiCustomer)
     return response.data.data
   } catch (error) {
-    console.log('1. customer slice: loi roi, ket noi API nghiem tuc di')
+    console.log('1. customer slice: API loi roi')
     console.log('error: ', error)
     return null
   }
@@ -29,6 +29,7 @@ export const createCustomer = createAsyncThunk('Customers/createCustomer', async
     formData.append('password', customer.password)
     const response = await axios.post(apiCustomer, formData)
     console.log('response: ', response)
+    bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
     return response.data.data
   } catch (error) {
     console.log('2. customer slice: loi API')
@@ -36,6 +37,35 @@ export const createCustomer = createAsyncThunk('Customers/createCustomer', async
     return null
   }
 })
+export const updateCustomer = createAsyncThunk(
+  'Customers/updateCustomer',
+  async ({ id, customer }) => {
+    console.log('id :', id)
+    console.log('customer :', customer)
+    try {
+      const formData = new FormData()
+      formData.append('fullName', customer.fullName)
+      formData.append('gender', customer.gender)
+      formData.append('dateOfBirth', customer.dateOfBirth)
+      formData.append('address', customer.address)
+      formData.append('email', customer.email)
+      formData.append('phoneNumber', customer.phoneNumber)
+      formData.append('identificationNo', customer.identificationNo)
+      formData.append('image', customer.image)
+      formData.append('password', customer.password)
+      console.log('test data fomr: ', formData)
+      const response = await axios.put(`${apiCustomer}${id}`, formData)
+      console.log('response: ', response)
+      bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
+      return response.data.data
+    } catch (error) {
+      console.log('3. customer slice: lỗi API trong updateCustomer')
+      console.log('error: ', error)
+      return null
+    }
+  },
+)
+
 const customerSlice = createSlice({
   name: 'customers',
   initialState: {
@@ -61,6 +91,7 @@ const customerSlice = createSlice({
     handleSetCustomer: (state, action) => {
       // console.log('handleSetCustomer-action: ', action)
       state.customer = action.payload
+      console.log(state.customer)
     },
   },
   extraReducers: (builder) => {
@@ -76,6 +107,18 @@ const customerSlice = createSlice({
         // state.items.shift(action.payload)
         const item = action.payload
         item != null ? state.items.unshift(item) : console.log('cannot add')
+      })
+      .addCase(updateCustomer.fulfilled, (state, action) => {
+        console.log('extraReducers-updateCustomer: ', action)
+        state.status = 'succeeded'
+        const updatedItem = action.payload
+        if (updatedItem) {
+          // Tìm và thay thế khách hàng cũ với khách hàng đã cập nhật
+          const index = state.items.findIndex((item) => item.customerId === updatedItem.customerId)
+          if (index !== -1) {
+            state.items[index] = updatedItem // Cập nhật khách hàng trong state.items
+          }
+        }
       })
   },
 })

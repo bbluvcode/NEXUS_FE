@@ -1,7 +1,11 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchFeedbacks } from '../../../redux/customer/feedbackSlice'
+import {
+  changeStatusFeedback,
+  fetchFeedbacks,
+  handleSetFeedback,
+} from '../../../redux/customer/feedbackSlice'
 import BtnModal from '../../../components/button/BtnModal'
 import CIcon from '@coreui/icons-react'
 import { cilAssistiveListeningSystem, cilMouthSlash, cilUser } from '@coreui/icons'
@@ -21,17 +25,17 @@ const Feedbacks = () => {
     <div>
       <div className="d-flex justify-content-between">
         <h2>List of Customer Feedback</h2>
-        <BtnModal name="Create New Customer Request" iform="0" style="primary" />
+        {/* <BtnModal name="Create New Customer Request" iform="0" style="primary" /> */}
       </div>
       <div className="row">
-        <table className="table">
+        <table className="table table-hover">
           <thead>
             <tr>
-              <th>feedBackId</th>
+              <th>fbID</th>
               <th>Date</th>
-              <th>title</th>
-              <th>feedBackContent</th>
-              <th>customerId</th>
+              <th>Title</th>
+              <th>FeedBackContent</th>
+              <th>CustomerName</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -44,19 +48,23 @@ const Feedbacks = () => {
                   <td>{item.title}</td>
                   <td>{item.feedBackContent}</td>
                   {/* <td>{item.status}</td> */}
-                  <td>{item.customerId}</td>
-                  <td className="d-flex">
+                  <td>{item.fullName}</td>
+                  <td
+                    className="d-flex"
+                    onClick={() => {
+                      dispatch(handleSetFeedback(item))
+                    }}
+                  >
                     <button
                       className={`text-white me-1 btn btn-${item.status ? 'info' : 'secondary'}`}
+                      onClick={async () => {
+                        await dispatch(changeStatusFeedback(item.feedBackId))
+                        dispatch(fetchFeedbacks())
+                      }}
                     >
                       <CIcon icon={item.status ? cilAssistiveListeningSystem : cilMouthSlash} />
                     </button>
-                    <BtnModal name={<CIcon icon={cilUser} />} iform="1" style="outline-primary" />
-                    <BtnModal
-                      name={<i className="fa fa-edit"></i>}
-                      iform="1"
-                      style="outline-warning"
-                    />
+                    <BtnModal name={<CIcon icon={cilUser} />} iform="7" style="outline-primary" />
                   </td>
                 </tr>
               ))

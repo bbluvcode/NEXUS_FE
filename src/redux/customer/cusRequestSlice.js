@@ -7,45 +7,86 @@ import { apiCustomer } from '../../constant/apiConstant'
 //redux thunk(middleware) su ly bat dong bo
 export const fetchCusRequests = createAsyncThunk('CusRequests/fetchCusRequests', async () => {
   try {
-    const response = await axios.get(apiCustomer+"all-customer-request")
+    const response = await axios.get(apiCustomer + 'all-customer-request')
     return response.data.data
   } catch (error) {
     console.log('1. CusRequest slice: loi roi, ket noi API nghiem tuc di')
     console.log('error: ', error)
-    return true;
+    return false
   }
 })
-export const createCusRequest = createAsyncThunk('CusRequests/createCusRequest', async (CusRequest) => {
+export const createCusRequest = createAsyncThunk('CusRequests/createCusRequest', async (cusReq) => {
   try {
-    const response = await axios.post(apiCustomer+"create-customer-request", CusRequest)
+    const formData = new FormData()
+    formData.append('requestTitle', cusReq.requestTitle)
+    formData.append('serviceRequest', cusReq.serviceRequest)
+    formData.append('equipmentRequest', cusReq.equipmentRequest)
+    formData.append('isResponse', false)
+    formData.append('customerId', cusReq.customerId)
+    formData.append('dateCreate', new Date().toISOString())
+    const response = await axios.post(apiCustomer + 'create-customer-request', formData)
     console.log('response: ', response)
+    bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
     return response.data.data
   } catch (error) {
     console.log('2. CusRequest slice: loi roi, ket noi API nghiem tuc di')
     console.log('error: ', error)
-    return true;
-
+    return true
   }
 })
+export const updateCusRequest = createAsyncThunk('CusRequests/updateCusRequest', async (cusReq) => {
+  try {
+    const formData = new FormData()
+    formData.append('requestId', cusReq.requestId)
+    formData.append('requestTitle', cusReq.requestTitle)
+    formData.append('serviceRequest', cusReq.serviceRequest)
+    formData.append('equipmentRequest', cusReq.equipmentRequest)
+    formData.append('isResponse', cusReq.isResponse)
+    formData.append('customerId', cusReq.customerId)
+    formData.append('dateResolve', cusReq.dateResolve || '') // Nếu có ngày resolve
+    formData.append('dateCreate', cusReq.dateCreate || '') // Nếu có ngày resolve
+    const response = await axios.put(apiCustomer + `update-customer-request`, formData)
+    console.log('response: ', response)
+    bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
+    return response.data.data
+  } catch (error) {
+    console.log('3. CusRequest slice: loi roi, ket noi API nghiem tuc di')
+    console.log('error: ', error)
+    return false
+  }
+})
+export const changeStatusCusRequest = createAsyncThunk(
+  'cusRequests/changeStatusCusRequest',
+  async (cusReqID) => {
+    try {
+      const response = await axios.put(apiCustomer + 'change-status-customer-request/' + cusReqID)
+      return response.data.data
+    } catch (error) {
+      console.log('1. CusRequest slice: loi roi, ket noi API nghiem tuc di')
+      console.log('error: ', error)
+      return false
+    }
+  },
+)
 const cusRequestSlice = createSlice({
   name: 'cusRequests',
   initialState: {
     items: [],
     isUpdate: false,
     cusRequest: {
-        "requestTitle": "",
-        "serviceRequest": "",
-        "equipmentRequest": "",
-        "dateCreate":"",
-        "dateResolve":"",
-        "isResponse": false,
-        "customerId": null,
-        "fullName": "",
-        "gender": "",
-        "dateOfBirth": "",
-        "address": "",
-        "email": "",
-        "phoneNumber": ""
+      requestTitle: '',
+      serviceRequest: '',
+      equipmentRequest: '',
+      dateCreate: '',
+      dateResolve: '',
+      isResponse: false,
+      customerId: null,
+      fullName: '',
+      gender: '',
+      dateOfBirth: '',
+      address: '',
+      email: '',
+      phoneNumber: '',
     },
     status: 'idle',
     error: null,
@@ -54,7 +95,7 @@ const cusRequestSlice = createSlice({
     //su ly dong bo
     handleSetCusRequest: (state, action) => {
       console.log('action: ', action)
-      state.CusRequest = action.payload
+      state.cusRequest = action.payload
     },
   },
   extraReducers: (builder) => {
@@ -69,6 +110,26 @@ const cusRequestSlice = createSlice({
 
         state.status = 'succeeded'
         state.items.unshift(action.payload)
+      })
+      .addCase(updateCusRequest.fulfilled, (state, action) => {
+        // console.log('addcase: Updated customer request: ', action.payload)
+        if (action.payload != false) {
+          state.status = 'succeeded'
+          const index = state.items.findIndex((item) => item.requestId === action.payload.requestId)
+          if (index !== -1) {
+            state.items[index] = action.payload
+          }
+        }
+      })
+      .addCase(changeStatusCusRequest.fulfilled, (state, action) => {
+        console.log('addcase: Change status customer request: ', action.payload)
+        if (action.payload != false) {
+          state.status = 'succeeded'
+          const index = state.items.findIndex((item) => item.requestId === action.payload.requestId)
+          if (index !== -1) {
+            state.items[index] = action.payload
+          }
+        }
       })
   },
 })

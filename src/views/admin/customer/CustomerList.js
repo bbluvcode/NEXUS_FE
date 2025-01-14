@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchCustomers } from '../../../redux/customer/customerSlice'
+import { fetchCustomers, handleSetCustomer } from '../../../redux/customer/customerSlice'
 import BtnModal from '../../../components/button/BtnModal'
 
 const CustomerList = () => {
@@ -11,18 +11,23 @@ const CustomerList = () => {
   useEffect(() => {
     dispatch(fetchCustomers())
   }, [dispatch])
+
   const formatDateSystem = (dateString) => {
     const date = new Date(dateString)
     return date.toLocaleDateString()
+  }
+
+  const handleEditCustomer = (customer) => {
+    dispatch(handleSetCustomer(customer))
   }
   return (
     <div>
       <div className="d-flex justify-content-between">
         <h2>List of customer</h2>
-        <BtnModal name="Create New Customer" iform='0' style='primary'/>
+        <BtnModal name="Create New Customer" iform="0" style="primary" />
       </div>
       <div className="row">
-        <table className="table">
+        <table className="table table-hover">
           <thead>
             <tr>
               <th>Id</th>
@@ -52,8 +57,13 @@ const CustomerList = () => {
                   <td>{item.identificationNo}</td>
                   {/* <td>{item.image}</td>
         <td>{item.password}</td> */}
-                  <td>
-                    <BtnModal name={<i className="fa fa-edit"></i>} iform='1' style='warning'/>
+                  <td onClick={()=> handleEditCustomer(item)}>                
+                    <BtnModal
+                      name={<i className="fa fa-edit"></i>}
+                      iform="1"
+                      style="warning"
+                      customer={item}
+                    />
                   </td>
                 </tr>
               ))
@@ -71,7 +81,7 @@ const CustomerList = () => {
                   {/* <td>{item.image}</td>
         <td>{item.password}</td> */}
                   <td>
-                    <BtnModal name={<i className="fa fa-edit"></i>} iform='1' style='warning'/>
+                    <BtnModal name={<i className="fa fa-edit"></i>} iform="1" style="warning"/>
                   </td>
                 </tr>
                 <tr key={'2'}>
