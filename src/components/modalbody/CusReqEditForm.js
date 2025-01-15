@@ -133,21 +133,7 @@ function CusReqEditForm(props) {
             value={formData.dateResolve}
             onChange={handleChange}
           />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="isResponse" className="form-label">
-            Is Response
-          </label>
-          <input
-            type="checkbox"
-            id="isResponse"
-            name="isResponse"
-            className="form-check-input"
-            checked={formData.isResponse}
-            onChange={handleChange}
-          />
-        </div>
+        </div>        
 
         <div className="col-md-6">
           <label htmlFor="customerId" className="form-label">
@@ -162,7 +148,19 @@ function CusReqEditForm(props) {
             onChange={handleChange}
           />
         </div>
-
+        <div className="col-md-6">
+          <label htmlFor="isResponse" className="form-label">
+            Is Response
+          </label>
+          <input
+            type="checkbox"
+            id="isResponse"
+            name="isResponse"
+            className="form-check-input"
+            checked={formData.isResponse}
+            onChange={handleChange}
+          />
+        </div>
         <div className="col-12">
           <BtnModalCloseSubmit />
         </div>

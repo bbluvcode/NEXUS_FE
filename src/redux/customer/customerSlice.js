@@ -27,7 +27,9 @@ export const createCustomer = createAsyncThunk('Customers/createCustomer', async
     formData.append('identificationNo', customer.identificationNo)
     formData.append('image', customer.image)
     formData.append('password', customer.password)
+
     const response = await axios.post(apiCustomer, formData)
+    
     console.log('response: ', response)
     bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
     return response.data.data
@@ -40,8 +42,7 @@ export const createCustomer = createAsyncThunk('Customers/createCustomer', async
 export const updateCustomer = createAsyncThunk(
   'Customers/updateCustomer',
   async ({ id, customer }) => {
-    console.log('id :', id)
-    console.log('customer :', customer)
+
     try {
       const formData = new FormData()
       formData.append('fullName', customer.fullName)
@@ -109,14 +110,12 @@ const customerSlice = createSlice({
         item != null ? state.items.unshift(item) : console.log('cannot add')
       })
       .addCase(updateCustomer.fulfilled, (state, action) => {
-        console.log('extraReducers-updateCustomer: ', action)
         state.status = 'succeeded'
         const updatedItem = action.payload
         if (updatedItem) {
-          // Tìm và thay thế khách hàng cũ với khách hàng đã cập nhật
           const index = state.items.findIndex((item) => item.customerId === updatedItem.customerId)
           if (index !== -1) {
-            state.items[index] = updatedItem // Cập nhật khách hàng trong state.items
+            state.items[index] = updatedItem 
           }
         }
       })
