@@ -6,7 +6,6 @@ import { apiEmployee } from '../constant/apiConstant';
 export const getAllEmployees = async () => {
     try {
         let response = await axios.get(apiEmployee);
-        console.log(response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching employees", error);

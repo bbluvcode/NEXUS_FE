@@ -1,7 +1,9 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { addRetailShop } from '../../../services/retailShopSerivce';
+import { useNavigate } from 'react-router-dom';
 
 const retailShopValidationSchema = Yup.object().shape({
   RetailShopName: Yup.string()
@@ -26,24 +28,27 @@ const retailShopValidationSchema = Yup.object().shape({
 });
 
 const AddRetailShop = () => {
-  const [regions, setRegions] = useState([]);
+  const navigate = useNavigate(); // Correctly initialize the hook here
 
-  // Lấy danh sách vùng từ backend
-  useEffect(() => {
-    const fetchRegions = async () => {
-      try {
-        const response = await axios.get('/api/regions');
-        setRegions(response.data);
-      } catch (error) {
-        console.error('Failed to fetch regions', error);
-      }
-    };
-    fetchRegions();
-  }, []);
+  const regions = [
+    { RegionID: 1, RegionName: 'North Region' },
+    { RegionID: 2, RegionName: 'South Region' },
+    { RegionID: 3, RegionName: 'East Region' },
+  ];
 
-  const handleSubmit = (values) => {
-    console.log('Submitted data:', values);
-    // Gửi dữ liệu tới API backend
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      const response = await addRetailShop(values);
+      console.log('Retail Shop added successfully:', response);
+      alert('Retail Shop added successfully!');
+      resetForm(); // Clear the form
+      navigate('/admin/retailshoplist'); // Redirect to the retail shop list page
+    } catch (error) {
+      console.error('Failed to add Retail Shop:', error);
+      alert('Failed to add Retail Shop. Please try again.');
+    } finally {
+      setSubmitting(false); // Enable the form submission button
+    }
   };
 
   return (

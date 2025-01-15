@@ -1,70 +1,56 @@
-/* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getAllRetailShops } from '../../../services/retailShopSerivce'
 
 const RetailShopList = () => {
-  const [shops, setShops] = useState([]);
-  const [regions, setRegions] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchField, setSearchField] = useState('RSName');
-  const navigate = useNavigate();
+  const [shops, setShops] = useState([])
+  const [regions, setRegions] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [searchField, setSearchField] = useState('retailShopName')
+  const navigate = useNavigate()
 
   useEffect(() => {
     // Simulate fetching region data from a backend API
     const fetchRegions = async () => {
       const regionData = [
-        { RegionID: 101, RegionName: 'North Region' },
-        { RegionID: 102, RegionName: 'South Region' },
-        { RegionID: 103, RegionName: 'East Region' },
-        { RegionID: 104, RegionName: 'West Region' },
-      ];
-      setRegions(regionData);
-    };
+        { RegionID: 1, RegionName: 'North Region' },
+        { RegionID: 2, RegionName: 'South Region' },
+        { RegionID: 3, RegionName: 'East Region' },
+        { RegionID: 4, RegionName: 'West Region' },
+      ]
+      setRegions(regionData)
+    }
 
-    // Simulate fetching shop data from a backend API
+    // Fetch shops data from API
     const fetchShops = async () => {
-      const data = [
-        {
-          RSID: 1,
-          RegionID: 101,
-          RSName: 'Main Office',
-          Address: '123 Main St, City A',
-          Email: 'mainoffice@example.com',
-          Phone: '123-456-7890',
-          isMainOffice: true,
-          Fax: '123-456-7891',
-        },
-        {
-          RSID: 2,
-          RegionID: 102,
-          RSName: 'Branch Office',
-          Address: '456 Elm St, City B',
-          Email: 'branchoffice@example.com',
-          Phone: '987-654-3210',
-          isMainOffice: false,
-          Fax: '987-654-3211',
-        },
-      ];
-      setShops(data);
-    };
+      try {
+        const response = await getAllRetailShops()
+        if (Array.isArray(response.data)) {
+          setShops(response.data)
+        } else {
+          console.error('Unexpected data format:', response)
+          setShops([]) // Gán giá trị mặc định nếu không đúng định dạng
+        }
+      } catch (error) {
+        console.error('Error loading retail shops:', error)
+        setShops([]) // Gán giá trị mặc định nếu lỗi xảy ra
+      }
+    }
 
-    fetchRegions();
-    fetchShops();
-  }, []);
+    fetchRegions()
+    fetchShops()
+  }, [])
 
   const filteredShops = shops.filter((shop) =>
-    shop[searchField]?.toString().toLowerCase().includes(searchTerm)
-  );
+    shop[searchField]?.toString().toLowerCase().includes(searchTerm),
+  )
 
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">Retail Shop List</h2>
 
       <div className="d-flex justify-content-between mb-3">
-        <button
-          className="btn btn-primary"
-          onClick={() => navigate('/admin/AddRetailShop')}
-        >
+        <button className="btn btn-primary" onClick={() => navigate('/admin/AddRetailShop')}>
           Add Shop
         </button>
 
@@ -74,9 +60,9 @@ const RetailShopList = () => {
             value={searchField}
             onChange={(e) => setSearchField(e.target.value)}
           >
-            <option value="RSName">Search by Name</option>
-            <option value="Address">Search by Address</option>
-            <option value="Email">Search by Email</option>
+            <option value="retailShopName">Search by Name</option>
+            <option value="address">Search by Address</option>
+            <option value="email">Search by Email</option>
           </select>
           <input
             type="text"
@@ -104,18 +90,18 @@ const RetailShopList = () => {
         </thead>
         <tbody>
           {filteredShops.map((shop, index) => (
-            <tr key={shop.RSID}>
+            <tr key={shop.retailShopId}>
               <td>{index + 1}</td>
               <td>
-                {regions.find((region) => region.RegionID === shop.RegionID)
-                  ?.RegionName || 'Unknown Region'}
+                {regions.find((region) => region.RegionID === shop.regionId)?.RegionName ||
+                  'Unknown Region'}
               </td>
-              <td>{shop.RSName}</td>
-              <td>{shop.Address}</td>
-              <td>{shop.Email}</td>
-              <td>{shop.Phone}</td>
+              <td>{shop.retailShopName}</td>
+              <td>{shop.address}</td>
+              <td>{shop.email}</td>
+              <td>{shop.phone}</td>
               <td>{shop.isMainOffice ? 'Yes' : 'No'}</td>
-              <td>{shop.Fax}</td>
+              <td>{shop.fax || 'N/A'}</td>
               <td>
                 <button className="btn btn-primary btn-sm">Update</button>
               </td>
@@ -124,7 +110,7 @@ const RetailShopList = () => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default RetailShopList;
+export default RetailShopList

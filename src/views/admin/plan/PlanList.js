@@ -34,23 +34,27 @@ const PlanList = () => {
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div style={{ fontSize: '24px', textAlign: 'center', marginTop: '50px' }}>Loading...</div>
+    )
   }
 
   return (
-    <div style={{ display: 'flex', padding: '20px' }}>
+    <div style={{ display: 'flex', padding: '40px' }}>
       {/* Danh sách kế hoạch bên trái */}
-      <div style={{ flex: 1, marginRight: '20px' }}>
-        <h1>Internet Plans</h1>
+      <div style={{ flex: 1, marginRight: '40px' }}>
+        <h1 style={{ fontSize: '32px', marginBottom: '30px' }}>Internet Plans</h1>
         {plans.length > 0 ? (
           plans.map((plan) => (
             <div
               key={plan.planId}
               style={{
-                marginBottom: '20px',
-                padding: '10px',
+                marginBottom: '30px',
+                padding: '20px',
                 border: '1px solid #ccc',
-                borderRadius: '8px',
+                borderRadius: '10px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                transition: 'transform 0.3s ease',
               }}
             >
               <div
@@ -59,16 +63,18 @@ const PlanList = () => {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   cursor: 'pointer',
+                  fontSize: '24px',
+                  fontWeight: 'bold',
                 }}
                 onClick={() => toggleExpand(plan.planId)}
               >
                 <h2 style={{ margin: 0 }}>{plan.planName}</h2>
-                <span>{expandedPlans[plan.planId] ? '▲' : '▼'}</span>
+                <span style={{ fontSize: '24px' }}>{expandedPlans[plan.planId] ? '▲' : '▼'}</span>
               </div>
 
               {/* Chỉ hiển thị phí thuê ban đầu */}
-              <div style={{ marginTop: '10px' }}>
-                {planFees
+              <div style={{ marginTop: '20px', fontSize: '18px' }}>
+                {/* {planFees
                   .filter((fee) => fee.planId === plan.planId)
                   .slice(0, 1) // Chỉ hiển thị phí thuê đầu tiên
                   .map((fee) => (
@@ -78,29 +84,34 @@ const PlanList = () => {
                         cursor: 'pointer',
                         textDecoration: 'underline',
                         color: 'blue',
+                        fontSize: '20px',
+                        marginTop: '10px',
                       }}
                       onClick={() => handlePlanFeeClick(fee)}
-                    ></div>
-                  ))}
+                    >
+                      {fee.planFeeName}
+                    </div>
+                  ))} */}
               </div>
 
               {/* Hiển thị chi tiết nếu được mở rộng */}
               {expandedPlans[plan.planId] && (
                 <div
                   style={{
-                    marginTop: '10px',
-                    paddingLeft: '10px',
-                    borderLeft: '2px solid #ccc',
+                    marginTop: '20px',
+                    paddingLeft: '20px',
+                    borderLeft: '3px solid #ccc',
+                    fontSize: '18px',
                   }}
                 >
-                  <span style={{ display: 'block', marginBottom: '5px' }}>{plan.description}</span>
-                  <span style={{ display: 'block', marginBottom: '5px' }}>
+                  <span style={{ display: 'block', marginBottom: '10px' }}>{plan.description}</span>
+                  <span style={{ display: 'block', marginBottom: '10px' }}>
                     <strong>Security Deposit:</strong> ${plan.securityDeposit}
                   </span>
-                  <span style={{ display: 'block', marginBottom: '5px' }}>
+                  <span style={{ display: 'block', marginBottom: '10px' }}>
                     <strong>Status:</strong> {plan.isUsing ? 'Active' : 'Inactive'}
                   </span>
-                  <h4>Plan Fees:</h4>
+                  <h4 style={{ fontSize: '24px', marginTop: '20px' }}>Plan Fees:</h4>
                   {planFees
                     .filter((fee) => fee.planId === plan.planId)
                     .map((fee) => (
@@ -108,10 +119,17 @@ const PlanList = () => {
                         key={fee.planFeeId}
                         style={{
                           cursor: 'pointer',
-                          textDecoration: 'underline',
-                          color: 'blue',
+                          textDecoration: 'none',
+                          color: '#007bff',
+                          fontSize: '20px',
+                          marginTop: '10px',
+                          padding: '8px 15px',
+                          borderRadius: '5px',
+                          transition: 'background-color 0.3s, transform 0.3s',
                         }}
                         onClick={() => handlePlanFeeClick(fee)}
+                        onMouseEnter={(e) => (e.target.style.backgroundColor = '#e1f1ff')}
+                        onMouseLeave={(e) => (e.target.style.backgroundColor = 'transparent')}
                       >
                         <strong>{fee.planFeeName}:</strong> ${fee.rental}
                       </div>
@@ -127,25 +145,26 @@ const PlanList = () => {
 
       {/* Khu vực bên phải hiển thị chi tiết plan fee */}
       <div style={{ flex: 1 }}>
-        <h1>Plan Fee Details</h1>
+        <h1 style={{ fontSize: '32px', marginBottom: '30px' }}>Plan Fee Details</h1>
         {selectedPlanFee ? (
           <div
             style={{
-              padding: '20px',
+              padding: '30px',
               border: '1px solid #ccc',
-              borderRadius: '8px',
+              borderRadius: '10px',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
             }}
           >
-            <h2>{selectedPlanFee.planFeeName}</h2>
-            <span style={{ display: 'block', marginBottom: '5px' }}>
+            <h2 style={{ fontSize: '28px' }}>{selectedPlanFee.planFeeName}</h2>
+            <span style={{ display: 'block', marginBottom: '10px', fontSize: '20px' }}>
               <strong>Rental Fee:</strong> ${selectedPlanFee.rental}
             </span>
-            <span style={{ display: 'block', marginBottom: '5px' }}>
+            <span style={{ display: 'block', marginBottom: '10px', fontSize: '20px' }}>
               {selectedPlanFee.description}
             </span>
           </div>
         ) : (
-          <div>Please select a plan fee to see details.</div>
+          <div style={{ fontSize: '20px' }}>Please select a plan fee to see details.</div>
         )}
       </div>
     </div>
