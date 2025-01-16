@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import React from 'react'
 import styled from 'styled-components'
-import 'bootstrap-icons/font/bootstrap-icons.css'
+
 const StyledHero = styled.div`
   --default-color: #444444;
   --heading-color: rgb(73, 65, 185);
-  --accent-color:rgba(117, 109, 230, 0.88);
+  --accent-color: rgba(117, 109, 230, 0.88);
   --contrast-color: #ffffff;
   --bs-gutter-y: 1.5rem;
   .g-4,
@@ -208,6 +208,7 @@ const StyledHero = styled.div`
   .bi-inboxes::before {
     content: '';
   }
+
 `
 function Hero(props) {
   return (
@@ -287,4 +288,4 @@ function Hero(props) {
   )
 }
 
-export default React.memo(Hero)
+export default Hero

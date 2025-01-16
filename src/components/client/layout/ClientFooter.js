@@ -50,7 +50,7 @@ const ClientFooter = () => {
         <div className="row">
           <div className="col-lg-12">
             <p>
-              Copyright © 2022 Nexus Service Marketing System Co., Ltd. All Rights Reserved. <br />
+              Copyright © 2024-2025 Nexus Service Marketing System Co., Ltd. All Rights Reserved. <br />
               T1.2308A0 - GROUP 4: MAN NHAT HUY BINH
             </p>
           </div>

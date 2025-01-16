@@ -986,7 +986,7 @@ Banner Style
 About Style
 --------------------------------------------- 
 */
-
+/* 
 #about {
   padding-top: 130px;
 }
@@ -998,7 +998,7 @@ About Style
 .about-right-content p {
   margin-top: 30px;
   margin-bottom: 45px;
-}
+} */
 
 .skills-content {
   position: relative;

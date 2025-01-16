@@ -6,6 +6,7 @@ import supportRequestReducer from './customer/supportRequestSlice'
 import feedbackReducer from './customer/feedbackSlice'
 import regionReducer from './others/regionSlice'
 
+
 const myStore = configureStore({
   reducer: {
     customers: customerReducer,
@@ -16,3 +17,4 @@ const myStore = configureStore({
   },
 })
 export default myStore
+
