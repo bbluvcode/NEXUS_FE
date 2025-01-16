@@ -7,14 +7,9 @@ import './fontawesome.css'
 import myStore from './redux/store'
 
 import App from './App'
-import store from './store'
 
 createRoot(document.getElementById('root')).render(
-  // <DataProvider>
   <Provider store={myStore}>
     <App />
   </Provider>,
-  {
-    /* </DataProvider>, */
-  },
 )

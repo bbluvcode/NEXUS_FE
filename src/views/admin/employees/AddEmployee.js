@@ -41,7 +41,7 @@ const AddEmployee = () => {
       const addedEmployee = await addEmployee(data);
       console.log('Added Employee:', addedEmployee);
       alert('Employee added successfully!');
-      navigate('/admin/EmployeesList');
+      navigate('/admin/EmployeeList');
     } catch (error) {
       console.error('Error adding employee:', error);
       alert('Failed to add employee. Please try again.');
