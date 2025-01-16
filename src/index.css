@@ -264,7 +264,7 @@ header
 */
 
 .pre-header {
-  background-color: #efefef;
+  background-color:rgba(117, 109, 230, 0.88);
   height: 60px;
   padding: 15px 0px;
 }
@@ -278,7 +278,7 @@ header
 }
 
 .pre-header ul.info li a {
-  color: #afafaf;
+  color: #ffffff;
   font-size: 14px;
   transition: all 0.3s;
 }

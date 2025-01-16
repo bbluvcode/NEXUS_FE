@@ -8,7 +8,7 @@ const ClientLayout = () => {
   return (
     <div>
       <ClientHeader />
-      <div className="ClientContent">        
+      <div className="ClientContent" style={{ paddingTop: '100px' }}>
         <ClientContent />
       </div>
       <ClientFooter />
