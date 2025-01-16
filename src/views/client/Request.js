@@ -24,7 +24,7 @@ const Request = () => {
             <div className="row">
               <div className="col-lg-12">
                 <div className="contact-dec">
-                  <img src="assets/images/contact-dec-v3.png" alt />
+                  <img src="assets/images/contact-dec-v3.png" alt="contactDevV3" />
                 </div>
               </div>
               <div className="col-lg-5">

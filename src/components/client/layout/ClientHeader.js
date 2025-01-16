@@ -13,7 +13,7 @@ const ClientHeader = () => {
               <ul className="info">
                 <li>
                   <a href="#">
-                    <CIcon icon={cilEnvelopeLetter}  /> nexus@company.com
+                    <CIcon icon={cilEnvelopeLetter} /> nexus@company.com
                   </a>
                 </li>
                 <li>
@@ -27,7 +27,7 @@ const ClientHeader = () => {
               <ul className="social-media">
                 <li>
                   <a href="#">
-                    <CIcon icon={cilStar}  /> 
+                    <CIcon icon={cilStar} />
                   </a>
                 </li>
                 <li>
@@ -37,9 +37,9 @@ const ClientHeader = () => {
                 </li>
                 <li>
                   <a href="#">
-                  <CIcon icon={cilUserPlus}  /> 
+                    <CIcon icon={cilUserPlus} />
                   </a>
-                </li>                
+                </li>
               </ul>
             </div>
           </div>
@@ -58,7 +58,7 @@ const ClientHeader = () => {
               <nav className="main-nav">
                 {/* ***** Logo Start ***** */}
                 <a href="/" className="logo">
-                  <img src="logo_textblack_trans.png" alt style={{ width: '10rem' }} />
+                  <img src="logo_textblack_trans.png" alt="textBlack" style={{ width: '10rem' }} />
                 </a>
                 {/* ***** Logo End ***** */}
                 {/* ***** Menu Start ***** */}
@@ -69,26 +69,9 @@ const ClientHeader = () => {
                     </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a className="dropdown-toggle" href role="button" data-bs-toggle="dropdown">
+                    <a href="#Services">
                       Services
                     </a>
-                    <ul className="dropdown-menu">
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Dial-Up
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Broadband
-                        </a>
-                      </li>
-                      <li>
-                        <a className="dropdown-item" href="#">
-                          Landline
-                        </a>
-                      </li>
-                    </ul>
                   </li>
                   <li className="scroll-to-section">
                     <a href="#blog">Equipment</a>
