@@ -3,11 +3,11 @@ import React from 'react'
 import styled from 'styled-components'
 
 const StyledHero = styled.div`
-  --default-color: #444444;
+  /* --default-color: #444444;
   --heading-color: rgb(73, 65, 185);
   --accent-color: rgba(117, 109, 230, 0.88);
   --contrast-color: #ffffff;
-  --bs-gutter-y: 1.5rem;
+  --bs-gutter-y: 1.5rem; */
   .g-4,
   .gy-4 {
     --bs-gutter-y: 1.5rem;
@@ -247,7 +247,7 @@ function Hero(props) {
                 <div className="row gy-4">
                   <div className="col-xl-4 d-flex align-items-stretch">
                     <div className="icon-box" data-aos="zoom-out" data-aos-delay={300}>
-                      <i className="bi bi-clipboard-data" />
+                      <i className="bi bi-wifi" /> {/* Broadband Icon */}
                       <h4>Broadband</h4>
                       <p>
                         Experience high-speed internet connectivity tailored for seamless streaming
@@ -258,7 +258,7 @@ function Hero(props) {
                   {/* End Icon Box */}
                   <div className="col-xl-4 d-flex align-items-stretch">
                     <div className="icon-box" data-aos="zoom-out" data-aos-delay={400}>
-                      <i className="bi bi-gem" />
+                      <i className="bi bi-house-door" /> {/* Dial-Up Icon */}
                       <h4>Dial-Up</h4>
                       <p>
                         Reliable and cost-effective internet solutions for basic browsing and
@@ -269,7 +269,7 @@ function Hero(props) {
                   {/* End Icon Box */}
                   <div className="col-xl-4 d-flex align-items-stretch">
                     <div className="icon-box" data-aos="zoom-out" data-aos-delay={500}>
-                      <i className="bi bi-inboxes" />
+                      <i className="bi bi-telephone-plus" /> {/* Landline Icon */}
                       <h4>Landline</h4>
                       <p>
                         Crystal-clear voice communication with our dependable landline services.
@@ -284,6 +284,7 @@ function Hero(props) {
           {/* End Content */}
         </div>
       </section>
+
     </StyledHero>
   )
 }

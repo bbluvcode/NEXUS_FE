@@ -2,10 +2,26 @@
 import { cilEnvelopeLetter, cilFace, cilPhone, cilStar, cilUserPlus } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import React from 'react'
+import { Wow } from 'wowjs'
+import { useLocation, useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
+
+const StyledHeader = styled.div`
+  nav a {
+    cursor: pointer;
+  }
+
+`
+
 
 const ClientHeader = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+
+  const isActive = (path) => (location.pathname === path ? 'active' : '')
   return (
-    <div>
+    <StyledHeader>
       <div className="pre-header">
         <div className="container">
           <div className="row">
@@ -32,7 +48,7 @@ const ClientHeader = () => {
                 </li>
                 <li>
                   <a href="#">
-                    <i className='fa fa-facebook'></i>
+                    <i className="fa fa-facebook"></i>
                   </a>
                 </li>
                 <li>
@@ -57,33 +73,45 @@ const ClientHeader = () => {
             <div className="col-12">
               <nav className="main-nav">
                 {/* ***** Logo Start ***** */}
-                <a href="/" className="logo">
-                  <img src="logo_textblack_trans.png" alt="textBlack" style={{ width: '10rem' }} />
+                <a onClick={() => navigate('/')} className="logo">
+                  <img
+                    src="logo_textblack_trans.png"
+                    alt="textBlack"
+                    style={{ width: '10rem', cursor: 'pointer' }}
+                  />
                 </a>
                 {/* ***** Logo End ***** */}
                 {/* ***** Menu Start ***** */}
                 <ul className="nav">
                   <li className="scroll-to-section">
-                    <a href="#top" className="active">
+                    <a onClick={() => navigate('/')} className={isActive('/')}>
                       Home
                     </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="#Services">
+                    <a onClick={() => navigate('/services')} className={isActive('/services')}>
                       Services
                     </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="#blog">Equipment</a>
+                    <a onClick={() => navigate('/equipment')} className={isActive('/equipment')}>
+                      Equipment
+                    </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="#portfolio">News</a>
+                    <a onClick={() => navigate('/news')} className={isActive('/news')}>
+                      News
+                    </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="#about">About</a>
+                    <a onClick={() => navigate('/about')} className={isActive('/about')}>
+                      About
+                    </a>
                   </li>
                   <li className="scroll-to-section">
-                    <a href="#contact">Support</a>
+                    <a onClick={() => navigate('/support')} className={isActive('/support')}>
+                      Support
+                    </a>
                   </li>
                   <li className="scroll-to-section dropdown">
                     <a className="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
@@ -122,7 +150,7 @@ const ClientHeader = () => {
           </div>
         </div>
       </header>
-    </div>
+    </StyledHeader>
   )
 }
 

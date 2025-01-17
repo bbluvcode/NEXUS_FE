@@ -3,11 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const StyledAbout = styled.div`
-  --default-color: #444444;
-  --heading-color: rgb(73, 65, 185);
-  --accent-color: rgba(117, 109, 230, 0.88);
-  --contrast-color: #ffffff;
-  --bs-gutter-y: 1.5rem;
+
   section,
   .section {
     color: var(--default-color);
