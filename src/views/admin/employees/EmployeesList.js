@@ -38,7 +38,6 @@ const RetailShopList = () => {
         console.error('Error loading retail shops or employees', error)
       }
     }
-
     fetchShopsAndEmployees()
   }, [])
 
