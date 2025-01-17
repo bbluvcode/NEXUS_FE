@@ -12,7 +12,7 @@ export const fetchCustomers = createAsyncThunk('Customers/fetchCustomers', async
   } catch (error) {
     console.log('1. customer slice: API loi roi')
     console.log('error: ', error)
-    return null
+    return false
   }
 })
 export const createCustomer = createAsyncThunk('Customers/createCustomer', async (customer) => {
@@ -107,7 +107,7 @@ const customerSlice = createSlice({
         state.status = 'succeeded'
         // state.items.shift(action.payload)
         const item = action.payload
-        item != null ? state.items.unshift(item) : console.log('cannot add')
+        item ? state.items.unshift(item) : console.log('cannot add')
       })
       .addCase(updateCustomer.fulfilled, (state, action) => {
         state.status = 'succeeded'
