@@ -64,7 +64,7 @@ const Feedbacks = () => {
                     >
                       <CIcon icon={item.status ? cilAssistiveListeningSystem : cilMouthSlash} />
                     </button>
-                    <BtnModal name={<CIcon icon={cilUser} />} iform="7" style="outline-primary" />
+                    <BtnModal name={<CIcon icon={cilUser} />} iform="FeedbackDetail" style="outline-primary" />
                   </td>
                 </tr>
               ))

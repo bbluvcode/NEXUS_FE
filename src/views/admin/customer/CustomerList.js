@@ -24,7 +24,7 @@ const CustomerList = () => {
     <div>
       <div className="d-flex justify-content-between">
         <h2>List of customer</h2>
-        <BtnModal name="Create New Customer" iform="0" style="primary" />
+        <BtnModal name="Create New Customer" iform="CustomerCreateForm" style="primary" />
       </div>
       <div className="row">
         <table className="table table-hover">
@@ -81,7 +81,7 @@ const CustomerList = () => {
                   {/* <td>{item.image}</td>
         <td>{item.password}</td> */}
                   <td>
-                    <BtnModal name={<i className="fa fa-edit"></i>} iform="1" style="warning"/>
+                    <BtnModal name={<i className="fa fa-edit"></i>} iform="CustomerEditForm" style="warning"/>
                   </td>
                 </tr>
                 <tr key={'2'}>

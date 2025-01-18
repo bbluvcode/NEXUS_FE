@@ -22,7 +22,7 @@ const EquipmentList = () => {
     <div>
       <div className="d-flex justify-content-between">
         <h2>Equipment List</h2>
-        <BtnModal name="Add New Equipment" iform="0" style="primary" />
+        <BtnModal name="Add New Equipment" iform="EquipmentCreateForm" style="primary" />
       </div>
       <div className="row">
         <table className="table table-hover">
@@ -64,7 +64,7 @@ const EquipmentList = () => {
                   <td>
                     <BtnModal
                       name={<i className="fa fa-edit"></i>}
-                      iform="1"
+                      iform="EquipmentEditForm"
                       style="warning"
                       equipment={item}
                       onClick={() => handleEditEquipment(item)}

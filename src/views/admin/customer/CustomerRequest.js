@@ -29,7 +29,7 @@ const CustomerRequest = () => {
     <div>
       <div className="d-flex justify-content-between">
         <h2>List of Customer Request</h2>
-        <BtnModal name="Create New Customer Request" iform="2" style="primary" />
+        <BtnModal name="Create New Customer Request" iform="CusReqCreateForm" style="primary" />
       </div>
       <div className="row">
         <table className="table table-hover">
@@ -70,10 +70,10 @@ const CustomerRequest = () => {
                     {/* <td>{item.image}</td>
         <td>{item.password}</td> */}
                     {/* <td className="d-flex "> */}
-                    <BtnModal name={<CIcon icon={cilUser} />} iform="4" style="outline-primary" />
+                    <BtnModal name={<CIcon icon={cilUser} />} iform="CusReqDetail" style="outline-primary" />
                     <BtnModal
                       name={<i className="fa fa-edit"></i>}
-                      iform="3"
+                      iform="CusReqEditForm"
                       style="outline-warning"
                     />
                   </td>
@@ -92,8 +92,8 @@ const CustomerRequest = () => {
                   {/* <td>{item.image}</td>
         <td>{item.password}</td> */}
                   <td className="d-flex ">
-                    <BtnModal name={<i className="fa fa-edit"></i>} iform="1" style="warning" />
-                    <BtnModal name={<CIcon icon={cilUser} size="sm" />} iform="1" style="primary" />
+                    <BtnModal name={<i className="fa fa-edit"></i>} iform="CusReqDetail" style="warning" />
+                    <BtnModal name={<CIcon icon={cilUser} size="sm" />} iform="CusReqEditForm" style="primary" />
                   </td>
                 </tr>
                 <tr key={'2'}>

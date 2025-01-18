@@ -2,7 +2,6 @@
 import { cilEnvelopeLetter, cilFace, cilPhone, cilStar, cilUserPlus } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import React from 'react'
-import { Wow } from 'wowjs'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 

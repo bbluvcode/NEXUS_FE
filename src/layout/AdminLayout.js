@@ -1,15 +1,5 @@
 import React from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader, ModalComponent } from '../components/index'
-import CustomerCreateForm from '../components/modalbody/CustomerCreateForm'
-import CustomerEditForm from '../components/modalbody/CustomerEditForm'
-import CusReqCreateForm from '../components/modalbody/CusReqCreateForm'
-import CusReqEditForm from '../components/modalbody/CusReqEditForm'
-import SupReqCreateForm from '../components/modalbody/SupReqCreateForm'
-import SupReqEditForm from '../components/modalbody/SupReqEditForm'
-import CusReqDetail from '../components/modalbody/CusReqDetail'
-import FeedbackDetail from '../components/modalbody/FeedbackDetail'
-import EquipmentCreateForm from '../components/modalbody/EquipmentCreateForm'
-import EquipmentEditForm from '../components/modalbody/EquipmentEditForm'
 
 const AdminLayout = () => {
   return (
@@ -22,18 +12,7 @@ const AdminLayout = () => {
         </div>
         <AppFooter />
       </div>
-      <ModalComponent>
-        <EquipmentCreateForm />
-        <EquipmentEditForm />
-        <CustomerCreateForm />
-        <CustomerEditForm />
-        <CusReqCreateForm />
-        <CusReqEditForm />
-        <CusReqDetail />
-        <SupReqCreateForm />
-        <SupReqEditForm />
-        <FeedbackDetail />
-      </ModalComponent>
+      <ModalComponent />
     </div>
   )
 }
