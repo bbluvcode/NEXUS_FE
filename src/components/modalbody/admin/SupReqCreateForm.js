@@ -7,8 +7,8 @@ import * as yup from 'yup'
 import {
   createSuppportRequest,
   handleSetSuppportRequest,
-} from '../../redux/customer/supportRequestSlice'
-import BtnModalCloseSubmit from '../button/BtnModalCloseSubmit'
+} from '../../../redux/customer/supportRequestSlice'
+import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 
 function SupReqCreateForm(props) {
   const dispatch = useDispatch()

@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react'
-import BtnModalCloseSubmit from '../button/BtnModalCloseSubmit'
+import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { useDispatch, useSelector } from 'react-redux'
-import { handleSetEquipment, updateEquipment } from '../../redux/equipment/equipmentSlice'
+import { handleSetEquipment, updateEquipment } from '../../../redux/equipment/equipmentSlice'
 
 function EquipmentEditForm(props) {
   const dispatch = useDispatch()

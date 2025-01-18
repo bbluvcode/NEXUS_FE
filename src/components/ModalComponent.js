@@ -1,16 +1,17 @@
 /* eslint-disable prettier/prettier */
 import React, { useContext } from 'react'
 import { DataContext } from '../context/DataContext'
-import CustomerCreateForm from '../components/modalbody/CustomerCreateForm'
-import CustomerEditForm from '../components/modalbody/CustomerEditForm'
-import CusReqCreateForm from '../components/modalbody/CusReqCreateForm'
-import CusReqEditForm from '../components/modalbody/CusReqEditForm'
-import SupReqCreateForm from '../components/modalbody/SupReqCreateForm'
-import SupReqEditForm from '../components/modalbody/SupReqEditForm'
-import CusReqDetail from '../components/modalbody/CusReqDetail'
-import FeedbackDetail from '../components/modalbody/FeedbackDetail'
-import EquipmentCreateForm from '../components/modalbody/EquipmentCreateForm'
-import EquipmentEditForm from '../components/modalbody/EquipmentEditForm'
+import CustomerCreateForm from './modalbody/admin/CustomerCreateForm'
+import CustomerEditForm from './modalbody/admin/CustomerEditForm'
+import CusReqCreateForm from './modalbody/admin/CusReqCreateForm'
+import CusReqEditForm from './modalbody/admin/CusReqEditForm'
+import SupReqCreateForm from './modalbody/admin/SupReqCreateForm'
+import SupReqEditForm from './modalbody/admin/SupReqEditForm'
+import CusReqDetail from './modalbody/admin/CusReqDetail'
+import FeedbackDetail from './modalbody/admin/FeedbackDetail'
+import EquipmentCreateForm from './modalbody/admin/EquipmentCreateForm'
+import EquipmentEditForm from './modalbody/admin/EquipmentEditForm'
+import ClientCusReq from './modalbody/client/ClientCusReq'
 
 function ModalComponent(props) {
   const { iform } = useContext(DataContext)
@@ -26,6 +27,7 @@ function ModalComponent(props) {
     SupReqCreateForm: <SupReqCreateForm />,
     SupReqEditForm: <SupReqEditForm />,
     FeedbackDetail: <FeedbackDetail />,
+    ClientCusReq: <ClientCusReq/>
   }
   return (
     <div>

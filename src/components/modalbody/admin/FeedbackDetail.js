@@ -2,7 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import BtnModalClose from '../button/BtnModalClose'
+import BtnModalClose from '../../button/BtnModalClose'
 
 function FeedbackDetail(props) {
   const feedback = useSelector((state) => state.feedbacks.feedback)

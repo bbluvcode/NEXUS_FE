@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react'
-import BtnModalCloseSubmit from '../button/BtnModalCloseSubmit'
+import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { useDispatch, useSelector } from 'react-redux'
-import { createEquipment, handleSetEquipment } from '../../redux/equipment/equipmentSlice'
+import { createEquipment, handleSetEquipment } from '../../../redux/equipment/equipmentSlice'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'

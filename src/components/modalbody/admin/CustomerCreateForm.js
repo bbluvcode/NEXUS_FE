@@ -1,13 +1,14 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react'
-import BtnModalCloseSubmit from '../button/BtnModalCloseSubmit'
+import React, { useState } from 'react'
+import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { useDispatch, useSelector } from 'react-redux'
-import { handleSetCustomer, updateCustomer } from '../../redux/customer/customerSlice'
+import { createCustomer, handleSetCustomer } from '../../../redux/customer/customerSlice'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
 
-function CustomerEditForm(props) {
+function CustomerCreateForm(props) {
   const dispatch = useDispatch()
-
-  // Lấy dữ liệu customer từ Redux
   const customer = useSelector((state) => state.customers.customer)
   const [formData, setFormData] = useState({
     fullName: '',
@@ -20,73 +21,74 @@ function CustomerEditForm(props) {
     image: null,
     password: '',
   })
-  const formatDate = (date) => {
-    if (!date) return ''
-    const d = new Date(date)
-    const year = d.getFullYear()
-    const month = String(d.getMonth() + 1).padStart(2, '0') // Thêm 0 trước tháng nếu tháng có 1 chữ số
-    const day = String(d.getDate()).padStart(2, '0') // Thêm 0 trước ngày nếu ngày có 1 chữ số
-    return `${year}-${month}-${day}` // Định dạng theo yyyy-MM-dd
-  }
-  // Cập nhật formData khi customer thay đổi
-  useEffect(() => {
-    if (customer) {
-      setFormData({
-        fullName: customer.fullName || '',
-        gender: customer.gender || '',
-        dateOfBirth: formatDate(customer.dateOfBirth) || '',
-        address: customer.address || '',
-        email: customer.email || '',
-        phoneNumber: customer.phoneNumber || '',
-        identificationNo: customer.identificationNo || '',
-        image: customer.image || null,
-        password: customer.password || '',
-      })
-    }
-  }, [customer]) // Dependency array để chạy lại khi customer thay đổi
-  
+  const schema = yup.object().shape({
+    fullName: yup.string().min(3).max(12).required('Full name is required'),
+    gender: yup.string().required('Gender is required'),
+    dateOfBirth: yup.date().required('Date of birth is required'),
+    address: yup.string().optional(),
+    email: yup.string().email('Invalid email address').required(),
+    phoneNumber: yup
+      .string()
+      .matches(/^[0-9]+$/, 'Phone number must be numeric')
+      .optional(),
+    identificationNo: yup.string().optional(),
+    image: yup.string().optional(), // Add validation if needed for images (e.g., file type)
+    password: yup
+      .string()
+      .min(6, 'Password must be at least 6 characters')
+      .required('Password is required'),
+  })
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onTouched',
+  })
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData({
       ...formData,
       [name]: value,
     })
-    dispatch(handleSetCustomer({ ...customer, [name]: value })) // Đồng bộ lại dữ liệu vào Redux
+    dispatch(handleSetCustomer({ ...customer, [name]: value }))
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Gửi yêu cầu cập nhật khách hàng, có thể gọi hành động updateCustomer
-    console.log('Submit updated customer form:', formData)
-    console.log('Submit updated customer:', customer)
-    dispatch(updateCustomer({ id: customer.customerId, customer }))
+  const onSubmit = async (e) => {
+    // e.preventDefault()
 
+    // Đảm bảo gọi hàm bất đồng bộ với await
+    dispatch(createCustomer(customer))
   }
+
   const handleFileChange = (e) => {
-    const file = e.target.files[0]
-    setFormData({
-      ...formData,
-      image: file,
-    })
+    // const file = e.target.files[0];
+    // setFormData({
+    //     ...formData,
+    //     image: file
+    // });
   }
 
   return (
-    <div className="customer-edit-form">
-      <h2 className="text-center">Edit Customer</h2>
-      <form onSubmit={handleSubmit} className="row g-3">
+    <div className="customer-create-form">
+      <h2 className="text-center">Create New Customer</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
         <div className="col-md-6">
           <label htmlFor="fullName" className="form-label">
             Full Name
           </label>
           <input
+            {...register('fullName')}
             type="text"
             id="fullName"
             name="fullName"
             className="form-control"
-            value={formData.fullName}
             onChange={handleChange}
-            required
           />
+          {errors.fullName && <p className="text-danger">{errors.fullName.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -94,18 +96,18 @@ function CustomerEditForm(props) {
             Gender
           </label>
           <select
+            {...register('gender')}
             id="gender"
             name="gender"
             className="form-select"
-            value={formData.gender}
             onChange={handleChange}
-            required
           >
             <option value="">Select Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
+          {errors.gender && <p className="text-danger">{errors.gender.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -113,14 +115,14 @@ function CustomerEditForm(props) {
             Date of Birth
           </label>
           <input
+            {...register('dateOfBirth')}
             type="date"
             id="dateOfBirth"
             name="dateOfBirth"
             className="form-control"
-            value={formData.dateOfBirth}
             onChange={handleChange}
-            required
           />
+          {errors.dateOfBirth && <p className="text-danger">{errors.dateOfBirth.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -128,14 +130,14 @@ function CustomerEditForm(props) {
             Password
           </label>
           <input
+            {...register('password')}
             type="password"
             id="password"
             name="password"
             className="form-control"
-            value={formData.password}
             onChange={handleChange}
-            required
           />
+          {errors.password && <p className="text-danger">{errors.password.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -143,14 +145,14 @@ function CustomerEditForm(props) {
             Email
           </label>
           <input
+            {...register('email')}
             type="email"
             id="email"
             name="email"
             className="form-control"
-            value={formData.email}
             onChange={handleChange}
-            required
           />
+          {errors.email && <p className="text-danger">{errors.email.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -158,14 +160,14 @@ function CustomerEditForm(props) {
             Phone Number
           </label>
           <input
+            {...register('phoneNumber')}
             type="text"
             id="phoneNumber"
             name="phoneNumber"
             className="form-control"
-            value={formData.phoneNumber}
             onChange={handleChange}
-            required
           />
+          {errors.phoneNumber && <p className="text-danger">{errors.phoneNumber.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -173,14 +175,16 @@ function CustomerEditForm(props) {
             Identification Number
           </label>
           <input
+            {...register('identificationNo')}
             type="text"
             id="identificationNo"
             name="identificationNo"
             className="form-control"
-            value={formData.identificationNo}
             onChange={handleChange}
-            required
           />
+          {errors.identificationNo && (
+            <p className="text-danger">{errors.identificationNo.message}</p>
+          )}
         </div>
 
         <div className="col-md-6">
@@ -188,12 +192,14 @@ function CustomerEditForm(props) {
             Image
           </label>
           <input
+            {...register('image')}
             type="file"
             id="image"
             name="image"
             className="form-control"
-            onChange={handleFileChange}
+            onChange={handleChange}
           />
+          {errors.image && <p className="text-danger">{errors.image.message}</p>}
         </div>
 
         <div className="col-md-12">
@@ -201,20 +207,22 @@ function CustomerEditForm(props) {
             Address
           </label>
           <input
+            {...register('address')}
             type="text"
             id="address"
             name="address"
             className="form-control"
-            value={formData.address}
             onChange={handleChange}
-            required
           />
+          {errors.address && <p className="text-danger">{errors.address.message}</p>}
         </div>
 
-        <BtnModalCloseSubmit />
+        <div className="col-md-12">
+          <BtnModalCloseSubmit />
+        </div>
       </form>
     </div>
   )
 }
 
-export default React.memo(CustomerEditForm)
+export default React.memo(CustomerCreateForm)
