@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import React, { useContext } from 'react'
 import { DataContext } from '../../context/DataContext'
@@ -15,6 +16,7 @@ function BtnModal(props) {
       >
         {props.name}
       </button>
+      
     </div>
   )
 }

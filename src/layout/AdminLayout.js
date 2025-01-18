@@ -8,6 +8,8 @@ import SupReqCreateForm from '../components/modalbody/SupReqCreateForm'
 import SupReqEditForm from '../components/modalbody/SupReqEditForm'
 import CusReqDetail from '../components/modalbody/CusReqDetail'
 import FeedbackDetail from '../components/modalbody/FeedbackDetail'
+import EquipmentCreateForm from '../components/modalbody/EquipmentCreateForm'
+import EquipmentEditForm from '../components/modalbody/EquipmentEditForm'
 
 const AdminLayout = () => {
   return (
@@ -21,6 +23,8 @@ const AdminLayout = () => {
         <AppFooter />
       </div>
       <ModalComponent>
+        <EquipmentCreateForm />
+        <EquipmentEditForm />
         <CustomerCreateForm />
         <CustomerEditForm />
         <CusReqCreateForm />
