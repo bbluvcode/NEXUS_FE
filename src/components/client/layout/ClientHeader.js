@@ -136,7 +136,9 @@ const ClientHeader = () => {
                   </li>
                   <li className="scroll-to-section">
                     <div className="border-first-button">
-                      <a href="#contact">Log In</a>
+                      <a onClick={() => navigate('/login')}>
+                        Login
+                      </a>
                     </div>
                   </li>
                 </ul>
