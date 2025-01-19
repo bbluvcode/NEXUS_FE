@@ -12,7 +12,6 @@ const Equipment = React.lazy(() => import('../views/client/Equipment'))
 const Login = React.lazy(() => import('../views/client/Login'))
 const ForgotPassword = React.lazy(() => import('../components/customerLogin/ForgotPassword'))
 const ProfileUser = React.lazy(() => import('../components/userProfile/ProfileUser'))
-const ChangePassword = React.lazy(() => import('../components/userProfile/ChangePassword'))
 
 const routesClient = [
   { path: '/', exact: true, name: 'Home', element: Home },
@@ -26,7 +25,7 @@ const routesClient = [
   { path: '/login', exact: true, name: 'Login', element: Login }, 
   { path: '/forgotpassword', exact: true, name: 'ForgotPassword', element: ForgotPassword },
   { path: '/profile', exact: true, name: 'ProfileUser', element: ProfileUser },
-  { path: '/changepassword', exact: true, name: 'ChangePassword', element: ChangePassword },
+
 ]
 
 export default routesClient
