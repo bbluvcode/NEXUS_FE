@@ -58,7 +58,7 @@ function ProfileUser() {
                 DateCreate: "2025-01-13",
                 IsResponse: false,
             },
-            
+
         ],
         supports: [
             {
@@ -69,14 +69,14 @@ function ProfileUser() {
             },
             {
                 DateRequest: "2025-01-10",
-                Title : "Request for Land-line Repair",
-                DetailContent : "Land-line phone is not working properly; there is a lot of static noise.",
+                Title: "Request for Land-line Repair",
+                DetailContent: "Land-line phone is not working properly; there is a lot of static noise.",
                 IsResolved: true,
             },
             {
                 DateRequest: "2025-01-15",
-                Title : "Help with Dial-up Internet Configuration",
-                DetailContent : "Need assistance in configuring the dial-up connection for better speed.",
+                Title: "Help with Dial-up Internet Configuration",
+                DetailContent: "Need assistance in configuring the dial-up connection for better speed.",
                 IsResolved: false,
             },
         ],
@@ -89,17 +89,17 @@ function ProfileUser() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline>
-                <Grid container direction="column" sx={{ overflowX: "hidden", minHeight: "70vh" }}>
+                <Grid container direction="column" sx={{ overflowX: "hidden", minHeight: "100vh" }}>
                     {/* Background Image */}
                     <Grid item xs={12} md={6}>
                         <img
                             alt="avatar"
                             style={{
-                                width: "100vw",
-                                height: "20vh",
+                                width: "100%",
+                                height: "30vh",
                                 objectFit: "cover",
-                                objectPosition: "50% 50%",
-                                position: "relative",
+                                objectPosition: "center",
+
                             }}
                             src="https://iris2.gettimely.com/images/default-cover-image.jpg"
                         />
@@ -108,17 +108,16 @@ function ProfileUser() {
                     {/* Components */}
                     <Grid
                         container
-                        direction={{ xs: "column", md: "row" }}
                         spacing={3}
                         sx={{
                             position: "absolute",
                             top: "30vh",
+                            mt: { xs: 3, md: 5 },
                             px: { xs: 2, md: 7 },
-                            
                         }}
                     >
                         {/* Profile Card */}
-                        <Grid item md={3}>
+                        <Grid item xs={12} md={3}>
                             <ProfileCard
                                 name={user.fullName}
                                 sub={user.email}
@@ -129,7 +128,7 @@ function ProfileUser() {
                         </Grid>
 
                         {/* Settings Card */}
-                        <Grid item md={9}>
+                        <Grid item xs={12} md={9}>
                             <SettingProfileCard user={user} updateUser={updateUser} />
                         </Grid>
                     </Grid>
