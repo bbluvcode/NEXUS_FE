@@ -1,68 +1,79 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react'
-import CIcon from '@coreui/icons-react'
-import { cilPlus } from '@coreui/icons'
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchEquipmentTypes, handleSetEquipmentType } from '../../../redux/equipment/equipmentTypeSlice';
+import BtnModal from '../../../components/button/BtnModal';
+
 const EquipmentType = () => {
-  const [types, setTypes] = useState([])
-  const [newType, setNewType] = useState({ TypeName: '', Provider: '' })
+  const dispatch = useDispatch();
+  const { types, status, error } = useSelector((state) => state.equipmentTypes);
 
-  const handleAddType = () => {
-    if (!newType.TypeName || !newType.Provider) {
-      alert('Please fill in all fields.')
-      return
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchEquipmentTypes());
     }
+  }, [dispatch, status]);
 
-    const newTypeWithId = {
-      ...newType,
-      TypeId: types.length > 0 ? types[types.length - 1].TypeId + 1 : 1,
-    }
-    setTypes([...types, newTypeWithId])
-
-    setNewType({ TypeName: '', Provider: '' })
-    alert('Equipment type added successfully!')
-  }
-
-  const handleDeleteType = (id) => {
-    setTypes(types.filter((type) => type.TypeId !== id))
-    alert('Equipment type deleted successfully!')
-  }
+  const handleEditType = (type) => {
+    dispatch(handleSetEquipmentType(type));
+  };
 
   return (
     <div>
-      <h1>Equipment Types</h1>
-      {types.length === 0 ? (
-        <p>No equipment types found.</p>
-      ) : (
-        <ul>
-          {types.map((type) => (
-            <li key={type.TypeId}>
-              {type.TypeName} ({type.Provider})
-              <button onClick={() => handleDeleteType(type.TypeId)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-      )}
-      <div>
-        <h2>Add New Type</h2>
-        <input
-          type="text"
-          placeholder="Type Name"
-          value={newType.TypeName}
-          onChange={(e) => setNewType({ ...newType, TypeName: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="Provider"
-          value={newType.Provider}
-          onChange={(e) => setNewType({ ...newType, Provider: e.target.value })}
-        />
-   
-        <button onClick={handleAddType} className='btn btn-primary' >
-          <CIcon icon={cilPlus}/>
-        </button>
+      <div className="d-flex justify-content-between">
+        <h2>Equipment Types</h2>
+        <BtnModal name="Add New Type" iform="EquipmentTypeCreateForm" style="primary" />
+      </div>
+      <div className="row">
+        <table className="table table-hover">
+          <thead>
+            <tr>
+              <th>Type Name</th>
+              <th>Provider</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {status === 'loading' && (
+              <tr>
+                <td colSpan="3" style={{ textAlign: 'center' }}>Loading...</td>
+              </tr>
+            )}
+            {status === 'failed' && (
+              <tr>
+                <td colSpan="3" style={{ textAlign: 'center', color: 'red' }}>
+                  {error || 'Failed to load data.'}
+                </td>
+              </tr>
+            )}
+            {status === 'succeeded' && types?.length > 0 ? (
+              types.map((type, index) => (
+                <tr key={index}>
+                  <td>{type.TypeName}</td>
+                  <td>{type.Provider}</td>
+                  <td>
+                    <BtnModal
+                      name={<i className="fa fa-edit"></i>}
+                      iform="EquipmentTypeEditForm"
+                      style="warning"
+                      equipmentType={type}
+                      onClick={() => handleEditType(type)}
+                    />
+                  </td>
+                </tr>
+              ))
+            ) : status === 'succeeded' && (
+              <tr>
+                <td colSpan="3" style={{ textAlign: 'center', color: 'red' }}>
+                  No data available
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default EquipmentType
+export default React.memo(EquipmentType);
