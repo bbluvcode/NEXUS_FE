@@ -7,6 +7,7 @@ import feedbackReducer from './customer/feedbackSlice'
 import regionReducer from './others/regionSlice'
 import equipmentReducer from './equipment/equipmentSlice'
 import stockReducer from './stock/stockSlice'
+import equipmentTypeReducer from './equipment/equipmentTypeSlice'
 
 const myStore = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const myStore = configureStore({
     feedbacks: feedbackReducer,
     regions: regionReducer,
     equipments: equipmentReducer,
+    equipmentTypes: equipmentTypeReducer,
     stocks: stockReducer,
   },
 })

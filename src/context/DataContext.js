@@ -9,6 +9,7 @@ export const DataProvider = ({ children }) => {
     const [retailShops, setRetailShops] = useState([]);
     const [employeeTypes, setEmployeeTypes] = useState([]);
     const [equipments, setEquipments] = useState([]);
+    const [equipmentTypes, setEquipmentTypes] = useState([]);
     const [stocks, setStocks] = useState([]); 
     //usestate form
     const [iform, setIform] = useState([0]);
@@ -22,6 +23,8 @@ export const DataProvider = ({ children }) => {
         setEmployeeTypes,
         equipments, 
         setEquipments,
+        equipmentTypes,
+        setEquipmentTypes,
         stocks, 
         setStocks,
         iform, setIform,
