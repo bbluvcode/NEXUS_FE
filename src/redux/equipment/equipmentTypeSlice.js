@@ -10,13 +10,12 @@ export const fetchEquipmentTypes = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(apiEquipmentType);
-      return response.data.data;
+      return response.data;
     } catch (error) {
-      console.log('1. EquipmentType slice: API error');
-      console.log('error: ', error);
+      console.error('EquipmentType slice: API error', error);
       return rejectWithValue(error.response?.data || 'Failed to fetch equipment types');
     }
-  }
+  },
 );
 
 export const createEquipmentType = createAsyncThunk(
@@ -24,13 +23,12 @@ export const createEquipmentType = createAsyncThunk(
   async (equipmentType, { rejectWithValue }) => {
     try {
       const response = await axios.post(apiEquipmentType, equipmentType);
-      return response.data.data;
+      return response.data;
     } catch (error) {
-      console.log('2. EquipmentType slice: API error in createEquipmentType');
-      console.log('error: ', error);
+      console.error('EquipmentType slice: API error in createEquipmentType', error);
       return rejectWithValue(error.response?.data || 'Failed to create equipment type');
     }
-  }
+  },
 );
 
 export const updateEquipmentType = createAsyncThunk(
@@ -38,21 +36,18 @@ export const updateEquipmentType = createAsyncThunk(
   async ({ id, equipmentType }, { rejectWithValue }) => {
     try {
       const response = await axios.put(`${apiEquipmentType}/${id}`, equipmentType);
-      return response.data.data;
+      return response.data;
     } catch (error) {
-      console.log('3. EquipmentType slice: API error in updateEquipmentType');
-      console.log('error: ', error);
+      console.error('EquipmentType slice: API error in updateEquipmentType', error);
       return rejectWithValue(error.response?.data || 'Failed to update equipment type');
     }
-  }
+  },
 );
 
-// Slice definition
 const equipmentTypeSlice = createSlice({
   name: 'equipmentTypes',
   initialState: {
     items: [],
-    isUpdate: false,
     equipmentType: {
       typeName: '',
       provider: '',
@@ -61,38 +56,37 @@ const equipmentTypeSlice = createSlice({
     error: null,
   },
   reducers: {
-    // Synchronous logic to set the selected equipment type
     handleSetEquipmentType: (state, action) => {
       state.equipmentType = action.payload;
-      console.log(state.equipmentType);
     },
   },
   extraReducers: (builder) => {
-    // Handling asynchronous actions
     builder
       .addCase(fetchEquipmentTypes.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.items = action.payload;
       })
       .addCase(createEquipmentType.fulfilled, (state, action) => {
-        console.log('extraReducers-createEquipmentType: ', action);
         state.status = 'succeeded';
-        const item = action.payload;
-        item ? state.items.unshift(item) : console.log('Cannot add');
+        state.items.unshift(action.payload);
       })
       .addCase(updateEquipmentType.fulfilled, (state, action) => {
         state.status = 'succeeded';
         const updatedItem = action.payload;
-        if (updatedItem) {
-          const index = state.items.findIndex((item) => item.equipmentTypeId === updatedItem.equipmentTypeId);
-          if (index !== -1) {
-            state.items[index] = updatedItem;
-          }
+        const index = state.items.findIndex(item => item.EquipmentTypeId === updatedItem.EquipmentTypeId);
+        if (index !== -1) {
+          state.items[index] = updatedItem;
         }
-      });
+      })
+      .addMatcher(
+        action => action.type.endsWith('/rejected'),
+        (state, action) => {
+          state.status = 'failed';
+          state.error = action.payload;
+        }
+      );
   },
 });
 
-// Export actions and reducer
 export const { handleSetEquipmentType } = equipmentTypeSlice.actions;
 export default equipmentTypeSlice.reducer;
