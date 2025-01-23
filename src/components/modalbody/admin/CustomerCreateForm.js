@@ -1,14 +1,16 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { useDispatch, useSelector } from 'react-redux'
 import { createCustomer, handleSetCustomer } from '../../../redux/customer/customerSlice'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
+import { DataContext } from '../../../context/DataContext'
 
 function CustomerCreateForm(props) {
   const dispatch = useDispatch()
+  const { setIform } = useContext(DataContext)
   const customer = useSelector((state) => state.customers.customer)
   const [formData, setFormData] = useState({
     fullName: '',
@@ -21,6 +23,7 @@ function CustomerCreateForm(props) {
     image: null,
     password: '',
   })
+
   const schema = yup.object().shape({
     fullName: yup.string().min(3).max(12).required('Full name is required'),
     gender: yup.string().required('Gender is required'),
@@ -61,7 +64,17 @@ function CustomerCreateForm(props) {
     // e.preventDefault()
 
     // Đảm bảo gọi hàm bất đồng bộ với await
-    dispatch(createCustomer(customer))
+    try {
+      await dispatch(createCustomer(customer)) // Await the async action
+      if (props.client) {
+        console.log('client')
+        console.log('props:', props.client)
+        setIform('CusReqCreateForm')
+        bootstrap.Modal.getInstance(document.getElementById('myModal')).show()
+      }
+    } catch (error) {
+      console.error('Error creating customer:', error)
+    }
   }
 
   const handleFileChange = (e) => {
@@ -187,7 +200,7 @@ function CustomerCreateForm(props) {
           )}
         </div>
 
-        <div className="col-md-6">
+        {/* <div className="col-md-6">
           <label htmlFor="image" className="form-label">
             Image
           </label>
@@ -200,9 +213,9 @@ function CustomerCreateForm(props) {
             onChange={handleChange}
           />
           {errors.image && <p className="text-danger">{errors.image.message}</p>}
-        </div>
+        </div> */}
 
-        <div className="col-md-12">
+        <div className="col-md-6">
           <label htmlFor="address" className="form-label">
             Address
           </label>

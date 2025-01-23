@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { useDispatch, useSelector } from 'react-redux'
 import { createCusRequest, handleSetCusRequest } from '../../../redux/customer/cusRequestSlice'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
+import { DataContext } from '../../../context/DataContext'
 
 function CusReqCreateForm(props) {
   const dispatch = useDispatch()
@@ -15,13 +16,17 @@ function CusReqCreateForm(props) {
     serviceRequest: '',
     equipmentRequest: '',
     customerId: '',
+    regionId: '',
   })
+    // const { setIform } = useContext(DataContext)
+  
 
   const schema = yup.object().shape({
     requestTitle: yup.string().required('Request title is required'),
     serviceRequest: yup.string().required('Service request is required'),
     equipmentRequest: yup.string().required('Equipment request is required'),
     customerId: yup.number().required('Customer ID is required'),
+    regionId: yup.number().required('region ID is required'),
   })
 
   const {
@@ -111,7 +116,20 @@ function CusReqCreateForm(props) {
           />
           {errors.customerId && <p className="text-danger">{errors.customerId.message}</p>}
         </div>
-
+        <div className="col-md-6">
+          <label htmlFor="regionId" className="form-label">
+            Region ID
+          </label>
+          <input
+            {...register('regionId')}
+            type="number"
+            id="regionId"
+            name="regionId"
+            className="form-control"
+            onChange={handleChange}
+          />
+          {errors.regionId && <p className="text-danger">{errors.regionId.message}</p>}
+        </div>
         <div className="col-md-12">
           <BtnModalCloseSubmit />
         </div>

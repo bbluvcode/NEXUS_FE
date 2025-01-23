@@ -11,6 +11,9 @@ const BtnReq = (props) => {
         className="btn btn-info text-white nb "
         data-bs-toggle="modal"
         data-bs-target="#myModal"
+        onClick={() => {
+          setIform('CustomerCreateFormClient')
+        }}
       >
         Register
       </button>

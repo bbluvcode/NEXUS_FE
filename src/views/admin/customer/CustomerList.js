@@ -60,7 +60,7 @@ const CustomerList = () => {
                   <td onClick={()=> handleEditCustomer(item)}>                
                     <BtnModal
                       name={<i className="fa fa-edit"></i>}
-                      iform="1"
+                      iform="CustomerEditForm"
                       style="warning"
                       customer={item}
                     />

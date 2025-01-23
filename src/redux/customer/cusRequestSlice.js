@@ -23,6 +23,7 @@ export const createCusRequest = createAsyncThunk('CusRequests/createCusRequest',
     formData.append('equipmentRequest', cusReq.equipmentRequest)
     formData.append('isResponse', false)
     formData.append('customerId', cusReq.customerId)
+    formData.append('regionId', cusReq.regionId)
     formData.append('dateCreate', new Date().toISOString())
     const response = await axios.post(apiCustomer + 'create-customer-request', formData)
     console.log('response: ', response)
