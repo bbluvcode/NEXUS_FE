@@ -1,21 +1,21 @@
-/* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
-import axios from 'axios';
-import { apiEquipment } from '../../../constant/apiConstant';  
+import React, { useState } from 'react'
+import axios from 'axios'
+import { apiEquipment } from '../../../constant/apiConstant'
 
-function AddEquipment() {
-  const [equipmentName, setEquipmentName] = useState('');
-  const [price, setPrice] = useState('');
-  const [stockQuantity, setStockQuantity] = useState('');
-  const [description, setDescription] = useState('');
-  const [status, setStatus] = useState(true);
-  const [discountId, setDiscountId] = useState('');
-  const [equipmentTypeId, setEquipmentTypeId] = useState('');
-  const [vendorId, setVendorId] = useState('');
-  const [stockId, setStockId] = useState('');
+// eslint-disable-next-line react/prop-types
+function AddEquipment({ onSuccess }) {
+  const [equipmentName, setEquipmentName] = useState('')
+  const [price, setPrice] = useState('')
+  const [stockQuantity, setStockQuantity] = useState('')
+  const [description, setDescription] = useState('')
+  const [status, setStatus] = useState(true)
+  const [discountId, setDiscountId] = useState('')
+  const [equipmentTypeId, setEquipmentTypeId] = useState('')
+  const [vendorId, setVendorId] = useState('')
+  const [stockId, setStockId] = useState('')
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     const equipmentData = {
       EquipmentName: equipmentName,
@@ -27,17 +27,17 @@ function AddEquipment() {
       EquipmentTypeId: parseInt(equipmentTypeId),
       VendorId: parseInt(vendorId),
       StockId: parseInt(stockId),
-    };
+    }
 
     try {
-      const response = await axios.post(apiEquipment, equipmentData);  
-      alert('Equipment added successfully!');
-      console.log(response.data);
+      const response = await axios.post(apiEquipment, equipmentData)
+      alert('Equipment added successfully!')
+      if (onSuccess) onSuccess() // Đóng modal và cập nhật danh sách thiết bị
     } catch (error) {
-      console.error('Error adding equipment:', error);
-      alert('Failed to add equipment');
+      console.error('Error adding equipment:', error)
+      alert('Failed to add equipment')
     }
-  };
+  }
 
   return (
     <div>
@@ -76,28 +76,17 @@ function AddEquipment() {
         <br />
         <label>
           Description:
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
         </label>
         <br />
         <label>
           Status:
-          <input
-            type="checkbox"
-            checked={status}
-            onChange={(e) => setStatus(e.target.checked)}
-          />
+          <input type="checkbox" checked={status} onChange={(e) => setStatus(e.target.checked)} />
         </label>
         <br />
         <label>
           Discount ID:
-          <input
-            type="text"
-            value={discountId}
-            onChange={(e) => setDiscountId(e.target.value)}
-          />
+          <input type="text" value={discountId} onChange={(e) => setDiscountId(e.target.value)} />
         </label>
         <br />
         <label>
@@ -133,7 +122,7 @@ function AddEquipment() {
         <button type="submit">Add Equipment</button>
       </form>
     </div>
-  );
+  )
 }
 
-export default AddEquipment;
+export default AddEquipment
