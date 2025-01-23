@@ -68,8 +68,8 @@ function CustomerCreateForm(props) {
     const resultAction = await dispatch(createCustomer(customer))
 
     if (createCustomer.fulfilled.match(resultAction)) {
-      const { customerId } = resultAction.payload
-      localStorage.setItem('cusId', customerId);
+      const customerInfo = resultAction.payload
+      localStorage.setItem('customerInfo',  JSON.stringify(customerInfo));
     } 
     if (props.client) {
       console.log('client')
@@ -90,7 +90,7 @@ function CustomerCreateForm(props) {
 
   return (
     <div className="customer-create-form">
-      <h2 className="text-center">Create New Customer</h2>
+      <h2 className="text-center">Register New Customer</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
         <div className="col-md-6">
           <label htmlFor="fullName" className="form-label">

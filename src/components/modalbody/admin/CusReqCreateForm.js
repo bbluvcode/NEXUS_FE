@@ -9,7 +9,9 @@ import * as yup from 'yup'
 import { DataContext } from '../../../context/DataContext'
 
 function CusReqCreateForm(props) {
-  const cusId = localStorage.getItem('cusId')
+  const customerInfoString = localStorage.getItem('customerInfo')
+  const customerInfo = customerInfoString ? JSON.parse(localStorage.getItem('customerInfo')) : null
+  console.log('🚀 ~ CusReqCreateForm ~ customerInfo:', customerInfo)
   const dispatch = useDispatch()
   const request = useSelector((state) => state.cusRequests.cusRequest)
   const [formData, setFormData] = useState({
@@ -19,8 +21,7 @@ function CusReqCreateForm(props) {
     customerId: '',
     regionId: '',
   })
-    // const { setIform } = useContext(DataContext)
-  
+  // const { setIform } = useContext(DataContext)
 
   const schema = yup.object().shape({
     requestTitle: yup.string().required('Request title is required'),
@@ -113,7 +114,8 @@ function CusReqCreateForm(props) {
             id="customerId"
             name="customerId"
             className="form-control"
-            value={cusId}
+            value={customerInfo.customerId}
+            disabled
             onChange={handleChange}
           />
           {errors.customerId && <p className="text-danger">{errors.customerId.message}</p>}
@@ -131,6 +133,12 @@ function CusReqCreateForm(props) {
             onChange={handleChange}
           />
           {errors.regionId && <p className="text-danger">{errors.regionId.message}</p>}
+        </div>
+        <div className="col-md-6">
+          <label htmlFor="customerId" className="form-label">
+            Customer Name
+          </label>
+          <input type="text" className="form-control" disabled value={customerInfo.fullName} />
         </div>
         <div className="col-md-12">
           <BtnModalCloseSubmit />
