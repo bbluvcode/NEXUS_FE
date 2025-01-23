@@ -12,7 +12,13 @@ const BtnReq = (props) => {
         data-bs-toggle="modal"
         data-bs-target="#myModal"
         onClick={() => {
-          setIform('CustomerCreateFormClient')
+          const cusId = localStorage.getItem('cusId')
+          console.log('🚀 ~ BtnReq ~ cusId:', cusId)
+          if (cusId) {
+            setIform('CusReqCreateForm')
+          } else{
+            setIform('CustomerCreateFormClient')
+          }
         }}
       >
         Register

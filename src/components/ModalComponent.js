@@ -11,7 +11,6 @@ import CusReqDetail from './modalbody/admin/CusReqDetail'
 import FeedbackDetail from './modalbody/admin/FeedbackDetail'
 import EquipmentCreateForm from './modalbody/admin/EquipmentCreateForm'
 import EquipmentEditForm from './modalbody/admin/EquipmentEditForm'
-// import ClientCusReq from './modalbody/client/ClientCusReq'
 
 function ModalComponent(props) {
   const { iform } = useContext(DataContext)
@@ -28,7 +27,6 @@ function ModalComponent(props) {
     SupReqCreateForm: <SupReqCreateForm />,
     SupReqEditForm: <SupReqEditForm />,
     FeedbackDetail: <FeedbackDetail />,
-    // ClientCusReq: <ClientCusReq/>
   }
   return (
     <div>

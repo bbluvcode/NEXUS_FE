@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import React, { useContext, useState } from 'react'
 import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
@@ -60,21 +61,23 @@ function CustomerCreateForm(props) {
     dispatch(handleSetCustomer({ ...customer, [name]: value }))
   }
 
-  const onSubmit = async (e) => {
+  const onSubmit = async () => {
     // e.preventDefault()
 
-    // Đảm bảo gọi hàm bất đồng bộ với await
-    try {
-      await dispatch(createCustomer(customer)) // Await the async action
-      if (props.client) {
-        console.log('client')
-        console.log('props:', props.client)
-        setIform('CusReqCreateForm')
-        bootstrap.Modal.getInstance(document.getElementById('myModal')).show()
-      }
-    } catch (error) {
-      console.error('Error creating customer:', error)
+    
+    const resultAction = await dispatch(createCustomer(customer))
+
+    if (createCustomer.fulfilled.match(resultAction)) {
+      const { customerId } = resultAction.payload
+      localStorage.setItem('cusId', customerId);
+    } 
+    if (props.client) {
+      console.log('client')
+      console.log('props:', props.client)
+      setIform('CusReqCreateForm')
+      bootstrap.Modal.getInstance(document.getElementById('myModal')).show()
     }
+ 
   }
 
   const handleFileChange = (e) => {

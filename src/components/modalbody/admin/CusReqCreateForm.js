@@ -9,6 +9,7 @@ import * as yup from 'yup'
 import { DataContext } from '../../../context/DataContext'
 
 function CusReqCreateForm(props) {
+  const cusId = localStorage.getItem('cusId')
   const dispatch = useDispatch()
   const request = useSelector((state) => state.cusRequests.cusRequest)
   const [formData, setFormData] = useState({
@@ -112,6 +113,7 @@ function CusReqCreateForm(props) {
             id="customerId"
             name="customerId"
             className="form-control"
+            value={cusId}
             onChange={handleChange}
           />
           {errors.customerId && <p className="text-danger">{errors.customerId.message}</p>}
