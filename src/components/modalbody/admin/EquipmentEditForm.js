@@ -1,205 +1,154 @@
-/* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react'
-import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { useDispatch, useSelector } from 'react-redux'
-import { handleSetEquipment, updateEquipment } from '../../../redux/equipment/equipmentSlice'
+import { useParams } from 'react-router-dom'
+import { fetchEquipments, updateEquipment } from '../../../redux/equipment/equipmentSlice'
+import BtnModal from '../../../components/button/BtnModal'
 
-function EquipmentEditForm(props) {
+const EquipmentEditForm = () => {
   const dispatch = useDispatch()
+  const { id } = useParams()
+  const { equipment, status, error } = useSelector((state) => state.equipments)
+  const [equipmentDetails, setEquipmentDetails] = useState(equipment || {})
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  // Lấy dữ liệu equipment từ Redux
-  const equipment = useSelector((state) => state.equipments.equipment)
-  const [formData, setFormData] = useState({
-    equipmentName: '',
-    price: '',
-    stockQuantity: '',
-    description: '',
-    status: '',
-    discountId: '',
-    equipmentTypeId: '',
-    vendorId: '',
-    stockId: '',
-  })
-
-  // Cập nhật formData khi equipment thay đổi
   useEffect(() => {
-    if (equipment) {
-      setFormData({
-        equipmentName: equipment.equipmentName || '',
-        price: equipment.price || '',
-        stockQuantity: equipment.stockQuantity || '',
-        description: equipment.description || '',
-        status: equipment.status || '',
-        discountId: equipment.discountId || '',
-        equipmentTypeId: equipment.equipmentTypeId || '',
-        vendorId: equipment.vendorId || '',
-        stockId: equipment.stockId || '',
-      })
+    if (status === 'idle' && id) {
+      dispatch(fetchEquipments())
     }
-  }, [equipment]) // Dependency array để chạy lại khi equipment thay đổi
+  }, [dispatch, status, id])
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    if (id) {
+      const equipmentItem = equipment.find((item) => item.EquipmentId === parseInt(id))
+      if (equipmentItem) setEquipmentDetails(equipmentItem)
+    }
+  }, [equipment, id])
+
+  const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
-    dispatch(handleSetEquipment({ ...equipment, [name]: value })) // Đồng bộ lại dữ liệu vào Redux
+    setEquipmentDetails({ ...equipmentDetails, [name]: value })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Gửi yêu cầu cập nhật thiết bị
-    console.log('Submit updated equipment form:', formData)
-    console.log('Submit updated equipment:', equipment)
-    dispatch(updateEquipment({ id: equipment.equipmentId, equipment }))
+  const handleCheckboxChange = (e) => {
+    setEquipmentDetails({ ...equipmentDetails, Status: e.target.checked })
   }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      await dispatch(updateEquipment({ id, equipment: equipmentDetails }))
+      alert('Equipment updated successfully!')
+      if (isModalOpen) setIsModalOpen(false)
+    } catch (error) {
+      console.error('Error updating equipment:', error)
+      alert('Failed to update equipment')
+    }
+  }
+
+  const toggleModal = () => setIsModalOpen(!isModalOpen)
 
   return (
-    <div className="equipment-edit-form">
-      <h2 className="text-center">Edit Equipment</h2>
-      <form onSubmit={handleSubmit} className="row g-3">
-        <div className="col-md-6">
-          <label htmlFor="equipmentName" className="form-label">
-            Equipment Name
-          </label>
-          <input
-            type="text"
-            id="equipmentName"
-            name="equipmentName"
-            className="form-control"
-            value={formData.equipmentName}
-            onChange={handleChange}
-            required
-          />
-        </div>
+    <div>
+      <h2>Edit Equipment</h2>
 
-        <div className="col-md-6">
-          <label htmlFor="price" className="form-label">
-            Price
-          </label>
-          <input
-            type="number"
-            step="0.01"
-            id="price"
-            name="price"
-            className="form-control"
-            value={formData.price}
-            onChange={handleChange}
-            required
-          />
-        </div>
+      {status === 'loading' && <div>Loading...</div>}
+      {status === 'failed' && (
+        <div style={{ color: 'red' }}>{error || 'Failed to load equipment details.'}</div>
+      )}
 
-        <div className="col-md-6">
-          <label htmlFor="stockQuantity" className="form-label">
-            Stock Quantity
+      {status === 'succeeded' && equipmentDetails && (
+        <form onSubmit={handleSubmit}>
+          <label>
+            Equipment Name:
+            <input
+              type="text"
+              name="EquipmentName"
+              value={equipmentDetails.EquipmentName}
+              onChange={handleInputChange}
+              required
+            />
           </label>
-          <input
-            type="number"
-            id="stockQuantity"
-            name="stockQuantity"
-            className="form-control"
-            value={formData.stockQuantity}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="status" className="form-label">
-            Status
+          <br />
+          <label>
+            Price:
+            <input
+              type="number"
+              step="0.01"
+              name="Price"
+              value={equipmentDetails.Price}
+              onChange={handleInputChange}
+              required
+            />
           </label>
-          <select
-            id="status"
-            name="status"
-            className="form-select"
-            value={formData.status}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Status</option>
-            <option value={true}>Active</option>
-            <option value={false}>Inactive</option>
-          </select>
-        </div>
-
-        <div className="col-md-12">
-          <label htmlFor="description" className="form-label">
-            Description
+          <br />
+          <label>
+            Stock Quantity:
+            <input
+              type="number"
+              name="StockQuantity"
+              value={equipmentDetails.StockQuantity}
+              onChange={handleInputChange}
+              required
+            />
           </label>
-          <textarea
-            id="description"
-            name="description"
-            className="form-control"
-            rows="3"
-            value={formData.description}
-            onChange={handleChange}
-          ></textarea>
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="discountId" className="form-label">
-            Discount ID
+          <br />
+          <label>
+            Description:
+            <textarea
+              name="Description"
+              value={equipmentDetails.Description}
+              onChange={handleInputChange}
+            />
           </label>
-          <input
-            type="text"
-            id="discountId"
-            name="discountId"
-            className="form-control"
-            value={formData.discountId}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="equipmentTypeId" className="form-label">
-            Equipment Type ID
+          <br />
+          <label>
+            Status:
+            <input
+              type="checkbox"
+              name="Status"
+              checked={equipmentDetails.Status}
+              onChange={handleCheckboxChange}
+            />
           </label>
-          <input
-            type="number"
-            id="equipmentTypeId"
-            name="equipmentTypeId"
-            className="form-control"
-            value={formData.equipmentTypeId}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="vendorId" className="form-label">
-            Vendor ID
+          <br />
+          <label>
+            Equipment Type ID:
+            <input
+              type="number"
+              name="EquipmentTypeId"
+              value={equipmentDetails.EquipmentTypeId}
+              onChange={handleInputChange}
+              required
+            />
           </label>
-          <input
-            type="number"
-            id="vendorId"
-            name="vendorId"
-            className="form-control"
-            value={formData.vendorId}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="stockId" className="form-label">
-            Stock ID
+          <br />
+          <label>
+            Vendor ID:
+            <input
+              type="number"
+              name="VendorId"
+              value={equipmentDetails.VendorId}
+              onChange={handleInputChange}
+              required
+            />
           </label>
-          <input
-            type="number"
-            id="stockId"
-            name="stockId"
-            className="form-control"
-            value={formData.stockId}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <BtnModalCloseSubmit />
-      </form>
+          <br />
+          <label>
+            Stock ID:
+            <input
+              type="number"
+              name="StockId"
+              value={equipmentDetails.StockId}
+              onChange={handleInputChange}
+              required
+            />
+          </label>
+          <br />
+          <BtnModal name="Save Changes" style="success" onClick={toggleModal} />
+        </form>
+      )}
     </div>
   )
 }
 
-export default React.memo(EquipmentEditForm)
+export default EquipmentEditForm
