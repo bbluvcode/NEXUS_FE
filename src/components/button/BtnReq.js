@@ -9,6 +9,8 @@ const BtnReq = (props) => {
   const navigate = useNavigate()
 
   const handleRegisterClick = () => {
+    localStorage.setItem('serviceSelected', JSON.stringify(props.serviceItem))
+
     const customerInfo = localStorage.getItem('customerInfo')
     const parsedCustomerInfo = customerInfo ? JSON.parse(customerInfo) : null
     const cusId = parsedCustomerInfo?.customerId
