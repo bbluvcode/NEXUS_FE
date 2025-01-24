@@ -1,58 +1,64 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchStocks, handleSetStock } from '../../../redux/stock/stockSlice';
-import BtnModal from '../../../components/button/BtnModal';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchStocks, handleSetStock } from '../../../redux/stock/stockSlice'
+import BtnModal from '../../../components/button/BtnModal'
 
 const StockList = () => {
-  const dispatch = useDispatch();
-  const { items, status, error } = useSelector((state) => state.stocks);
+  const dispatch = useDispatch()
+  const stocks = useSelector((state) => state.stocks.items)
+  const status = useSelector((state) => state.stocks.status)
+  const error = useSelector((state) => state.stocks.error)
 
   useEffect(() => {
     if (status === 'idle') {
-      dispatch(fetchStocks());
+      dispatch(fetchStocks())
     }
-  }, [dispatch, status]);
+  }, [dispatch, status])
 
   const handleEditStock = (stock) => {
-    dispatch(handleSetStock(stock));
-  };
+    dispatch(handleSetStock(stock))
+  }
 
   return (
     <div>
       <div className="d-flex justify-content-between">
-        <h2>Stock List</h2>
-        <BtnModal name="Add New Stock" iform="StockCreateForm" style="primary" />
+        <h2>List of Stocks</h2>
+        <BtnModal name="Create New Stock" iform="StockCreateForm" style="primary" />
       </div>
       <div className="row">
         <table className="table table-hover">
           <thead>
             <tr>
+              <th>Id</th>
               <th>Stock Name</th>
               <th>Address</th>
               <th>Email</th>
               <th>Phone</th>
               <th>Fax</th>
               <th>Region</th>
-              <th>Actions</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {status === 'loading' && (
               <tr>
-                <td colSpan="7" style={{ textAlign: 'center' }}>Loading...</td>
+                <td colSpan="8" style={{ textAlign: 'center' }}>
+                  Loading...
+                </td>
               </tr>
             )}
             {status === 'failed' && (
               <tr>
-                <td colSpan="7" style={{ textAlign: 'center', color: 'red' }}>
+                <td colSpan="8" style={{ textAlign: 'center', color: 'red' }}>
                   {error || 'Failed to load data.'}
                 </td>
               </tr>
             )}
-            {status === 'succeeded' && items?.length > 0 ? (
-              items.map((item, index) => (
+            {status === 'succeeded' && stocks.length > 0 ? (
+              stocks.map((item, index) => (
                 <tr key={index}>
+                  <td>{item.stockId}</td>
                   <td>{item.stockName}</td>
                   <td>{item.address}</td>
                   <td>{item.email}</td>
@@ -64,24 +70,25 @@ const StockList = () => {
                       name={<i className="fa fa-edit"></i>}
                       iform="StockEditForm"
                       style="warning"
-                      stock={item}
                       onClick={() => handleEditStock(item)}
                     />
                   </td>
                 </tr>
               ))
-            ) : status === 'succeeded' && (
-              <tr>
-                <td colSpan="7" style={{ textAlign: 'center', color: 'red' }}>
-                  No data available
-                </td>
-              </tr>
+            ) : (
+              <>
+                <tr key="1">
+                  <td colSpan="8" style={{ textAlign: 'center', color: 'red' }}>
+                    No data available
+                  </td>
+                </tr>
+              </>
             )}
           </tbody>
         </table>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default React.memo(StockList);
+export default React.memo(StockList)
