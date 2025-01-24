@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState, useRef, useContext, useLayoutEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../components/css/Login.css';
@@ -191,7 +192,7 @@ function Login() {
     return (
 
         <div className='login-wrapper'>
-            <div className="login-container" ref={containerRef}>
+            <div className="login-container mt-4" ref={containerRef}>
                 {/* SIGNUP */}
                 <div className="formLogin-container sign-up">
                     <form onSubmit={handleRegister}>
