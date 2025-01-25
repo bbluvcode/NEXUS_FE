@@ -22,20 +22,19 @@ export const createStock = createAsyncThunk(
   'stocks/createStock',
   async (stock, { rejectWithValue }) => {
     try {
-      const formData = new FormData()
-      formData.append('stockName', stock.stockName)
-      formData.append('address', stock.address)
-      formData.append('email', stock.email)
-      formData.append('phone', stock.phone)
-      formData.append('fax', stock.fax)
-      formData.append('regionId', stock.regionId)
-
-      const response = await axios.post(apiStock, formData)
+      const response = await axios.post(apiStock, {
+        stockName: stock.stockName,
+        address: stock.address,
+        email: stock.email,
+        phone: stock.phone,
+        fax: stock.fax,
+        regionId: stock.regionId, // Sử dụng regionId
+      })
 
       if (response.status === 201) {
         console.log('Stock created successfully:', response.data)
         bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
-        return response.data.data
+        return response.data.data // Trả về dữ liệu từ response
       }
       return rejectWithValue('Unable to create stock. Unknown error.')
     } catch (error) {
@@ -50,20 +49,19 @@ export const updateStock = createAsyncThunk(
   'stocks/updateStock',
   async ({ id, stock }, { rejectWithValue }) => {
     try {
-      const formData = new FormData()
-      formData.append('stockName', stock.stockName)
-      formData.append('address', stock.address)
-      formData.append('email', stock.email)
-      formData.append('phone', stock.phone)
-      formData.append('fax', stock.fax)
-      formData.append('regionId', stock.regionId)
-
-      const response = await axios.put(`${apiStock}${id}`, formData)
+      const response = await axios.put(`${apiStock}${id}`, {
+        stockName: stock.stockName,
+        address: stock.address,
+        email: stock.email,
+        phone: stock.phone,
+        fax: stock.fax,
+        regionId: stock.regionId, // Sử dụng regionId
+      })
 
       if (response.status === 200) {
         console.log('Stock updated successfully:', response.data)
         bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
-        return response.data.data
+        return response.data.data // Trả về dữ liệu từ response
       }
       return rejectWithValue('Unable to update stock. Unknown error.')
     } catch (error) {
@@ -83,7 +81,7 @@ const stockSlice = createSlice({
       email: '',
       phone: '',
       fax: '',
-      regionId: '',
+      regionId: '', // Sử dụng regionId thay vì region
     },
     status: 'idle',
     error: null,

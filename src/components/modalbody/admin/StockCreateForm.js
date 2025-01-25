@@ -1,166 +1,105 @@
 /* eslint-disable prettier/prettier */
-import React, { useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit';
-import { createStock, handleSetStock } from '../../../redux/stock/stockSlice';
-import { DataContext } from '../../../context/DataContext';
+/* eslint-disable react/prop-types */
+import React, { useState } from 'react'
+import axios from 'axios'
+import { apiStock } from '../../../constant/apiConstant'
+import { useDispatch } from 'react-redux'
+import { fetchStocks } from '../../../redux/stock/stockSlice'
 
-function StockCreateForm() {
-  const dispatch = useDispatch();
-  const { setIform } = useContext(DataContext);
-  const stock = useSelector((state) => state.stocks.stock);
-
-  // Validation schema
-  const schema = yup.object().shape({
-    stockName: yup.string().min(3).max(100).required('Stock name is required'),
-    address: yup.string().max(200).required('Address is required'),
-    email: yup.string().email('Invalid email').required('Email is required'),
-    phone: yup
-      .string()
-      .matches(/^[0-9]+$/, 'Phone must be numeric')
-      .max(20, 'Phone must be 20 characters or less')
-      .required('Phone is required'),
-    fax: yup
-      .string()
-      .max(30, 'Fax must be 30 characters or less')
-      .required('Fax is required'),
-    regionId: yup
-      .number()
-      .typeError('Region ID must be a number')
-      .positive('Region ID must be a positive number')
-      .integer('Region ID must be an integer')
-      .required('Region ID is required'),
-  });
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-    mode: 'onTouched',
-  });
+const StockCreateForm = ({ onSuccess }) => {
+  const dispatch = useDispatch()
+  const [formData, setFormData] = useState({
+    stockName: '',
+    address: '',
+    email: '',
+    phone: '',
+    fax: '',
+    region: '',
+  })
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    dispatch(handleSetStock({ ...stock, [name]: value }));
-  };
+    const { name, value } = e.target
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }))
+  }
 
-  const onSubmit = async () => {
-    const resultAction = await dispatch(createStock(stock));
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
-    if (createStock.fulfilled.match(resultAction)) {
-      setIform(''); // Đóng modal sau khi thành công
-      bootstrap.Modal.getInstance(document.getElementById('myModal')).hide();
-    } else {
-      // Xử lý lỗi (nếu cần)
-      console.error('Failed to create stock');
+    try {
+      await axios.post(apiStock, formData)
+      alert('Stock created successfully!')
+      if (onSuccess) {
+        onSuccess() // Close modal after success
+      } else {
+        dispatch(fetchStocks()) // Refresh stocks if no onSuccess
+      }
+    } catch (error) {
+      console.error('Error creating stock:', error)
+      alert('Failed to create stock')
     }
-  };
+  }
 
   return (
-    <div className="stock-create-form">
-      <h2 className="text-center">Create New Stock</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
-        <div className="col-md-6">
-          <label htmlFor="stockName" className="form-label">
-            Stock Name
-          </label>
+    <div>
+      <h2>Create New Stock</h2>
+      <form onSubmit={handleSubmit} id="StockCreateForm">
+        <label>
+          Stock Name:
           <input
-            {...register('stockName')}
             type="text"
-            id="stockName"
             name="stockName"
-            className="form-control"
+            value={formData.stockName}
             onChange={handleChange}
+            required
           />
-          {errors.stockName && <p className="text-danger">{errors.stockName.message}</p>}
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="address" className="form-label">
-            Address
-          </label>
+        </label>
+        <br />
+        <label>
+          Address:
           <input
-            {...register('address')}
             type="text"
-            id="address"
             name="address"
-            className="form-control"
+            value={formData.address}
             onChange={handleChange}
+            required
           />
-          {errors.address && <p className="text-danger">{errors.address.message}</p>}
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
+        </label>
+        <br />
+        <label>
+          Email:
           <input
-            {...register('email')}
             type="email"
-            id="email"
             name="email"
-            className="form-control"
+            value={formData.email}
             onChange={handleChange}
+            required
           />
-          {errors.email && <p className="text-danger">{errors.email.message}</p>}
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="phone" className="form-label">
-            Phone
-          </label>
-          <input
-            {...register('phone')}
-            type="text"
-            id="phone"
-            name="phone"
-            className="form-control"
-            onChange={handleChange}
-          />
-          {errors.phone && <p className="text-danger">{errors.phone.message}</p>}
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="fax" className="form-label">
-            Fax
-          </label>
-          <input
-            {...register('fax')}
-            type="text"
-            id="fax"
-            name="fax"
-            className="form-control"
-            onChange={handleChange}
-          />
-          {errors.fax && <p className="text-danger">{errors.fax.message}</p>}
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="regionId" className="form-label">
-            Region ID
-          </label>
-          <input
-            {...register('regionId')}
-            type="number"
-            id="regionId"
-            name="regionId"
-            className="form-control"
-            onChange={handleChange}
-          />
-          {errors.regionId && <p className="text-danger">{errors.regionId.message}</p>}
-        </div>
-
-        <div className="col-md-12">
-          <BtnModalCloseSubmit />
-        </div>
+        </label>
+        <br />
+        <label>
+          Phone:
+          <input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
+        </label>
+        <br />
+        <label>
+          Fax:
+          <input type="text" name="fax" value={formData.fax} onChange={handleChange} />
+        </label>
+        <br />
+        <label>
+          Region:
+          <input type="text" name="region" value={formData.region} onChange={handleChange} />
+        </label>
+        <br />
+        <button type="submit" className="btn btn-primary">
+          Create Stock
+        </button>
       </form>
     </div>
-  );
+  )
 }
 
-export default React.memo(StockCreateForm);
+export default StockCreateForm

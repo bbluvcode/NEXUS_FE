@@ -1,14 +1,15 @@
-/* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchStocks, handleSetStock } from '../../../redux/stock/stockSlice'
 import BtnModal from '../../../components/button/BtnModal'
+import StockCreateForm from '../../../components/modalbody/admin/StockCreateForm'
+
 
 const StockList = () => {
   const dispatch = useDispatch()
-  const stocks = useSelector((state) => state.stocks.items)
-  const status = useSelector((state) => state.stocks.status)
-  const error = useSelector((state) => state.stocks.error)
+  const { items: stocks, status, error } = useSelector((state) => state.stocks)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedStock, setSelectedStock] = useState(null)
 
   useEffect(() => {
     if (status === 'idle') {
@@ -16,28 +17,42 @@ const StockList = () => {
     }
   }, [dispatch, status])
 
-  const handleEditStock = (stock) => {
-    dispatch(handleSetStock(stock))
+  const toggleModal = (stock = null) => {
+    setSelectedStock(stock)
+    setIsModalOpen(!isModalOpen)
   }
 
   return (
     <div>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>List of Stocks</h2>
-        <BtnModal name="Create New Stock" iform="StockCreateForm" style="primary" />
+        <BtnModal
+          name="Create New Stock"
+          iform="StockCreateForm"
+          style="primary"
+          onClick={() => toggleModal()}
+        />
       </div>
+
+      {isModalOpen &&
+        (selectedStock ? (
+          <StockEditForm stock={selectedStock} onSuccess={toggleModal} />
+        ) : (
+          <StockCreateForm onSuccess={toggleModal} />
+        ))}
+
       <div className="row">
-        <table className="table table-hover">
-          <thead>
+        <table className="table table-bordered table-hover">
+          <thead className="thead-dark">
             <tr>
-              <th>Id</th>
+              <th>ID</th>
               <th>Stock Name</th>
               <th>Address</th>
               <th>Email</th>
               <th>Phone</th>
               <th>Fax</th>
               <th>Region</th>
-              <th></th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -55,35 +70,35 @@ const StockList = () => {
                 </td>
               </tr>
             )}
-            {status === 'succeeded' && stocks.length > 0 ? (
-              stocks.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.stockId}</td>
-                  <td>{item.stockName}</td>
-                  <td>{item.address}</td>
-                  <td>{item.email}</td>
-                  <td>{item.phone}</td>
-                  <td>{item.fax}</td>
-                  <td>{item.region?.regionName || 'Unknown'}</td>
-                  <td>
-                    <BtnModal
-                      name={<i className="fa fa-edit"></i>}
-                      iform="StockEditForm"
-                      style="warning"
-                      onClick={() => handleEditStock(item)}
-                    />
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <>
-                <tr key="1">
-                  <td colSpan="8" style={{ textAlign: 'center', color: 'red' }}>
-                    No data available
-                  </td>
-                </tr>
-              </>
-            )}
+            {status === 'succeeded' && stocks.length > 0
+              ? stocks.map((stock) => (
+                  <tr key={stock.stockId}>
+                    <td>{stock.stockId}</td>
+                    <td>{stock.stockName}</td>
+                    <td>{stock.address}</td>
+                    <td>{stock.email}</td>
+                    <td>{stock.phone}</td>
+                    <td>{stock.fax}</td>
+                    <td>{stock.region?.regionName || 'Unknown'}</td>
+                    <td>
+                      <div className="btn-group">
+                        <BtnModal
+                          name={<i className="fa fa-edit"></i>}
+                          iform="StockEditForm"
+                          style="warning"
+                          onClick={() => toggleModal(stock)}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              : status === 'succeeded' && (
+                  <tr>
+                    <td colSpan="8" style={{ textAlign: 'center', color: 'red' }}>
+                      No data available
+                    </td>
+                  </tr>
+                )}
           </tbody>
         </table>
       </div>
@@ -91,4 +106,4 @@ const StockList = () => {
   )
 }
 
-export default React.memo(StockList)
+export default StockList
