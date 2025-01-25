@@ -1,28 +1,28 @@
 /* eslint-disable prettier/prettier */
-import React from 'react'
+import React, { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
 import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { createCusRequest, handleSetCusRequest } from '../../../redux/customer/cusRequestSlice'
+import { DataContext } from '../../../context/DataContext'
 
 function CusReqCreateForm() {
+  const { serviceSelected } = useContext(DataContext)
+  console.log('🚀 ~ CusReqCreateForm ~ serviceSelected:', serviceSelected)
   const dispatch = useDispatch()
   const customerInfoString = localStorage.getItem('customerInfo')
   const customerInfo = customerInfoString ? JSON.parse(customerInfoString) : null
-
-  const serviceSelectedString = localStorage.getItem('serviceSelected')
-  const serviceSelected = serviceSelectedString ? JSON.parse(serviceSelectedString) : null
-  console.log('🚀 ~ CusReqCreateForm ~ serviceSelected:', serviceSelected)
+  const rateDeposit = 0.2
 
   if (!customerInfo) {
     return <p className="text-danger">Customer information is missing!</p>
   }
 
   const { customerId, fullName, address } = customerInfo
-  console.log('🚀 ~ CusReqCreateForm ~ address:', address)
   const { planName, securityDeposit } = serviceSelected
+  console.log('🚀 ~ CusReqCreateForm ~ planName:', planName)
 
   const schema = yup.object().shape({
     requestTitle: yup.string().required('Request title is required'),
@@ -44,10 +44,11 @@ function CusReqCreateForm() {
     mode: 'onTouched',
     defaultValues: {
       requestTitle: '',
-      serviceRequest: '',
+      serviceRequest: planName || '',
       equipmentRequest: '',
       regionId: '',
       installationAddress: address || '',
+      deposit: securityDeposit * rateDeposit || 0,
     },
   })
 
@@ -86,6 +87,7 @@ function CusReqCreateForm() {
             id="serviceRequest"
             name="serviceRequest"
             className="form-control"
+            value={planName}
             aria-invalid={!!errors.serviceRequest}
           />
           {errors.serviceRequest && <p className="text-danger">{errors.serviceRequest.message}</p>}
@@ -131,7 +133,7 @@ function CusReqCreateForm() {
             id="installationAddress"
             name="installationAddress"
             className="form-control"
-            value={address}
+            defaultValue={address}
             aria-invalid={!!errors.installationAddress}
           />
           {errors.installationAddress && (
@@ -141,7 +143,7 @@ function CusReqCreateForm() {
 
         <div className="col-md-6">
           <label htmlFor="deposit" className="form-label">
-            Deposit
+            Deposit ($)
           </label>
           <input
             {...register('deposit')}
@@ -149,7 +151,9 @@ function CusReqCreateForm() {
             id="deposit"
             name="deposit"
             className="form-control"
+            value={securityDeposit * rateDeposit}
             aria-invalid={!!errors.deposit}
+            disabled
           />
           {errors.deposit && <p className="text-danger">{errors.deposit.message}</p>}
         </div>

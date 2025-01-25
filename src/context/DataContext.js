@@ -13,6 +13,7 @@ export const DataProvider = ({ children }) => {
     const [stocks, setStocks] = useState([]); 
     //usestate form
     const [iform, setIform] = useState("");
+    const [serviceSelected, setServiceSelected] = useState(null);
 
     const data = {
         employees,
@@ -28,6 +29,7 @@ export const DataProvider = ({ children }) => {
         stocks, 
         setStocks,
         iform, setIform,
+        serviceSelected, setServiceSelected,
     };
 
     return <DataContext.Provider value={data}>{children}</DataContext.Provider>;

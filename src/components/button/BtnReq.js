@@ -1,42 +1,42 @@
-/* eslint-disable prettier/prettier */
+/* eslint-disable react/prop-types */ /* eslint-disable prettier/prettier */
 import React, { useContext } from 'react'
 import { DataContext } from '../../context/DataContext'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
 const BtnReq = (props) => {
-  const { setIform } = useContext(DataContext)
+  const { setIform,serviceSelected, setServiceSelected } = useContext(DataContext)
   const navigate = useNavigate()
 
+  // handleRegisterClick.js
   const handleRegisterClick = () => {
-    localStorage.setItem('serviceSelected', JSON.stringify(props.serviceItem))
-
+    setServiceSelected(props.serviceSelected)
     const customerInfo = localStorage.getItem('customerInfo')
     const parsedCustomerInfo = customerInfo ? JSON.parse(customerInfo) : null
     const cusId = parsedCustomerInfo?.customerId
 
+    const modalInstance = bootstrap.Modal.getInstance(document.getElementById('myModal'))
+
     if (cusId) {
       // User has a customer ID
       setIform('CusReqCreateForm')
-      bootstrap.Modal.getInstance(document.getElementById('myModal')).show()
+      modalInstance.show()
     } else {
-      bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
+      modalInstance.hide()
       Swal.fire({
         title: 'Do you have an account?',
         showDenyButton: true,
         showCancelButton: true,
         confirmButtonText: 'Yes',
-        denyButtonText: `No`,
+        denyButtonText: 'No',
       }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
           Swal.fire('Let log in', '', 'info')
           navigate('/login')
-          bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
         } else if (result.isDenied) {
           Swal.fire('Enter Customer Info', '', 'info')
           setIform('CustomerCreateFormClient')
-          bootstrap.Modal.getInstance(document.getElementById('myModal')).show()
+          modalInstance.show()
         }
       })
     }

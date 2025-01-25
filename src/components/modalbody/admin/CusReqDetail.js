@@ -24,6 +24,12 @@ function CusReqDetail(props) {
           <strong>Request Title:</strong> <span>{cusRequest.requestTitle || 'N/A'}</span>
         </div>
         <div className="col-md-6">
+          <strong>Installation address:</strong> <span>{cusRequest.installationAddress || 'N/A'}</span>
+        </div>
+        <div className="col-md-6">
+          <strong>Deposit:</strong> <span>{cusRequest.deposit + '$' || 'N/A'}</span>
+        </div>
+        <div className="col-md-6">
           <strong>Service Request:</strong> <span>{cusRequest.serviceRequest || 'N/A'}</span>
         </div>
         <div className="col-md-6">
@@ -39,9 +45,9 @@ function CusReqDetail(props) {
           <strong>Response Status:</strong>{' '}
           <span>{cusRequest.isResponse ? 'Responded' : 'Pending'}</span>
         </div>
-        <div className="col-md-6">
+        {/* <div className="col-md-6">
           <strong>Customer ID:</strong> <span>{cusRequest.customerId || 'N/A'}</span>
-        </div>
+        </div> */}
         <div className="col-md-6">
           <strong>Full Name:</strong> <span>{cusRequest.fullName || 'N/A'}</span>
         </div>

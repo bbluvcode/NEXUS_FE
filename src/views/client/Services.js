@@ -63,7 +63,7 @@ function Services(props) {
               <p className="card-text">
                 Status: <strong>{item.isUsing ? 'Active' : 'Inactive'}</strong>
               </p>
-              <BtnReq serviceItem={item}/>
+              <BtnReq serviceSelected={item}/>
             </div>
           </div>
         ))}
