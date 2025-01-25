@@ -1,30 +1,39 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
-import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit';
-import { createCusRequest, handleSetCusRequest } from '../../../redux/customer/cusRequestSlice';
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import { useDispatch, useSelector } from 'react-redux'
+import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
+import { createCusRequest, handleSetCusRequest } from '../../../redux/customer/cusRequestSlice'
 
 function CusReqCreateForm() {
-  const dispatch = useDispatch();
-  const customerInfoString = localStorage.getItem('customerInfo');
-  const customerInfo = customerInfoString ? JSON.parse(customerInfoString) : null;
+  const dispatch = useDispatch()
+  const customerInfoString = localStorage.getItem('customerInfo')
+  const customerInfo = customerInfoString ? JSON.parse(customerInfoString) : null
+
+  const serviceSelectedString = localStorage.getItem('serviceSelected')
+  const serviceSelected = serviceSelectedString ? JSON.parse(serviceSelectedString) : null
+  console.log('🚀 ~ CusReqCreateForm ~ serviceSelected:', serviceSelected)
 
   if (!customerInfo) {
-    return <p className="text-danger">Customer information is missing!</p>;
+    return <p className="text-danger">Customer information is missing!</p>
   }
 
-  const { customerId, fullName } = customerInfo;
+  const { customerId, fullName, address } = customerInfo
+  console.log('🚀 ~ CusReqCreateForm ~ address:', address)
+  const { planName, securityDeposit } = serviceSelected
 
   const schema = yup.object().shape({
     requestTitle: yup.string().required('Request title is required'),
     serviceRequest: yup.string().required('Service request is required'),
     equipmentRequest: yup.string().required('Equipment request is required'),
     installationAddress: yup.string().required('Installation Address request is required'),
-    regionId: yup.number().required('Region ID is required').typeError('Region ID must be a number'),
-  });
+    regionId: yup
+      .number()
+      .required('Region ID is required')
+      .typeError('Region ID must be a number'),
+  })
 
   const {
     register,
@@ -38,15 +47,15 @@ function CusReqCreateForm() {
       serviceRequest: '',
       equipmentRequest: '',
       regionId: '',
-      installationAddress: '',
+      installationAddress: address || '',
     },
-  });
+  })
 
   const onSubmit = (data) => {
-    const newRequest = { ...data, customerId };
-    dispatch(handleSetCusRequest(newRequest));
-    dispatch(createCusRequest(newRequest));
-  };
+    const newRequest = { ...data, customerId }
+    dispatch(handleSetCusRequest(newRequest))
+    dispatch(createCusRequest(newRequest))
+  }
 
   return (
     <div className="request-create-form">
@@ -94,7 +103,9 @@ function CusReqCreateForm() {
             className="form-control"
             aria-invalid={!!errors.equipmentRequest}
           />
-          {errors.equipmentRequest && <p className="text-danger">{errors.equipmentRequest.message}</p>}
+          {errors.equipmentRequest && (
+            <p className="text-danger">{errors.equipmentRequest.message}</p>
+          )}
         </div>
         <div className="col-md-6">
           <label htmlFor="regionId" className="form-label">
@@ -120,9 +131,12 @@ function CusReqCreateForm() {
             id="installationAddress"
             name="installationAddress"
             className="form-control"
+            value={address}
             aria-invalid={!!errors.installationAddress}
           />
-          {errors.installationAddress && <p className="text-danger">{errors.installationAddress.message}</p>}
+          {errors.installationAddress && (
+            <p className="text-danger">{errors.installationAddress.message}</p>
+          )}
         </div>
 
         <div className="col-md-6">
@@ -173,7 +187,7 @@ function CusReqCreateForm() {
         </div>
       </form>
     </div>
-  );
+  )
 }
 
-export default React.memo(CusReqCreateForm);
+export default React.memo(CusReqCreateForm)
