@@ -16,6 +16,7 @@ export const fetchCusRequests = createAsyncThunk('CusRequests/fetchCusRequests',
   }
 })
 export const createCusRequest = createAsyncThunk('CusRequests/createCusRequest', async (cusReq) => {
+  console.log('🚀 ~ createCusRequest ~ cusReq:', cusReq)
   try {
     const formData = new FormData()
     formData.append('requestTitle', cusReq.requestTitle)
@@ -23,15 +24,19 @@ export const createCusRequest = createAsyncThunk('CusRequests/createCusRequest',
     formData.append('equipmentRequest', cusReq.equipmentRequest)
     formData.append('isResponse', false)
     formData.append('customerId', cusReq.customerId)
+    formData.append('regionId', cusReq.regionId)
+    formData.append('installationAddress', cusReq.installationAddress)
+    formData.append('deposit', cusReq.deposit)
     formData.append('dateCreate', new Date().toISOString())
+    console.log('🚀 ~ createCusRequest ~ formData:', formData)
     const response = await axios.post(apiCustomer + 'create-customer-request', formData)
-    console.log('response: ', response)
+    console.log('🚀 ~ createCusRequest ~ response:', response)
     bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
     return response.data.data
   } catch (error) {
     console.log('2. CusRequest slice: loi roi, ket noi API nghiem tuc di')
     console.log('error: ', error)
-    return true
+    return null
   }
 })
 export const updateCusRequest = createAsyncThunk('CusRequests/updateCusRequest', async (cusReq) => {
@@ -81,6 +86,9 @@ const cusRequestSlice = createSlice({
       dateResolve: '',
       isResponse: false,
       customerId: null,
+      regionId: '',
+      deposit: null,
+      installationAddress: null,
       fullName: '',
       gender: '',
       dateOfBirth: '',

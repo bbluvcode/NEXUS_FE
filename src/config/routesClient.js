@@ -21,7 +21,6 @@ const routesClient = [
   { path: '/request', exact: true, name: 'Request', element: Request },
   { path: '/support', exact: true, name: 'Support', element: Support },
   { path: '/equipment', exact: true, name: 'Equipment', element: Equipment },
-  //moi them nha 
   { path: '/login', exact: true, name: 'Login', element: Login }, 
   { path: '/forgotpassword', exact: true, name: 'ForgotPassword', element: ForgotPassword },
   { path: '/profile', exact: true, name: 'ProfileUser', element: ProfileUser },

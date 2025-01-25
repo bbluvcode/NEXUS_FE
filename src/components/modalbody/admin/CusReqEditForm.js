@@ -133,7 +133,7 @@ function CusReqEditForm(props) {
             value={formData.dateResolve}
             onChange={handleChange}
           />
-        </div>        
+        </div>
 
         <div className="col-md-6">
           <label htmlFor="customerId" className="form-label">

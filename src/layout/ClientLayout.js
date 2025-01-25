@@ -11,7 +11,7 @@ const ClientLayout = () => {
     <div>
       <ClientHeader />
       <div className="ClientContent" style={{ paddingTop: '100px' }}>
-      <BtnModal iform="ClientCusReq" name="ClientCusReq" style="info" />
+      {/* <BtnModal iform="ClientCusReq" name="ClientCusReq" style="info" /> */}
         <ClientContent />
       </div>
       <ClientFooter />

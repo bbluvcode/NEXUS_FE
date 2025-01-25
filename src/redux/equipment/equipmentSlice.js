@@ -1,125 +1,127 @@
 /* eslint-disable prettier/prettier */
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
+import { apiEquipment } from '../../constant/apiConstant'
 
-import { apiEquipment } from '../../constant/apiConstant';
+// Helper to populate FormData
+const populateFormData = (equipment) => {
+  const formData = new FormData()
+  Object.keys(equipment).forEach((key) => {
+    formData.append(key, equipment[key])
+  })
+  return formData
+}
 
 // Fetch all equipments
-export const fetchEquipments = createAsyncThunk('Equipments/fetchEquipments', async () => {
-  try {
-    const response = await axios.get(apiEquipment);
-    return response.data.data;
-  } catch (error) {
-    console.log('1. Equipment slice: API error');
-    console.log('error: ', error);
-    return false;
-  }
-});
+export const fetchEquipments = createAsyncThunk(
+  'Equipments/fetchEquipments',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(apiEquipment)
+      return response.data.data
+    } catch (error) {
+      console.error('1. Equipment slice: API error in fetchEquipments', error)
+      return rejectWithValue(error.response ? error.response.data : 'API Error')
+    }
+  },
+)
 
 // Create a new equipment
-export const createEquipment = createAsyncThunk('Equipments/createEquipment', async (equipment) => {
-  try {
-    const formData = new FormData();
-    formData.append('equipmentName', equipment.equipmentName);
-    formData.append('price', equipment.price);
-    formData.append('stockQuantity', equipment.stockQuantity);
-    formData.append('description', equipment.description);
-    formData.append('status', equipment.status);
-    formData.append('discountId', equipment.discountId);
-    formData.append('equipmentTypeId', equipment.equipmentTypeId);
-    formData.append('vendorId', equipment.vendorId);
-    formData.append('stockId', equipment.stockId);
-
-    const response = await axios.post(apiEquipment, formData);
-    console.log('response: ', response);
-    bootstrap.Modal.getInstance(document.getElementById('myModal')).hide();
-    return response.data.data;
-  } catch (error) {
-    console.log('2. Equipment slice: API error in createEquipment');
-    console.log('error: ', error);
-    return null;
-  }
-});
+export const createEquipment = createAsyncThunk(
+  'Equipments/createEquipment',
+  async (equipment, { rejectWithValue }) => {
+    try {
+      const formData = populateFormData(equipment)
+      const response = await axios.post(apiEquipment, formData)
+      return response.data.data
+    } catch (error) {
+      console.error('2. Equipment slice: API error in createEquipment', error)
+      return rejectWithValue(error.response ? error.response.data : 'API Error')
+    }
+  },
+)
 
 // Update an equipment
 export const updateEquipment = createAsyncThunk(
   'Equipments/updateEquipment',
-  async ({ id, equipment }) => {
+  async ({ id, equipment }, { rejectWithValue }) => {
     try {
-      const formData = new FormData();
-      formData.append('equipmentName', equipment.equipmentName);
-      formData.append('price', equipment.price);
-      formData.append('stockQuantity', equipment.stockQuantity);
-      formData.append('description', equipment.description);
-      formData.append('status', equipment.status);
-      formData.append('discountId', equipment.discountId);
-      formData.append('equipmentTypeId', equipment.equipmentTypeId);
-      formData.append('vendorId', equipment.vendorId);
-      formData.append('stockId', equipment.stockId);
-
-      const response = await axios.put(`${apiEquipment}${id}`, formData);
-      console.log('response: ', response);
-      bootstrap.Modal.getInstance(document.getElementById('myModal')).hide();
-      return response.data.data;
+      const formData = populateFormData(equipment)
+      const response = await axios.put(`${apiEquipment}${id}`, formData)
+      return response.data.data
     } catch (error) {
-      console.log('3. Equipment slice: API error in updateEquipment');
-      console.log('error: ', error);
-      return null;
+      console.error('3. Equipment slice: API error in updateEquipment', error)
+      return rejectWithValue(error.response ? error.response.data : 'API Error')
     }
-  }
-);
+  },
+)
 
 const equipmentSlice = createSlice({
   name: 'equipments',
   initialState: {
     items: [],
-    isUpdate: false,
     equipment: {
-      equipmentName: '',
-      price: 0,
-      stockQuantity: 0,
-      description: '',
-      status: false,
-      discountId: '',
-      equipmentTypeId: '',
-      vendorId: '',
-      stockId: '',
+      EquipmentId: 0,
+      EquipmentName: '',
+      Price: 0.0,
+      StockQuantity: 0,
+      Description: '',
+      Status: false,
+      DiscountId: null,
+      EquipmentTypeId: 0,
+      VendorId: 0,
+      StockId: 0,
     },
     status: 'idle',
     error: null,
   },
   reducers: {
-    // Synchronous logic to set the selected equipment
     handleSetEquipment: (state, action) => {
-      state.equipment = action.payload;
-      console.log(state.equipment);
+      state.equipment = action.payload
     },
   },
   extraReducers: (builder) => {
-    // Handling asynchronous actions
     builder
+      .addCase(fetchEquipments.pending, (state) => {
+        state.status = 'loading'
+      })
       .addCase(fetchEquipments.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.items = action.payload;
+        state.status = 'succeeded'
+        state.items = action.payload
+      })
+      .addCase(fetchEquipments.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.payload
       })
       .addCase(createEquipment.fulfilled, (state, action) => {
-        console.log('extraReducers-createEquipment: ', action);
-        state.status = 'succeeded';
-        const item = action.payload;
-        item ? state.items.unshift(item) : console.log('Cannot add');
+        state.status = 'succeeded'
+        if (action.payload) {
+          state.items.unshift(action.payload)
+        }
+      })
+      .addCase(createEquipment.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.payload
       })
       .addCase(updateEquipment.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        const updatedItem = action.payload;
+        state.status = 'succeeded'
+        const updatedItem = action.payload
         if (updatedItem) {
-          const index = state.items.findIndex((item) => item.equipmentId === updatedItem.equipmentId);
+          const index = state.items.findIndex(
+            (item) => item.EquipmentId === updatedItem.EquipmentId,
+          )
           if (index !== -1) {
-            state.items[index] = updatedItem;
+            state.items[index] = updatedItem
           }
         }
-      });
+      })
+      .addCase(updateEquipment.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.payload
+      })
   },
-});
+})
 
-export const { handleSetEquipment } = equipmentSlice.actions;
-export default equipmentSlice.reducer;
+export const { handleSetEquipment } = equipmentSlice.actions
+// eslint-disable-next-line prettier/prettier
+export default equipmentSlice.reducer

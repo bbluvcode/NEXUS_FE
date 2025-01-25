@@ -11,7 +11,7 @@ import CusReqDetail from './modalbody/admin/CusReqDetail'
 import FeedbackDetail from './modalbody/admin/FeedbackDetail'
 import EquipmentCreateForm from './modalbody/admin/EquipmentCreateForm'
 import EquipmentEditForm from './modalbody/admin/EquipmentEditForm'
-import ClientCusReq from './modalbody/client/ClientCusReq'
+import StockCreateForm from './modalbody/admin/StockCreateForm'
 
 function ModalComponent(props) {
   const { iform } = useContext(DataContext)
@@ -19,7 +19,9 @@ function ModalComponent(props) {
   const modalComponents = {
     EquipmentCreateForm: <EquipmentCreateForm />,
     EquipmentEditForm: <EquipmentEditForm />,
+    StockCreateForm: <StockCreateForm/>,
     CustomerCreateForm: <CustomerCreateForm />,
+    CustomerCreateFormClient: <CustomerCreateForm client={true}/>,
     CustomerEditForm: <CustomerEditForm />,
     CusReqCreateForm: <CusReqCreateForm />,
     CusReqEditForm: <CusReqEditForm />,
@@ -27,7 +29,6 @@ function ModalComponent(props) {
     SupReqCreateForm: <SupReqCreateForm />,
     SupReqEditForm: <SupReqEditForm />,
     FeedbackDetail: <FeedbackDetail />,
-    ClientCusReq: <ClientCusReq/>
   }
   return (
     <div>

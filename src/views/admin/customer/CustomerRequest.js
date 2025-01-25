@@ -29,7 +29,7 @@ const CustomerRequest = () => {
     <div>
       <div className="d-flex justify-content-between">
         <h2>List of Customer Request</h2>
-        <BtnModal name="Create New Customer Request" iform="CusReqCreateForm" style="primary" />
+        {/* <BtnModal name="Create New Customer Request" iform="CusReqCreateForm" style="primary" /> */}
       </div>
       <div className="row">
         <table className="table table-hover">
@@ -37,9 +37,11 @@ const CustomerRequest = () => {
             <tr>
               <th>Id</th>
               <th>dateCreate</th>
+              <th>Region Id</th>
               <th>requestTitle</th>
               <th>serviceRequest</th>
               <th>equipmentRequest</th>
+              <th>deposit</th>
               <th>dateResolve</th>
               <th className="text-center">Action</th>
               {/* <th></th> */}
@@ -53,9 +55,11 @@ const CustomerRequest = () => {
                 <tr key={index}>
                   <td>{item.requestId}</td>
                   <td>{formatDateSystem(item.dateCreate)}</td>
+                  <td>{item.regionId}</td>
                   <td>{item.requestTitle}</td>
                   <td>{item.serviceRequest}</td>
                   <td>{item.equipmentRequest}</td>
+                  <td>{item.deposit}</td>
                   <td>{item.dateResolve ? formatDateSystem(item.dateResolve) : 'Waiting'}</td>
                   <td className="d-flex" onClick={() => handleEditCusReq(item)}>
                     <button
@@ -66,10 +70,7 @@ const CustomerRequest = () => {
                     >
                       <CIcon icon={item.isResponse ? cilCheck : cilWarning} />
                     </button>
-                    {/* </td> */}
-                    {/* <td>{item.image}</td>
-        <td>{item.password}</td> */}
-                    {/* <td className="d-flex "> */}
+
                     <BtnModal name={<CIcon icon={cilUser} />} iform="CusReqDetail" style="outline-primary" />
                     <BtnModal
                       name={<i className="fa fa-edit"></i>}

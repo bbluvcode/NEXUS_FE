@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState, useRef, useContext, useLayoutEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../components/css/Login.css';
@@ -6,11 +7,11 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import showToast from "../../components/customerLogin/ShowToast";
+import showToast from '../../components/customerLogin/ShowToast'
 import { DataContext } from '../../context/DataContext';
 
 function Login() {
-    const { setUserId } = useContext(DataContext);
+  const { setUserId } = useContext(DataContext)
     const [email, setEmail] = useState('');
     const [emailRegister, setEmailRegister] = useState('');
     const [password, setPassword] = useState('');
@@ -18,7 +19,7 @@ function Login() {
     const [fullName, setFullName] = useState('');
     const [loginError, setLoginError] = useState('');
     const [registerError, setRegisterError] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const loginEmailRef = useRef(null);
     const registerNameRef = useRef(null);
@@ -191,7 +192,7 @@ function Login() {
     return (
 
         <div className='login-wrapper'>
-            <div className="login-container" ref={containerRef}>
+            <div className="login-container mt-4" ref={containerRef}>
                 {/* SIGNUP */}
                 <div className="formLogin-container sign-up">
                     <form onSubmit={handleRegister}>

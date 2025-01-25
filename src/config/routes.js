@@ -43,7 +43,7 @@ const Discount = React.lazy(() => import('../views/admin/discount/Discount'))
 //equipment
 const AddEquipment = React.lazy(() => import('../views/admin/equiments/AddEquipment'))
 const EquipmentList = React.lazy(() => import('../views/admin/equiments/EquipmentList'))
-const EquipmentType = React.lazy(() => import('../views/admin/equiments/EquipmentType'))
+const EquipmentType = React.lazy(() => import('../views/admin/equiments/EquipmentTypeList'))
 
 //others
 const Region = React.lazy(() => import('../views/admin/others/Region'))
