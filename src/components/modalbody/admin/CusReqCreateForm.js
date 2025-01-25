@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -7,11 +7,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { createCusRequest, handleSetCusRequest } from '../../../redux/customer/cusRequestSlice'
 import { DataContext } from '../../../context/DataContext'
+import { fetchRegions } from '../../../redux/others/regionSlice'
 
 function CusReqCreateForm() {
-  const { serviceSelected } = useContext(DataContext)
-  console.log('🚀 ~ CusReqCreateForm ~ serviceSelected:', serviceSelected)
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
+
+  const regionList = useSelector((state) => state.regions.items)
+  useEffect(() => {
+    dispatch(fetchRegions())
+  }, [])
+
+  const { serviceSelected } = useContext(DataContext)
   const customerInfoString = localStorage.getItem('customerInfo')
   const customerInfo = customerInfoString ? JSON.parse(customerInfoString) : null
   const rateDeposit = 0.2
@@ -22,17 +29,13 @@ function CusReqCreateForm() {
 
   const { customerId, fullName, address } = customerInfo
   const { planName, securityDeposit } = serviceSelected
-  console.log('🚀 ~ CusReqCreateForm ~ planName:', planName)
 
   const schema = yup.object().shape({
     requestTitle: yup.string().required('Request title is required'),
     serviceRequest: yup.string().required('Service request is required'),
     equipmentRequest: yup.string().required('Equipment request is required'),
     installationAddress: yup.string().required('Installation Address request is required'),
-    regionId: yup
-      .number()
-      .required('Region ID is required')
-      .typeError('Region ID must be a number'),
+    regionId: yup.string().required('Region is required').typeError('Region must be a number'),
   })
 
   const {
@@ -52,10 +55,23 @@ function CusReqCreateForm() {
     },
   })
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    setLoading(true) // Bật loading khi nhấn nút thanh toán
+
     const newRequest = { ...data, customerId }
-    dispatch(handleSetCusRequest(newRequest))
-    dispatch(createCusRequest(newRequest))
+    try {
+      dispatch(handleSetCusRequest(newRequest))
+      const res = await dispatch(createCusRequest(newRequest))
+      // approvalUrl
+      if (createCusRequest.fulfilled.match(res)) {
+        const approvalLink = res.payload.approvalUrl
+        window.location.href = approvalLink
+      }
+    } catch (error) {
+      console.error('Error creating PayPal payment', error)
+    } finally {
+      setLoading(false) // Tắt loading khi hoàn thành
+    }
   }
 
   return (
@@ -111,18 +127,25 @@ function CusReqCreateForm() {
         </div>
         <div className="col-md-6">
           <label htmlFor="regionId" className="form-label">
-            Region ID
+            Region
           </label>
-          <input
+          <select
             {...register('regionId')}
-            type="number"
             id="regionId"
             name="regionId"
-            className="form-control"
+            className="form-select"
             aria-invalid={!!errors.regionId}
-          />
+          >
+            <option value="">Select a region</option>
+            {regionList.map((region) => (
+              <option key={region.regionId} value={region.regionId}>
+                {region.regionName}
+              </option>
+            ))}
+          </select>
           {errors.regionId && <p className="text-danger">{errors.regionId.message}</p>}
         </div>
+
         <div className="col-md-6">
           <label htmlFor="installationAddress" className="form-label">
             Installation Address
@@ -187,7 +210,13 @@ function CusReqCreateForm() {
         </div>
 
         <div className="col-md-12">
-          <BtnModalCloseSubmit />
+          {loading ? (
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          ) : (
+            <BtnModalCloseSubmit />
+          )}
         </div>
       </form>
     </div>

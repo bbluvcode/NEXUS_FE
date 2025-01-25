@@ -27,12 +27,12 @@ export const createCusRequest = createAsyncThunk('CusRequests/createCusRequest',
     formData.append('regionId', cusReq.regionId)
     formData.append('installationAddress', cusReq.installationAddress)
     formData.append('deposit', cusReq.deposit)
+    formData.append('depositStatus', "pending")
     formData.append('dateCreate', new Date().toISOString())
-    console.log('🚀 ~ createCusRequest ~ formData:', formData)
     const response = await axios.post(apiCustomer + 'create-customer-request', formData)
     console.log('🚀 ~ createCusRequest ~ response:', response)
     bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
-    return response.data.data
+    return response.data
   } catch (error) {
     console.log('2. CusRequest slice: loi roi, ket noi API nghiem tuc di')
     console.log('error: ', error)
@@ -79,22 +79,22 @@ const cusRequestSlice = createSlice({
     items: [],
     isUpdate: false,
     cusRequest: {
-      requestTitle: '',
-      serviceRequest: '',
-      equipmentRequest: '',
-      dateCreate: '',
-      dateResolve: '',
-      isResponse: false,
-      customerId: null,
-      regionId: '',
-      deposit: null,
-      installationAddress: null,
-      fullName: '',
-      gender: '',
-      dateOfBirth: '',
-      address: '',
-      email: '',
-      phoneNumber: '',
+      // requestTitle: '',
+      // serviceRequest: '',
+      // equipmentRequest: '',
+      // dateCreate: '',
+      // dateResolve: '',
+      // isResponse: false,
+      // customerId: null,
+      // regionId: '',
+      // deposit: null,
+      // installationAddress: null,
+      // fullName: '',
+      // gender: '',
+      // dateOfBirth: '',
+      // address: '',
+      // email: '',
+      // phoneNumber: '',
     },
     status: 'idle',
     error: null,

@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable prettier/prettier */
+/* eslint-disable react/prop-types *//* eslint-disable prettier/prettier */
 import React, { useContext, useState } from 'react'
 import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { useDispatch, useSelector } from 'react-redux'
@@ -62,11 +61,8 @@ function CustomerCreateForm(props) {
   }
 
   const onSubmit = async () => {
-    // e.preventDefault()
-
-    
+    // e.preventDefault()    
     const resultAction = await dispatch(createCustomer(customer))
-
     if (createCustomer.fulfilled.match(resultAction)) {
       const customerInfo = resultAction.payload
       localStorage.setItem('customerInfo',  JSON.stringify(customerInfo));

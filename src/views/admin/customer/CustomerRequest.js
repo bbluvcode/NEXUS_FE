@@ -36,13 +36,13 @@ const CustomerRequest = () => {
           <thead>
             <tr>
               <th>Id</th>
-              <th>dateCreate</th>
-              <th>Region Id</th>
-              <th>requestTitle</th>
-              <th>serviceRequest</th>
-              <th>equipmentRequest</th>
-              <th>deposit</th>
-              <th>dateResolve</th>
+              <th>Date Created</th>
+              <th>Region Code</th>
+              <th>Request Title</th>
+              <th>ServiceRequest</th>
+              <th>EquipmentRequest</th>
+              <th>Deposit</th>
+              <th>DateResolve</th>
               <th className="text-center">Action</th>
               {/* <th></th> */}
               {/* <th>Image</th>
@@ -55,11 +55,11 @@ const CustomerRequest = () => {
                 <tr key={index}>
                   <td>{item.requestId}</td>
                   <td>{formatDateSystem(item.dateCreate)}</td>
-                  <td>{item.regionId}</td>
+                  <td>{item.regionCode}</td>
                   <td>{item.requestTitle}</td>
                   <td>{item.serviceRequest}</td>
                   <td>{item.equipmentRequest}</td>
-                  <td>{item.deposit}</td>
+                  <td>${item.deposit??0}</td>
                   <td>{item.dateResolve ? formatDateSystem(item.dateResolve) : 'Waiting'}</td>
                   <td className="d-flex" onClick={() => handleEditCusReq(item)}>
                     <button
