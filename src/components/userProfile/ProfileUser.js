@@ -16,7 +16,7 @@ const theme = createTheme();
 
 function ProfileUser() {
     const [user, setUser] = useState({
-        dt1: "5 Orders",
+        dt1: "4 Orders",
         dt2: "150 Points",
         dt3: "01/2024",
         fullName: "Nguyen Van ABC",
@@ -58,27 +58,6 @@ function ProfileUser() {
                 EquipmentRequest: "Dial-up Modem Model DM789",
                 DateCreate: "2025-01-13",
                 IsResponse: false,
-            },
-
-        ],
-        supports: [
-            {
-                DateRequest: "2025-01-13",
-                Title: "Request for Broadband Repair",
-                DetailContent: "The broadband connection is not working since yesterday evening.",
-                IsResolved: false,
-            },
-            {
-                DateRequest: "2025-01-10",
-                Title: "Request for Land-line Repair",
-                DetailContent: "Land-line phone is not working properly; there is a lot of static noise.",
-                IsResolved: true,
-            },
-            {
-                DateRequest: "2025-01-15",
-                Title: "Help with Dial-up Internet Configuration",
-                DetailContent: "Need assistance in configuring the dial-up connection for better speed.",
-                IsResolved: false,
             },
         ],
     });
@@ -140,3 +119,4 @@ function ProfileUser() {
 }
 
 export default ProfileUser;
+

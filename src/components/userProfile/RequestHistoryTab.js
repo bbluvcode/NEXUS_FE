@@ -37,7 +37,7 @@ function RequestHistoryTab({ requests }) {
                                 <TableCell align="center">{request.ServiceRequest}</TableCell>
                                 <TableCell align="center">{request.EquipmentRequest}</TableCell>
                                 <TableCell align="center">{request.DateCreate}</TableCell>
-                                <TableCell align="center">{request.IsResponse ? "Processed" : "Pending"}</TableCell>
+                                <TableCell align="center">{request.IsResponse ? "Processed" : "Processing"}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
