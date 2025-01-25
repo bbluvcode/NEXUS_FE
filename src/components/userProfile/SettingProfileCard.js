@@ -7,7 +7,6 @@ import ProfileTab from "./ProfileTab";
 import ChangePasswordTab from "./ChangePasswordTab";
 import OrderHistoryTab from "./OrderHistoryTab";
 import RequestHistoryTab from "./RequestHistoryTab";
-import SupportHistoryTab from "./SupportHistoryTab";
 
 function SettingProfileCard({ user, updateUser }) {
     const [valueTab, setValueTab] = useState("1");
@@ -21,13 +20,11 @@ function SettingProfileCard({ user, updateUser }) {
             case "1":
                 return <ProfileTab user={user} updateUser={updateUser} />;
             case "2":
-                return <ChangePasswordTab />;
+                return <ChangePasswordTab user={user} updateUser={updateUser} />;
             case "3":
                 return <OrderHistoryTab orders = {user.orders} />;
             case "4":
                 return <RequestHistoryTab requests = {user.requests}/>;
-            case "5":
-                return <SupportHistoryTab supports = {user.supports}/>;
             default:
                 return null;
         }
@@ -55,7 +52,6 @@ function SettingProfileCard({ user, updateUser }) {
                 <Tab value="2" label="Change Password" />
                 <Tab value="3" label="Order History" />
                 <Tab value="4" label="Request History" />
-                <Tab value="5" label="Support History" />
             </Tabs>
             <Divider />
             <div style={{ padding: "16px" }}>{renderTabContent()}</div>
