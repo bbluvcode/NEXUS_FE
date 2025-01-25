@@ -5,6 +5,7 @@ import { DataContext } from '../../context/DataContext'
 
 function BtnModal(props) {
   const {setIform} = useContext(DataContext);
+  
   return (
     <div>
       <button

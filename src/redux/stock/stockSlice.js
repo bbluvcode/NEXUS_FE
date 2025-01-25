@@ -1,113 +1,146 @@
 /* eslint-disable prettier/prettier */
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-import { apiStock } from '../../constant/apiConstant';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
+import { apiStock } from '../../constant/apiConstant'
 
 // Fetch all stocks
-export const fetchStocks = createAsyncThunk('Stocks/fetchStocks', async () => {
-  try {
-    const response = await axios.get(apiStock);
-    return response.data.data;
-  } catch (error) {
-    console.log('1. Stock slice: API error');
-    console.log('error: ', error);
-    return false;
+export const fetchStocks = createAsyncThunk(
+  'stocks/fetchStocks',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(apiStock)
+      return response.data.data
+    } catch (error) {
+      console.error('Error during API call fetchStocks:', error)
+      return rejectWithValue(error.response?.data?.message || 'Failed to load stocks.')
+    }
   }
-});
+)
 
 // Create a new stock
-export const createStock = createAsyncThunk('Stocks/createStock', async (stock) => {
-  try {
-    const formData = new FormData();
-    formData.append('stockName', stock.stockName);
-    formData.append('address', stock.address);
-    formData.append('email', stock.email);
-    formData.append('phone', stock.phone);
-    formData.append('fax', stock.fax);
-    formData.append('regionId', stock.regionId);
+export const createStock = createAsyncThunk(
+  'stocks/createStock',
+  async (stock, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(apiStock, {
+        stockName: stock.stockName,
+        address: stock.address,
+        email: stock.email,
+        phone: stock.phone,
+        fax: stock.fax,
+        regionId: stock.regionId, // Sử dụng regionId
+      })
 
-    const response = await axios.post(apiStock, formData);
-    console.log('response: ', response);
-    bootstrap.Modal.getInstance(document.getElementById('myModal')).hide();
-    return response.data.data;
-  } catch (error) {
-    console.log('2. Stock slice: API error in createStock');
-    console.log('error: ', error);
-    return null;
+      if (response.status === 201) {
+        console.log('Stock created successfully:', response.data)
+        bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
+        return response.data.data // Trả về dữ liệu từ response
+      }
+      return rejectWithValue('Unable to create stock. Unknown error.')
+    } catch (error) {
+      console.error('Error in createStock:', error)
+      return rejectWithValue(error.response?.data?.message || 'Failed to create stock.')
+    }
   }
-});
+)
 
-// Update a stock
-export const updateStock = createAsyncThunk('Stocks/updateStock', async ({ id, stock }) => {
-  try {
-    const formData = new FormData();
-    formData.append('stockName', stock.stockName);
-    formData.append('address', stock.address);
-    formData.append('email', stock.email);
-    formData.append('phone', stock.phone);
-    formData.append('fax', stock.fax);
-    formData.append('regionId', stock.regionId);
+// Update an existing stock
+export const updateStock = createAsyncThunk(
+  'stocks/updateStock',
+  async ({ id, stock }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`${apiStock}${id}`, {
+        stockName: stock.stockName,
+        address: stock.address,
+        email: stock.email,
+        phone: stock.phone,
+        fax: stock.fax,
+        regionId: stock.regionId, // Sử dụng regionId
+      })
 
-    const response = await axios.put(`${apiStock}${id}`, formData);
-    console.log('response: ', response);
-    bootstrap.Modal.getInstance(document.getElementById('myModal')).hide();
-    return response.data.data;
-  } catch (error) {
-    console.log('3. Stock slice: API error in updateStock');
-    console.log('error: ', error);
-    return null;
+      if (response.status === 200) {
+        console.log('Stock updated successfully:', response.data)
+        bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
+        return response.data.data // Trả về dữ liệu từ response
+      }
+      return rejectWithValue('Unable to update stock. Unknown error.')
+    } catch (error) {
+      console.error('Error in updateStock:', error)
+      return rejectWithValue(error.response?.data?.message || 'Failed to update stock.')
+    }
   }
-});
+)
 
 const stockSlice = createSlice({
   name: 'stocks',
   initialState: {
     items: [],
-    isUpdate: false,
     stock: {
       stockName: '',
       address: '',
       email: '',
       phone: '',
       fax: '',
-      regionId: '',
+      regionId: '', // Sử dụng regionId thay vì region
     },
     status: 'idle',
     error: null,
   },
   reducers: {
-    // Synchronous logic to set the selected stock
     handleSetStock: (state, action) => {
-      state.stock = action.payload;
-      console.log(state.stock);
+      state.stock = action.payload
+      console.log('Selected stock:', state.stock)
     },
   },
   extraReducers: (builder) => {
-    // Handling asynchronous actions
     builder
+      // Handling fetchStocks API
+      .addCase(fetchStocks.pending, (state) => {
+        state.status = 'loading'
+      })
       .addCase(fetchStocks.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.items = action.payload;
+        state.status = 'succeeded'
+        state.items = action.payload // Save the list of stocks
+      })
+      .addCase(fetchStocks.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.payload
+      })
+      // Handling createStock API
+      .addCase(createStock.pending, (state) => {
+        state.status = 'loading'
       })
       .addCase(createStock.fulfilled, (state, action) => {
-        console.log('extraReducers-createStock: ', action);
-        state.status = 'succeeded';
-        const item = action.payload;
-        item ? state.items.unshift(item) : console.log('Cannot add');
+        state.status = 'succeeded'
+        const newStock = action.payload
+        if (newStock) {
+          state.items.unshift(newStock)
+        }
+      })
+      .addCase(createStock.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.payload
+      })
+      // Handling updateStock API
+      .addCase(updateStock.pending, (state) => {
+        state.status = 'loading'
       })
       .addCase(updateStock.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        const updatedItem = action.payload;
-        if (updatedItem) {
-          const index = state.items.findIndex((item) => item.stockId === updatedItem.stockId);
+        state.status = 'succeeded'
+        const updatedStock = action.payload
+        if (updatedStock) {
+          const index = state.items.findIndex((item) => item.stockId === updatedStock.stockId)
           if (index !== -1) {
-            state.items[index] = updatedItem;
+            state.items[index] = updatedStock
           }
         }
-      });
+      })
+      .addCase(updateStock.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.payload
+      })
   },
-});
+})
 
-export const { handleSetStock } = stockSlice.actions;
-export default stockSlice.reducer;
+export const { handleSetStock } = stockSlice.actions
+export default stockSlice.reducer
