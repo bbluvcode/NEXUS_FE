@@ -1,40 +1,49 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
+/* eslint-disable prettier/prettier */
 import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 import axios from 'axios'
-import { apiStock } from '../../../constant/apiConstant'
 import { useDispatch } from 'react-redux'
 import { fetchStocks } from '../../../redux/stock/stockSlice'
+import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit' 
+
+const apiStock = '/src/constant/apiConstant.js'
 
 const StockCreateForm = ({ onSuccess }) => {
   const dispatch = useDispatch()
-  const [formData, setFormData] = useState({
-    stockName: '',
-    address: '',
-    email: '',
-    phone: '',
-    fax: '',
-    region: '',
+
+  // Form validation schema
+  const schema = yup.object().shape({
+    stockName: yup.string().required('Stock name is required'),
+    address: yup.string().required('Address is required'),
+    email: yup.string().email('Invalid email format').required('Email is required'),
+    phone: yup
+      .string()
+      .matches(/^[0-9]+$/, 'Phone number must be numeric')
+      .required('Phone number is required'),
+    fax: yup.string().optional(),
+    regionId: yup.number().typeError('Region ID must be a number').required('Region ID is required'),
   })
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }))
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onTouched',
+  })
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-
+  const onSubmit = async (data) => {
     try {
-      await axios.post(apiStock, formData)
+      await axios.post(apiStock, data)
       alert('Stock created successfully!')
       if (onSuccess) {
-        onSuccess() // Close modal after success
+        onSuccess()
       } else {
-        dispatch(fetchStocks()) // Refresh stocks if no onSuccess
+        dispatch(fetchStocks())
       }
     } catch (error) {
       console.error('Error creating stock:', error)
@@ -43,60 +52,96 @@ const StockCreateForm = ({ onSuccess }) => {
   }
 
   return (
-    <div>
-      <h2>Create New Stock</h2>
-      <form onSubmit={handleSubmit} id="StockCreateForm">
-        <label>
-          Stock Name:
+    <div className="stock-create-form">
+      <h2 className="text-center">Create New Stock</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
+        <div className="col-md-6">
+          <label htmlFor="stockName" className="form-label">
+            Stock Name
+          </label>
           <input
+            {...register('stockName')}
             type="text"
+            id="stockName"
             name="stockName"
-            value={formData.stockName}
-            onChange={handleChange}
-            required
+            className="form-control"
           />
-        </label>
-        <br />
-        <label>
-          Address:
+          {errors.stockName && <p className="text-danger">{errors.stockName.message}</p>}
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="address" className="form-label">
+            Address
+          </label>
           <input
+            {...register('address')}
             type="text"
+            id="address"
             name="address"
-            value={formData.address}
-            onChange={handleChange}
-            required
+            className="form-control"
           />
-        </label>
-        <br />
-        <label>
-          Email:
+          {errors.address && <p className="text-danger">{errors.address.message}</p>}
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="email" className="form-label">
+            Email
+          </label>
           <input
+            {...register('email')}
             type="email"
+            id="email"
             name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
+            className="form-control"
           />
-        </label>
-        <br />
-        <label>
-          Phone:
-          <input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
-        </label>
-        <br />
-        <label>
-          Fax:
-          <input type="text" name="fax" value={formData.fax} onChange={handleChange} />
-        </label>
-        <br />
-        <label>
-          Region:
-          <input type="text" name="region" value={formData.region} onChange={handleChange} />
-        </label>
-        <br />
-        <button type="submit" className="btn btn-primary">
-          Create Stock
-        </button>
+          {errors.email && <p className="text-danger">{errors.email.message}</p>}
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="phone" className="form-label">
+            Phone
+          </label>
+          <input
+            {...register('phone')}
+            type="text"
+            id="phone"
+            name="phone"
+            className="form-control"
+          />
+          {errors.phone && <p className="text-danger">{errors.phone.message}</p>}
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="fax" className="form-label">
+            Fax
+          </label>
+          <input
+            {...register('fax')}
+            type="text"
+            id="fax"
+            name="fax"
+            className="form-control"
+          />
+          {errors.fax && <p className="text-danger">{errors.fax.message}</p>}
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="regionId" className="form-label">
+            Region ID
+          </label>
+          <input
+            {...register('regionId')}
+            type="number"
+            id="regionId"
+            name="regionId"
+            className="form-control"
+          />
+          {errors.regionId && <p className="text-danger">{errors.regionId.message}</p>}
+        </div>
+
+        <div className="col-md-12">
+          <BtnModalCloseSubmit />
+        </div>
       </form>
     </div>
   )

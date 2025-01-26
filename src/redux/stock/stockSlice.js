@@ -21,26 +21,27 @@ export const fetchStocks = createAsyncThunk(
 export const createStock = createAsyncThunk(
   'stocks/createStock',
   async (stock, { rejectWithValue }) => {
-    try {
-      const response = await axios.post(apiStock, {
-        stockName: stock.stockName,
-        address: stock.address,
-        email: stock.email,
-        phone: stock.phone,
-        fax: stock.fax,
-        regionId: stock.regionId, // Sử dụng regionId
-      })
+    console.log('data',rejectWithValue)
+    // try {
+    //   const response = await axios.post(apiStock, {
+    //     stockName: stock.stockName,
+    //     address: stock.address,
+    //     email: stock.email,
+    //     phone: stock.phone,
+    //     fax: stock.fax,
+    //     regionId: stock.regionId, // Sử dụng regionId
+    //   })
 
-      if (response.status === 201) {
-        console.log('Stock created successfully:', response.data)
-        bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
-        return response.data.data // Trả về dữ liệu từ response
-      }
-      return rejectWithValue('Unable to create stock. Unknown error.')
-    } catch (error) {
-      console.error('Error in createStock:', error)
-      return rejectWithValue(error.response?.data?.message || 'Failed to create stock.')
-    }
+    //   if (response.status === 201) {
+    //     console.log('Stock created successfully:', response.data)
+    //     bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
+    //     return response.data.data // Trả về dữ liệu từ response
+    //   }
+    //   return rejectWithValue('Unable to create stock. Unknown error.')
+    // } catch (error) {
+    //   console.error('Error in createStock:', error)
+    //   return rejectWithValue(error.response?.data?.message || 'Failed to create stock.')
+    // }
   }
 )
 
