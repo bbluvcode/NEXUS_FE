@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 const API_PORT = 5185;
+export const apiKeyword = `http://localhost:${API_PORT}/api/Keyword/`;
 export const apiCustomer = `http://localhost:${API_PORT}/api/Customer/`;
 export const apiStock = `http://localhost:${API_PORT}/api/Stock/`;
 export const apiEquipment = `http://localhost:${API_PORT}/api/Equipment/`;

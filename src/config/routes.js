@@ -48,6 +48,7 @@ const EquipmentType = React.lazy(() => import('../views/admin/equiments/Equipmen
 //others
 const Region = React.lazy(() => import('../views/admin/others/Region'))
 const NewsList = React.lazy(() => import('../views/admin/others/NewsList'))
+const Keyword = React.lazy(() => import('../views/admin/others/Keyword'))
 
 //retailshop
 const AddRetailShop = React.lazy(() => import('../views/admin/retailshop/AddRetailShop'))
@@ -180,6 +181,7 @@ const routes = [
   //others
   { path: '/Region', exact: true, name: 'Region', element: Region },
   { path: '/NewsList', exact: true, name: 'NewsList', element: NewsList },
+  { path: '/Keyword', exact: true, name: 'Keyword', element: Keyword },
 
   //retailshop
   { path: '/AddRetailShop', exact: true, name: 'AddRetailShop', element: AddRetailShop },
