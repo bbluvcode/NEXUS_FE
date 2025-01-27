@@ -196,7 +196,7 @@ const routes = [
 
   //vendor
   { path: '/AddVendor', exact: true, name: 'AddVendor', element: AddVendor },
-  { path: '/UpdateVendor', exact: true, name: 'UpdateVendor', element: UpdateVendor },
+  { path: '/UpdateVendor/:id', exact: true, name: 'UpdateVendor', element: UpdateVendor },
   { path: '/VendorList', exact: true, name: 'VendorList', element: VendorList },
 
   //=================================================================================
