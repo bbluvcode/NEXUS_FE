@@ -8,6 +8,8 @@ import regionReducer from './others/regionSlice'
 import equipmentReducer from './equipment/equipmentSlice'
 import stockReducer from './stock/stockSlice'
 import equipmentTypeReducer from './equipment/equipmentTypeSlice'
+import inStockOrderReducer from './inStockOrder/inStockOrderSlice'
+import outStockOrderReducer from './outStockOrder/outStockOrderSlice'
 
 const myStore = configureStore({
   reducer: {
@@ -19,6 +21,8 @@ const myStore = configureStore({
     equipments: equipmentReducer,
     equipmentTypes: equipmentTypeReducer,
     stocks: stockReducer,
+    inStockOrders: inStockOrderReducer,
+    outStockOrders: outStockOrderReducer,
   },
 })
 export default myStore
