@@ -13,5 +13,6 @@ export const apiEmployee = `http://localhost:${API_PORT}/api/Employee/`;
 export const apiRetailShop = `http://localhost:${API_PORT}/api/RetailShop/`;
 export const apiPlan = `http://localhost:${API_PORT}/api/Plan/`;
 export const apiPlanFee = `http://localhost:${API_PORT}/api/PlanFee/`;
+export const apiVendor = `http://localhost:${API_PORT}/api/Vendor/`;
 
 export const apiImage = `${API_BASE_URL}/Images/imageRetail/`;
