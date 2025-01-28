@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllRetailShops } from '../../../services/retailShopSerivce'
 import { getAllEmployees } from '../../../services/employeeService'
+import { apiImage } from '../../../constant/apiConstant'
 
 const RetailShopList = () => {
   const [shops, setShops] = useState([])
@@ -11,28 +12,20 @@ const RetailShopList = () => {
   useEffect(() => {
     const fetchShopsAndEmployees = async () => {
       try {
-        // Fetch retail shops
         const shopResponse = await getAllRetailShops()
         const fetchedShops = shopResponse.data
         setShops(fetchedShops)
 
-        // Fetch employees for each shop and map their status
         const statusMap = {}
         for (const shop of fetchedShops) {
-          // Fetch employees for this shop only
           const employeeResponse = await getAllEmployees(shop.retailShopId)
           const employees = employeeResponse.data
-
-          // Filter employees to only those matching the current shop's retailShopId
           const relevantEmployees = employees.filter(
             (employee) => employee.retailShopId === shop.retailShopId,
           )
-
-          // Map statuses of relevant employees
           const statusCounts = relevantEmployees.map((employee) => employee.status)
           statusMap[shop.retailShopId] = statusCounts
         }
-
         setEmployeeStatus(statusMap)
       } catch (error) {
         console.error('Error loading retail shops or employees', error)
@@ -48,7 +41,6 @@ const RetailShopList = () => {
   const renderEmployeeDots = (statuses = []) => {
     const maxDots = 5
     const statusColors = statuses.slice(0, maxDots).map((status) => (status ? 'green' : 'red'))
-
     return (
       <div style={{ display: 'flex', gap: '5px' }}>
         {statusColors.map((color, index) => (
@@ -68,24 +60,39 @@ const RetailShopList = () => {
 
   return (
     <div>
-      <h1>Retail Shops</h1>
-      <div className="shop-list">
+      <button className="btn btn-primary mb-3" onClick={() => navigate('/admin/AddRetailShop')}>
+        Add Shop
+      </button>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '20px',
+        }}
+      >
         {shops.map((shop) => (
           <div
             key={shop.retailShopId}
-            className="shop-item"
+            className="shop-card"
             onClick={() => handleShopClick(shop.retailShopId)}
             style={{
               cursor: 'pointer',
-              margin: '10px',
-              padding: '10px',
+              padding: '15px',
               border: '1px solid #ccc',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              borderRadius: '10px',
+              textAlign: 'center',
+              boxShadow: '2px 2px 10px rgba(0,0,0,0.1)',
+              backgroundColor: '#fff',
+              marginBottom: '20px',
             }}
           >
-            <span>{shop.retailShopName}</span>
+            <img
+              src={`${apiImage}${shop.image.split('/').pop()}`}
+              alt={shop.retailShopName}
+              style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+            />
+            <h3>{shop.retailShopName}</h3>
+            <p>{shop.address}</p>
             {renderEmployeeDots(employeeStatus[shop.retailShopId] || [])}
           </div>
         ))}

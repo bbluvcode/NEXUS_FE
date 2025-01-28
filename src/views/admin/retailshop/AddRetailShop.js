@@ -4,6 +4,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { addRetailShop } from '../../../services/retailShopSerivce';
 import { useNavigate } from 'react-router-dom';
+import styles from "../../../style/ManStyle.module.css";
+
 
 const retailShopValidationSchema = Yup.object().shape({
   RetailShopName: Yup.string()
@@ -26,6 +28,10 @@ const retailShopValidationSchema = Yup.object().shape({
     .required('Region ID is required')
     .typeError('Region ID must be a number'),
 });
+
+const handleBack = () => {
+  navigate(-1);
+};
 
 const AddRetailShop = () => {
   const navigate = useNavigate(); // Correctly initialize the hook here
@@ -53,6 +59,9 @@ const AddRetailShop = () => {
 
   return (
     <div className="container">
+      <button onClick={handleBack} className="btn btn-outline-dark mb-4">
+        Back
+      </button>
       <h2>Add Retail Shop</h2>
       <Formik
         initialValues={{
