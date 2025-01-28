@@ -1,6 +1,14 @@
 /* eslint-disable prettier/prettier */
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
+import {
+  createSuppportRequest,
+  handleSetSuppportRequest,
+} from '../../../redux/customer/supportRequestSlice'
 
 const StyledContact = styled.div`
   section,
@@ -140,20 +148,84 @@ const StyledContact = styled.div`
 `
 
 const Contact = () => {
+  const dispatch = useDispatch()
+  const supportRequest = useSelector((state) => state.supportRequests.supportRequest)
+
+  const [formData, setFormData] = useState({
+    title: '',
+    detailContent: '',
+    dateResolved: null,
+    email: '',
+  })
+
+  const schema = yup.object().shape({
+    title: yup.string().min(3).max(50).required('Title is required'),
+    detailContent: yup.string().min(5).required('Detail Content is required'),
+    email: yup.string().email().required('Email is required'),
+  })
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: 'onTouched',
+  })
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData({
+      ...formData,
+      [name]: value,
+    })
+    dispatch(handleSetSuppportRequest({ ...supportRequest, [name]: value }))
+  }
+
+  const onSubmit = async () => {
+    const action = await dispatch(createSuppportRequest(supportRequest)); // Gửi yêu cầu
+    if (createSuppportRequest.fulfilled.match(action)) {
+      console.log("Gửi thành công");
+      
+      // Clear input fields
+      setFormData({
+        title: '',
+        detailContent: '',
+        email: '',
+      });
+
+      Swal.fire({
+        title: 'Request Submitted!',
+        text: 'Your support request has been successfully created.',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        draggable: true,
+      });
+    } else if (createSuppportRequest.rejected.match(action)) {
+      console.error("Gửi thất bại:", action.error.message);
+
+      Swal.fire({
+        title: 'Submission Failed',
+        text: action.error.message || 'Something went wrong. Please try again later.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    }
+  };
+
   return (
     <StyledContact>
       <section id="contact" className="contact section">
         {/* Section Title */}
         <div className="container section-title" data-aos="fade-up">
-          <h2>Contact Us</h2> {/* Tiêu đề rõ ràng hơn */}
+          <h2>Contact Us</h2>
           <p>
             Get in touch with us for any inquiries, support, or collaboration opportunities. We're
             here to help!
-          </p>{' '}
-          {/* Mô tả chi tiết hơn */}
+          </p>
         </div>
 
-        {/* End Section Title */}
+        {/* Google Maps */}
         <div className="mb-5" data-aos="fade-up" data-aos-delay={200}>
           <iframe
             style={{ border: 0, width: '100%', height: 270 }}
@@ -164,7 +236,8 @@ const Contact = () => {
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
-        {/* End Google Maps */}
+
+        {/* Contact Info */}
         <div className="container" data-aos="fade-up" data-aos-delay={100}>
           <div className="row gy-4">
             <div className="col-lg-4">
@@ -175,7 +248,6 @@ const Contact = () => {
                   <p>391A NKKN Street, HCM City , VN 70000</p>
                 </div>
               </div>
-              {/* End Info Item */}
               <div className="info-item d-flex" data-aos="fade-up" data-aos-delay={400}>
                 <i className="bi bi-telephone flex-shrink-0" />
                 <div>
@@ -183,7 +255,6 @@ const Contact = () => {
                   <p>+1 5589 55488 55</p>
                 </div>
               </div>
-              {/* End Info Item */}
               <div className="info-item d-flex" data-aos="fade-up" data-aos-delay={500}>
                 <i className="bi bi-envelope flex-shrink-0" />
                 <div>
@@ -191,64 +262,70 @@ const Contact = () => {
                   <p>mnhbgr@gmail.com</p>
                 </div>
               </div>
-              {/* End Info Item */}
             </div>
+
+            {/* Contact Form & Support Request */}
             <div className="col-lg-8">
-              <form
-                action="forms/contact.php"
-                method="post"
-                className="php-email-form"
-                data-aos="fade-up"
-                data-aos-delay={200}
-              >
+              <form onSubmit={handleSubmit(onSubmit)} className="php-email-form">
                 <div className="row gy-4">
                   <div className="col-md-6">
                     <input
                       type="text"
+                      {...register('name')}
                       name="name"
                       className="form-control"
                       placeholder="Your Name"
                       required
+                      onChange={handleChange}
                     />
                   </div>
                   <div className="col-md-6">
                     <input
                       type="email"
+                      {...register('email')}
                       className="form-control"
                       name="email"
                       placeholder="Your Email"
                       required
+                      onChange={handleChange}
                     />
+                    {errors.email && <p className="text-danger">{errors.email.message}</p>}
                   </div>
                   <div className="col-md-12">
                     <input
                       type="text"
+                      {...register('title')}
                       className="form-control"
-                      name="subject"
-                      placeholder="Subject"
+                      name="title"
+                      placeholder="Subject / Title"
                       required
+                      onChange={handleChange}
                     />
+                    {errors.title && <p className="text-danger">{errors.title.message}</p>}
                   </div>
                   <div className="col-md-12">
                     <textarea
+                      {...register('detailContent')}
                       className="form-control"
-                      name="message"
+                      name="detailContent"
                       rows={6}
-                      placeholder="Message"
+                      placeholder="Message / Detail Content"
                       required
-                      defaultValue={''}
+                      onChange={handleChange}
                     />
+                    {errors.detailContent && (
+                      <p className="text-danger">{errors.detailContent.message}</p>
+                    )}
                   </div>
+
                   <div className="col-md-12 text-center">
-                    <div className="loading">Loading</div>
-                    <div className="error-message" />
-                    {/* <div className="sent-message">Your message has been sent. Thank you!</div> */}
-                    <button type="submit">Send Message</button>
+                    <button type="submit" className="btn btn-primary">
+                      Submit
+                    </button>
                   </div>
                 </div>
               </form>
             </div>
-            {/* End Contact Form */}
           </div>
         </div>
       </section>

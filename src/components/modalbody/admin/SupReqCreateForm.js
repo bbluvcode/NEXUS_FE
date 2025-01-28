@@ -17,14 +17,14 @@ function SupReqCreateForm(props) {
     title: '',
     detailContent: '',
     dateResolved: null,
-    customerId: '',
+    email: '',
     empIdResolver: null,
   })
 
   const schema = yup.object().shape({
     title: yup.string().min(3).max(50).required('Title is required'),
     detailContent: yup.string().min(5).required('Detail Content is required'),
-    customerId: yup.number().required('Customer ID is required'),
+    email: yup.string().email().required('Customer ID is required'),
   })
 
   const {
@@ -54,7 +54,6 @@ function SupReqCreateForm(props) {
     <div className="support-request-create-form">
       <h2 className="text-center">Create Support Request</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
-
         <div className="col-md-12">
           <label htmlFor="title" className="form-label">
             Title
@@ -70,21 +69,19 @@ function SupReqCreateForm(props) {
           {errors.title && <p className="text-danger">{errors.title.message}</p>}
         </div>
 
-      
-
         <div className="col-md-6">
-          <label htmlFor="customerId" className="form-label">
-            Customer ID
+          <label htmlFor="email" className="form-label">
+            Email
           </label>
           <input
-            {...register('customerId')}
-            type="number"
-            id="customerId"
-            name="customerId"
+            {...register('email')}
+            type="text"
+            id="email"
+            name="email"
             className="form-control"
             onChange={handleChange}
           />
-          {errors.customerId && <p className="text-danger">{errors.customerId.message}</p>}
+          {errors.email && <p className="text-danger">{errors.email.message}</p>}
         </div>
 
         <div className="col-md-6">
@@ -114,7 +111,7 @@ function SupReqCreateForm(props) {
           {errors.detailContent && <p className="text-danger">{errors.detailContent.message}</p>}
         </div>
         <div className="col-md-12">
-          <BtnModalCloseSubmit/>
+          <BtnModalCloseSubmit />
         </div>
       </form>
     </div>

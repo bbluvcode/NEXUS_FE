@@ -2,6 +2,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { apiCustomer } from '../../constant/apiConstant'
+import Swal from 'sweetalert2'
 
 //redux thunk(middleware) su ly bat dong bo
 export const fetchSuppportRequests = createAsyncThunk(
@@ -11,9 +12,9 @@ export const fetchSuppportRequests = createAsyncThunk(
       const response = await axios.get(apiCustomer + 'support-requests')
       return response.data.data
     } catch (error) {
-      console.log('1. CusRequest slice: loi roi, ket noi API nghiem tuc di')
-      console.log('error: ', error)
-      return true
+      console.log('🚀 ~ error:', error)
+
+      return false
     }
   },
 )
@@ -26,7 +27,7 @@ export const createSuppportRequest = createAsyncThunk(
       formData.append('title', supReq.title)
       formData.append('detailContent', supReq.detailContent)
       formData.append('isResolved', false)
-      formData.append('customerId', supReq.customerId)
+      formData.append('email', supReq.email)
       const response = await axios.post(apiCustomer + 'create-support-request', formData)
       console.log('response: ', response)
       bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
@@ -34,10 +35,31 @@ export const createSuppportRequest = createAsyncThunk(
     } catch (error) {
       console.log('2. SuppportRequest slice: loi roi, ket noi API nghiem tuc di')
       console.log('error: ', error)
-      return true
+      return null
     }
   },
 )
+
+// Resolve support request
+export const changeStatusSupportRequest = createAsyncThunk(
+  'SupportRequests/changeStatusSupportRequest',
+  async ({ supId, empIdResolver }, { rejectWithValue }) => {
+    try {
+      const formData = new FormData()
+      formData.append('empIdResolver', empIdResolver)
+      const endpoint = `${apiCustomer}resolve-support-request/${supId}`
+      const response = await axios.put(endpoint, formData)
+      // const response = await axios.put(endpoint, empIdResolver);
+      return response.data.data
+    } catch (error) {
+      console.error('🚀 ~ Error changing support request status:', error)
+
+      // Pass error response to be handled by the thunk middleware
+      return rejectWithValue(error.response?.data || 'An error occurred')
+    }
+  },
+)
+
 const supportRequestSlice = createSlice({
   name: 'supportRequests',
   initialState: {
@@ -50,7 +72,7 @@ const supportRequestSlice = createSlice({
       detailContent: '',
       dateResolved: null,
       isResolved: false,
-      customerId: '',
+      email: '',
       fullName: '',
       gender: '',
       dateOfBirth: '',
@@ -77,10 +99,34 @@ const supportRequestSlice = createSlice({
       })
       .addCase(createSuppportRequest.fulfilled, (state, action) => {
         console.log('action: ', action)
-
         state.status = 'succeeded'
-        state.items.shift(action.payload)
+        Swal.fire({
+          title: 'Request Submitted!',
+          text: 'Your support request has been successfully created.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+          draggable: true,
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            window.location.href = '/'
+          } else if (result.isDenied) {
+            Swal.fire('Changes are not saved', '', 'info')
+          }
+        })
+        state.items.unshift(action.payload)
+      })
+      .addCase(changeStatusSupportRequest.fulfilled, (state, action) => {
+        if (action.payload != false) {
+          state.status = 'succeeded'
 
+          const index = state.items.findIndex(
+            (item) => item.supportRequestId === action.payload.supportRequestId,
+          )
+          if (index !== -1) {
+            state.items[index] = action.payload
+          }
+        }
       })
   },
 })
