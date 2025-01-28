@@ -36,9 +36,9 @@ function AddEquipment({ onSuccess }) {
       await axios.post(apiEquipment, equipmentData)
       alert('Equipment added successfully!')
       if (onSuccess) {
-        onSuccess() // Close modal after success
+        onSuccess()
       } else {
-        dispatch(fetchEquipments()) // If no onSuccess, fetch equipments
+        dispatch(fetchEquipments())
       }
     } catch (error) {
       console.error('Error adding equipment:', error)
@@ -47,86 +47,142 @@ function AddEquipment({ onSuccess }) {
   }
 
   return (
-    <div>
-      <h2>Add New Equipment</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Equipment Name:
+    <div className="add-equipment-form">
+      <h2 className="text-center">Add New Equipment</h2>
+      <form onSubmit={handleSubmit} className="row g-3">
+        <div className="col-md-6">
+          <label htmlFor="equipmentName" className="form-label">
+            Equipment Name
+          </label>
           <input
             type="text"
+            id="equipmentName"
             value={equipmentName}
             onChange={(e) => setEquipmentName(e.target.value)}
+            className="form-control"
             required
           />
-        </label>
-        <br />
-        <label>
-          Price:
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="price" className="form-label">
+            Price
+          </label>
           <input
             type="number"
             step="0.01"
+            id="price"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            className="form-control"
             required
           />
-        </label>
-        <br />
-        <label>
-          Stock Quantity:
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="stockQuantity" className="form-label">
+            Stock Quantity
+          </label>
           <input
             type="number"
+            id="stockQuantity"
             value={stockQuantity}
             onChange={(e) => setStockQuantity(e.target.value)}
+            className="form-control"
             required
           />
-        </label>
-        <br />
-        <label>
-          Description:
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Status:
-          <input type="checkbox" checked={status} onChange={(e) => setStatus(e.target.checked)} />
-        </label>
-        <br />
-        <label>
-          Discount ID:
-          <input type="text" value={discountId} onChange={(e) => setDiscountId(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Equipment Type ID:
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="description" className="form-label">
+            Description
+          </label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="form-control"
+          />
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="status" className="form-label">
+            Status
+          </label>
+          <div className="form-check">
+            <input
+              type="checkbox"
+              id="status"
+              checked={status}
+              onChange={(e) => setStatus(e.target.checked)}
+              className="form-check-input"
+            />
+            <label htmlFor="status" className="form-check-label">
+              Active
+            </label>
+          </div>
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="discountId" className="form-label">
+            Discount ID
+          </label>
+          <input
+            type="text"
+            id="discountId"
+            value={discountId}
+            onChange={(e) => setDiscountId(e.target.value)}
+            className="form-control"
+          />
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="equipmentTypeId" className="form-label">
+            Equipment Type ID
+          </label>
           <input
             type="number"
+            id="equipmentTypeId"
             value={equipmentTypeId}
             onChange={(e) => setEquipmentTypeId(e.target.value)}
+            className="form-control"
             required
           />
-        </label>
-        <br />
-        <label>
-          Vendor ID:
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="vendorId" className="form-label">
+            Vendor ID
+          </label>
           <input
             type="number"
+            id="vendorId"
             value={vendorId}
             onChange={(e) => setVendorId(e.target.value)}
+            className="form-control"
             required
           />
-        </label>
-        <br />
-        <label>
-          Stock ID:
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="stockId" className="form-label">
+            Stock ID
+          </label>
           <input
             type="number"
+            id="stockId"
             value={stockId}
             onChange={(e) => setStockId(e.target.value)}
+            className="form-control"
             required
           />
-        </label>
-        <br />
-        <button type="submit">Add Equipment</button>
+        </div>
+
+        <div className="col-md-12 text-center">
+          <button type="submit" className="btn btn-primary">
+            Add Equipment
+          </button>
+        </div>
       </form>
     </div>
   )

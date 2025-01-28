@@ -6,6 +6,7 @@ export const apiKeyword = `http://localhost:${API_PORT}/api/Keyword/`;
 export const apiCustomer = `http://localhost:${API_PORT}/api/Customer/`;
 export const apiStock = `http://localhost:${API_PORT}/api/Stock/`;
 export const apiInStockOrder = `http://localhost:${API_PORT}/api/InStockOrder/`;
+export const apiOutStockOrder = `http://localhost:${API_PORT}/api/OutStockOrder/`;
 export const apiEquipment = `http://localhost:${API_PORT}/api/Equipment/`;
 export const apiEquipmentType = `http://localhost:${API_PORT}/api/EquipmentType/`;
 export const apiRegion = `http://localhost:${API_PORT}/api/Region/`;
