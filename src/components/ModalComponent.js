@@ -12,7 +12,9 @@ import FeedbackDetail from './modalbody/admin/FeedbackDetail'
 import EquipmentCreateForm from './modalbody/admin/EquipmentCreateForm'
 import EquipmentEditForm from './modalbody/admin/EquipmentEditForm'
 import StockCreateForm from './modalbody/admin/StockCreateForm'
+import StockEditForm from './modalbody/admin/StockEditForm'
 import KeywordCreateForm from './modalbody/admin/KeywordCreateForm'
+
 
 function ModalComponent(props) {
   const { iform } = useContext(DataContext)
@@ -20,7 +22,8 @@ function ModalComponent(props) {
   const modalComponents = {
     EquipmentCreateForm: <EquipmentCreateForm />,
     EquipmentEditForm: <EquipmentEditForm />,
-    StockCreateForm: <StockCreateForm />,
+    StockCreateForm: <StockCreateForm/>,
+    StockEditForm: <StockEditForm/>,
     CustomerCreateForm: <CustomerCreateForm />,
     KeywordCreateForm: <KeywordCreateForm />,
     CustomerCreateFormClient: <CustomerCreateForm client={true} />,

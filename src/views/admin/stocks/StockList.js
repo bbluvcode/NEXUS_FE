@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchStocks, handleSetStock } from '../../../redux/stock/stockSlice'
 import BtnModal from '../../../components/button/BtnModal'
 import StockCreateForm from '../../../components/modalbody/admin/StockCreateForm'
-
+import StockEditForm from '../../../components/modalbody/admin/StockEditForm'
 
 const StockList = () => {
   const dispatch = useDispatch()
@@ -20,6 +20,11 @@ const StockList = () => {
   const toggleModal = (stock = null) => {
     setSelectedStock(stock)
     setIsModalOpen(!isModalOpen)
+  }
+
+  const formatDateSystem = (dateString) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString()
   }
 
   return (
@@ -70,35 +75,35 @@ const StockList = () => {
                 </td>
               </tr>
             )}
-            {status === 'succeeded' && stocks.length > 0
-              ? stocks.map((stock) => (
-                  <tr key={stock.stockId}>
-                    <td>{stock.stockId}</td>
-                    <td>{stock.stockName}</td>
-                    <td>{stock.address}</td>
-                    <td>{stock.email}</td>
-                    <td>{stock.phone}</td>
-                    <td>{stock.fax}</td>
-                    <td>{stock.region?.regionName || 'Unknown'}</td>
-                    <td>
-                      <div className="btn-group">
-                        <BtnModal
-                          name={<i className="fa fa-edit"></i>}
-                          iform="StockEditForm"
-                          style="warning"
-                          onClick={() => toggleModal(stock)}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              : status === 'succeeded' && (
-                  <tr>
-                    <td colSpan="8" style={{ textAlign: 'center', color: 'red' }}>
-                      No data available
-                    </td>
-                  </tr>
-                )}
+            {status === 'succeeded' && stocks.length > 0 ? (
+              stocks.map((stock) => (
+                <tr key={stock.stockId}>
+                  <td>{stock.stockId}</td>
+                  <td>{stock.stockName}</td>
+                  <td>{stock.address}</td>
+                  <td>{stock.email}</td>
+                  <td>{stock.phone}</td>
+                  <td>{stock.fax}</td>
+                  <td>{stock.region?.regionName || 'Unknown'}</td>
+                  <td>
+                    <div className="btn-group">
+                      <BtnModal
+                        name={<i className="fa fa-edit"></i>}
+                        iform="StockEditForm"
+                        style="warning"
+                        onClick={() => toggleModal(stock)}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="8" style={{ textAlign: 'center', color: 'red' }}>
+                  No data available
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchEquipments } from '../../../redux/equipment/equipmentSlice'
+import { fetchEquipments, handleSetEquipment } from '../../../redux/equipment/equipmentSlice'
 import BtnModal from '../../../components/button/BtnModal'
-import AddEquipment from './AddEquipment'
 
 const EquipmentList = () => {
   const dispatch = useDispatch()
-  const { items, status, error } = useSelector((state) => state.equipments)
+  const equipments = useSelector((state) => state.equipments.items)
+  const status = useSelector((state) => state.equipments.status)
+  const error = useSelector((state) => state.equipments.error)
+
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
@@ -15,24 +17,16 @@ const EquipmentList = () => {
     }
   }, [dispatch, status])
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen)
+  const handleEditEquipment = (equipment) => {
+    dispatch(handleSetEquipment(equipment))
   }
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div className="d-flex justify-content-between">
         <h2>Equipment List</h2>
-        <BtnModal
-          name="Add New Equipment"
-          iform="EquipmentCreateForm"
-          style="primary"
-          onClick={toggleModal}
-        />
+        <BtnModal name="Add New Equipment" iform="EquipmentCreateForm" style="primary" />
       </div>
-
-      {isModalOpen && <AddEquipment onSuccess={toggleModal} />}
-
       <div className="row">
         <table className="table table-bordered table-hover">
           <thead className="thead-dark">
@@ -64,8 +58,8 @@ const EquipmentList = () => {
                 </td>
               </tr>
             )}
-            {status === 'succeeded' && items?.length > 0
-              ? items.map((item) => (
+            {status === 'succeeded' && equipments?.length > 0
+              ? equipments.map((item) => (
                   <tr key={item.equipmentId}>
                     <td>{item.equipmentId}</td>
                     <td>{item.equipmentName}</td>
@@ -76,15 +70,12 @@ const EquipmentList = () => {
                     <td>{item.vendor?.vendorName || 'Unknown'}</td>
                     <td>{item.status ? 'Active' : 'Inactive'}</td>
                     <td>{item.discount?.discountName || 'No Discount'}</td>
-                    <td>
-                      <div className="btn-group">
-                        <BtnModal
-                          name={<i className="fa fa-edit"></i>}
-                          iform="EquipmentEditForm"
-                          style="warning"
-                          equipment={item}
-                        />
-                      </div>
+                    <td onClick={() => handleEditEquipment(item)}>
+                      <BtnModal
+                        name={<i className="fa fa-edit"></i>}
+                        iform="EquipmentEditForm"
+                        style="warning"
+                      />
                     </td>
                   </tr>
                 ))
@@ -102,4 +93,4 @@ const EquipmentList = () => {
   )
 }
 
-export default EquipmentList
+export default React.memo(EquipmentList)
