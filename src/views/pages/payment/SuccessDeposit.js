@@ -12,8 +12,6 @@ const SuccessDeposit = () => {
     const capturePayment = async (customerRequestId) => {
       try {
           const response = await axios.post(apiCustomer + 'capture-deposit', {customerRequestId})
-          console.log("🚀 ~ capturePayment ~ customerRequestId:", customerRequestId)
-        console.log("🚀 ~ capturePayment ~ response SUCCESS:", response)
       } catch (error) {
       console.log("🚀 ~ capturePayment ~ error:", error)
   

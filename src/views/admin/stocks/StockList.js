@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchStocks, handleSetStock } from '../../../redux/stock/stockSlice'
 import BtnModal from '../../../components/button/BtnModal'
 import StockCreateForm from '../../../components/modalbody/admin/StockCreateForm'
-import StockEditForm from '../../../components/modalbody/admin/StockEditForm' 
+import StockEditForm from '../../../components/modalbody/admin/StockEditForm'
 
 const StockList = () => {
   const dispatch = useDispatch()
@@ -39,13 +39,12 @@ const StockList = () => {
         />
       </div>
 
-      {isModalOpen && (
-        selectedStock ? (
+      {isModalOpen &&
+        (selectedStock ? (
           <StockEditForm stock={selectedStock} onSuccess={toggleModal} />
         ) : (
           <StockCreateForm onSuccess={toggleModal} />
-        )
-      )}
+        ))}
 
       <div className="row">
         <table className="table table-bordered table-hover">

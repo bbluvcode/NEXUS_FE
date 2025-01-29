@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllRetailShops } from '../../../services/retailShopSerivce'
+import { getAllRegions } from '../../../services/regionService'
 
 const RetailShopList = () => {
   const [shops, setShops] = useState([])
@@ -12,13 +13,12 @@ const RetailShopList = () => {
   useEffect(() => {
     // Simulate fetching region data from a backend API
     const fetchRegions = async () => {
-      const regionData = [
-        { RegionID: 1, RegionName: 'North Region' },
-        { RegionID: 2, RegionName: 'South Region' },
-        { RegionID: 3, RegionName: 'East Region' },
-        { RegionID: 4, RegionName: 'West Region' },
-      ]
-      setRegions(regionData)
+      try {
+        const data = await getAllRegions()
+        setRegions(data.data)
+      } catch (error) {
+        console.error('Failed to fetch regions', error)
+      }
     }
 
     // Fetch shops data from API
@@ -93,7 +93,7 @@ const RetailShopList = () => {
             <tr key={shop.retailShopId}>
               <td>{index + 1}</td>
               <td>
-                {regions.find((region) => region.RegionID === shop.regionId)?.RegionName ||
+                {regions.find((region) => region.regionId === shop.regionId)?.regionName ||
                   'Unknown Region'}
               </td>
               <td>{shop.retailShopName}</td>

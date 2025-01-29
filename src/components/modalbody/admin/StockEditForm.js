@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -11,6 +10,7 @@ import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 
 const apiStock = '/src/constant/apiConstant.js'
 
+// eslint-disable-next-line react/prop-types
 const StockCreateForm = ({ onSuccess }) => {
   const dispatch = useDispatch()
 

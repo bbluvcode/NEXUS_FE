@@ -10,9 +10,11 @@ import stockReducer from './stock/stockSlice'
 import equipmentTypeReducer from './equipment/equipmentTypeSlice'
 import inStockOrderReducer from './inStockOrder/inStockOrderSlice'
 import outStockOrderReducer from './outStockOrder/outStockOrderSlice'
+import keywordReducer from './others/keyWordSlice'
 
 const myStore = configureStore({
   reducer: {
+    keywords: keywordReducer,
     customers: customerReducer,
     cusRequests: cusRequestReducer,
     supportRequests: supportRequestReducer,
@@ -26,4 +28,3 @@ const myStore = configureStore({
   },
 })
 export default myStore
-

@@ -90,9 +90,7 @@ const customerSlice = createSlice({
   reducers: {
     //xu ly dong bo
     handleSetCustomer: (state, action) => {
-      // console.log('handleSetCustomer-action: ', action)
       state.customer = action.payload
-      console.log(state.customer)
     },
   },
   extraReducers: (builder) => {

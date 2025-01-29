@@ -220,6 +220,11 @@ const _nav = [
     items: [
       {
         component: CNavItem,
+        name: 'Keyword',
+        to: '/admin/Keyword',
+      },
+      {
+        component: CNavItem,
         name: 'Region',
         to: '/admin/Region',
       },
