@@ -4,16 +4,17 @@ import { getAllRetailShops } from '../../../services/retailShopSerivce'
 import { getAllEmployees } from '../../../services/employeeService'
 import { apiImage } from '../../../constant/apiConstant'
 
-const RetailShopList = () => {
+const EmployeeList = () => {
   const [shops, setShops] = useState([])
   const [employeeStatus, setEmployeeStatus] = useState({})
   const navigate = useNavigate()
+  const maxDots = 5
 
   useEffect(() => {
     const fetchShopsAndEmployees = async () => {
       try {
         const shopResponse = await getAllRetailShops()
-        const fetchedShops = shopResponse.data
+        const fetchedShops = shopResponse.data.filter((shop) => shop.status) // Chỉ lấy shops có status === true
         setShops(fetchedShops)
 
         const statusMap = {}
@@ -39,7 +40,6 @@ const RetailShopList = () => {
   }
 
   const renderEmployeeDots = (statuses = []) => {
-    const maxDots = 5
     const statusColors = statuses.slice(0, maxDots).map((status) => (status ? 'green' : 'red'))
     return (
       <div style={{ display: 'flex', gap: '5px' }}>
@@ -54,15 +54,50 @@ const RetailShopList = () => {
             }}
           ></div>
         ))}
+        {statuses.length > maxDots && <span>+{statuses.length - maxDots}</span>}
       </div>
     )
   }
 
   return (
     <div>
-      <button className="btn btn-primary mb-3" onClick={() => navigate('/admin/AddRetailShop')}>
-        Add Shop
-      </button>
+      {/* Thanh điều hướng trên cùng */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '20px',
+        }}
+      >
+        <button className="btn btn-primary" onClick={() => navigate('/admin/AddRetailShop')}>
+          Add Shop
+        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <div
+              style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                backgroundColor: 'green',
+              }}
+            ></div>
+            <span>Active employees</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <div
+              style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: 'red' }}
+            ></div>
+            <span>Inactive employees</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <span>Max visible dots: {maxDots}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Danh sách cửa hàng */}
       <div
         style={{
           display: 'grid',
@@ -101,4 +136,4 @@ const RetailShopList = () => {
   )
 }
 
-export default RetailShopList
+export default EmployeeList

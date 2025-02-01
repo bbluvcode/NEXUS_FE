@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getAllRetailShops } from '../../../services/retailShopSerivce'
+import { getAllRetailShops, updateRetailShopStatus } from '../../../services/retailShopSerivce'
 import { getAllRegions } from '../../../services/regionService'
+import { apiImage } from '../../../constant/apiConstant'
 
 const RetailShopList = () => {
   const [shops, setShops] = useState([])
@@ -11,35 +12,42 @@ const RetailShopList = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // Simulate fetching region data from a backend API
-    const fetchRegions = async () => {
-      try {
-        const data = await getAllRegions()
-        setRegions(data.data)
-      } catch (error) {
-        console.error('Failed to fetch regions', error)
-      }
-    }
-
-    // Fetch shops data from API
-    const fetchShops = async () => {
-      try {
-        const response = await getAllRetailShops()
-        if (Array.isArray(response.data)) {
-          setShops(response.data)
-        } else {
-          console.error('Unexpected data format:', response)
-          setShops([]) // Gán giá trị mặc định nếu không đúng định dạng
-        }
-      } catch (error) {
-        console.error('Error loading retail shops:', error)
-        setShops([]) // Gán giá trị mặc định nếu lỗi xảy ra
-      }
-    }
-
     fetchRegions()
     fetchShops()
   }, [])
+
+  const fetchRegions = async () => {
+    try {
+      const data = await getAllRegions()
+      setRegions(data.data)
+    } catch (error) {
+      console.error('Failed to fetch regions', error)
+    }
+  }
+
+  const fetchShops = async () => {
+    try {
+      const response = await getAllRetailShops()
+      setShops(Array.isArray(response.data) ? response.data : [])
+    } catch (error) {
+      console.error('Error loading retail shops:', error)
+      setShops([])
+    }
+  }
+
+  const toggleStatus = async (shopId, currentStatus) => {
+    try {
+      const updatedStatus = !currentStatus
+      await updateRetailShopStatus(shopId, updatedStatus)
+      setShops((prevShops) =>
+        prevShops.map((shop) =>
+          shop.retailShopId === shopId ? { ...shop, status: updatedStatus } : shop,
+        ),
+      )
+    } catch (error) {
+      console.error('Error toggling retail shop status:', error)
+    }
+  }
 
   const filteredShops = shops.filter((shop) =>
     shop[searchField]?.toString().toLowerCase().includes(searchTerm),
@@ -74,17 +82,17 @@ const RetailShopList = () => {
         </div>
       </div>
 
-      <table className="table table-striped table-bordered">
+      <table className="table table-hover table-bordered">
         <thead>
           <tr>
             <th>#</th>
+            <th>Image</th>
             <th>Region</th>
             <th>Shop Name</th>
             <th>Address</th>
             <th>Email</th>
             <th>Phone</th>
-            <th>Is Main Office</th>
-            <th>Fax</th>
+            <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -93,6 +101,46 @@ const RetailShopList = () => {
             <tr key={shop.retailShopId}>
               <td>{index + 1}</td>
               <td>
+                <img
+                  src={`${apiImage}${shop.image.split('/').pop()}`}
+                  alt={shop.retailShopName}
+                  style={{ width: '50px', height: '50px', cursor: 'pointer' }}
+                  data-bs-toggle="modal"
+                  data-bs-target={`#imageModal${shop.retailShopId}`}
+                />
+
+                <div
+                  className="modal fade"
+                  id={`imageModal${shop.retailShopId}`}
+                  tabIndex="-1"
+                  aria-labelledby={`imageModalLabel${shop.retailShopId}`}
+                  aria-hidden="true"
+                >
+                  <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id={`imageModalLabel${shop.retailShopId}`}>
+                          {shop.retailShopName}
+                        </h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div className="modal-body">
+                        <img
+                          src={`${apiImage}${shop.image.split('/').pop()}`}
+                          alt={shop.retailShopName}
+                          className="img-fluid"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
                 {regions.find((region) => region.regionId === shop.regionId)?.regionName ||
                   'Unknown Region'}
               </td>
@@ -100,10 +148,24 @@ const RetailShopList = () => {
               <td>{shop.address}</td>
               <td>{shop.email}</td>
               <td>{shop.phone}</td>
-              <td>{shop.isMainOffice ? 'Yes' : 'No'}</td>
-              <td>{shop.fax || 'N/A'}</td>
               <td>
-                <button className="btn btn-primary btn-sm">Update</button>
+                <span className={shop.status ? 'text-success' : 'text-danger'}>
+                  {shop.status ? 'Active' : 'Inactive'}
+                </span>
+              </td>
+              <td>
+                <button
+                  className="btn mb-2 btn-primary btn-sm me-2"
+                  onClick={() => navigate(`/admin/UpdateRetailShop/${shop.retailShopId}`)}
+                >
+                  Update
+                </button>
+                <button
+                  onClick={() => toggleStatus(shop.retailShopId, shop.status)}
+                  className={`btn btn-outline-${shop.status ? 'warning' : 'success'} btn-sm me-2 mb-2`}
+                >
+                  {shop.status ? 'Deactivate' : 'Activate'}
+                </button>
               </td>
             </tr>
           ))}

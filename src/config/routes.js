@@ -186,12 +186,16 @@ const routes = [
   //retailshop
   { path: '/AddRetailShop', exact: true, name: 'AddRetailShop', element: AddRetailShop },
   { path: '/RetailShopList', exact: true, name: 'RetailShopList', element: RetailShopList },
-  { path: '/UpdateRetailShop', exact: true, name: 'UpdateRetailShop', element: UpdateRetailShop },
+  {
+    path: '/UpdateRetailShop/:id',
+    exact: true,
+    name: 'UpdateRetailShop',
+    element: UpdateRetailShop,
+  },
 
   //stock
   { path: '/InStockOrder', exact: true, name: 'InStockOrder', element: InStockOrder },
   { path: '/OutStockOrder', exact: true, name: 'OutStockOrder', element: OutStockOrder },
-  { path: '/StockList', exact: true, name: 'StockList', element: StockList },
   { path: '/StockRequest', exact: true, name: 'StockRequest', element: StockRequest },
 
   //vendor
