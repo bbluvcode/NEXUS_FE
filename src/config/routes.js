@@ -24,9 +24,10 @@ const RetailShopDetail = React.lazy(
 )
 //plan
 const AddPlan = React.lazy(() => import('../views/admin/plan/AddPlan'))
+const AddPlanFee = React.lazy(() => import('../views/admin/plan/AddPlanFee'))
 const UpdatePlan = React.lazy(() => import('../views/admin/plan/UpdatePlan'))
+const UpdatePlanFee = React.lazy(() => import('../views/admin/plan/UpdatePlanFee'))
 const PlanList = React.lazy(() => import('../views/admin/plan/PlanList'))
-//vendor
 
 //order
 const ServiceOrder = React.lazy(() => import('../views/admin/orders/ServiceOrder'))
@@ -161,7 +162,9 @@ const routes = [
 
   //plan
   { path: '/AddPlan', exact: true, name: 'AddPlan', element: AddPlan },
-  { path: '/UpdatePlan', exact: true, name: 'UpdatePlan', element: UpdatePlan },
+  { path: '/AddPlanFee', exact: true, name: 'AddPlanFee', element: AddPlanFee },
+  { path: '/UpdatePlan/:planId', exact: true, name: 'UpdatePlan', element: UpdatePlan },
+  { path: '/UpdatePlanFee/:planId', exact: true, name: 'UpdatePlanFee', element: UpdatePlanFee },
   { path: '/PlanList', exact: true, name: 'PlanList', element: PlanList },
 
   //order
