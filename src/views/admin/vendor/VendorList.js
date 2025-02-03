@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAllVendors, updateVendorStatus } from '../../../services/vendorService'
-import { getAllRegions } from '../../../services/regionService' // Thêm hàm lấy dữ liệu khu vực
+import { getAllRegions } from '../../../services/regionService' // Thêm hàm lấy dữ liệu khu vực\
+import styles from '../../../style/ManStyle.module.css'
 
 const VendorList = () => {
   const [vendors, setVendors] = useState([])
@@ -112,7 +113,11 @@ const VendorList = () => {
               <td>{vendor.phone}</td>
               <td>{vendor.fax || 'N/A'}</td>
               <td>{vendor.description}</td>
-              <td>{vendor.status ? 'Active' : 'Inactive'}</td>
+              <td>
+                <span className={vendor.status ? styles.activeStatus : styles.inactiveStatus}>
+                  {vendor.status ? 'Active' : 'Inactive'}
+                </span>
+              </td>
               <td>
                 <button
                   className="btn mb-2 btn-primary btn-sm me-2"

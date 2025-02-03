@@ -24,9 +24,10 @@ const RetailShopDetail = React.lazy(
 )
 //plan
 const AddPlan = React.lazy(() => import('../views/admin/plan/AddPlan'))
+const AddPlanFee = React.lazy(() => import('../views/admin/plan/AddPlanFee'))
 const UpdatePlan = React.lazy(() => import('../views/admin/plan/UpdatePlan'))
+const UpdatePlanFee = React.lazy(() => import('../views/admin/plan/UpdatePlanFee'))
 const PlanList = React.lazy(() => import('../views/admin/plan/PlanList'))
-//vendor
 
 //order
 const ServiceOrder = React.lazy(() => import('../views/admin/orders/ServiceOrder'))
@@ -161,7 +162,9 @@ const routes = [
 
   //plan
   { path: '/AddPlan', exact: true, name: 'AddPlan', element: AddPlan },
-  { path: '/UpdatePlan', exact: true, name: 'UpdatePlan', element: UpdatePlan },
+  { path: '/AddPlanFee', exact: true, name: 'AddPlanFee', element: AddPlanFee },
+  { path: '/UpdatePlan/:planId', exact: true, name: 'UpdatePlan', element: UpdatePlan },
+  { path: '/UpdatePlanFee/:planId', exact: true, name: 'UpdatePlanFee', element: UpdatePlanFee },
   { path: '/PlanList', exact: true, name: 'PlanList', element: PlanList },
 
   //order
@@ -186,12 +189,16 @@ const routes = [
   //retailshop
   { path: '/AddRetailShop', exact: true, name: 'AddRetailShop', element: AddRetailShop },
   { path: '/RetailShopList', exact: true, name: 'RetailShopList', element: RetailShopList },
-  { path: '/UpdateRetailShop', exact: true, name: 'UpdateRetailShop', element: UpdateRetailShop },
+  {
+    path: '/UpdateRetailShop/:id',
+    exact: true,
+    name: 'UpdateRetailShop',
+    element: UpdateRetailShop,
+  },
 
   //stock
   { path: '/InStockOrder', exact: true, name: 'InStockOrder', element: InStockOrder },
   { path: '/OutStockOrder', exact: true, name: 'OutStockOrder', element: OutStockOrder },
-  { path: '/StockList', exact: true, name: 'StockList', element: StockList },
   { path: '/StockRequest', exact: true, name: 'StockRequest', element: StockRequest },
 
   //vendor

@@ -147,13 +147,13 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'UpdatePlan',
-        to: '/admin/UpdatePlan',
+        name: 'AddPlan',
+        to: '/admin/AddPlan',
       },
       {
         component: CNavItem,
-        name: 'AddPlan',
-        to: '/admin/AddPlan',
+        name: 'AddPlanFee',
+        to: '/admin/AddPlanFee',
       },
     ],
   },

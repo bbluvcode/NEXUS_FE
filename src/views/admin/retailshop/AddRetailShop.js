@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { addRetailShop } from '../../../services/retailShopSerivce';
 import { useNavigate } from 'react-router-dom';
-import styles from "../../../style/ManStyle.module.css";
-
+import { getAllRegions } from '../../../services/regionService';
+import styles from '../../../style/ManStyle.module.css'
 
 const retailShopValidationSchema = Yup.object().shape({
   RetailShopName: Yup.string()
@@ -27,33 +27,58 @@ const retailShopValidationSchema = Yup.object().shape({
   RegionId: Yup.number()
     .required('Region ID is required')
     .typeError('Region ID must be a number'),
+  Image: Yup.mixed().required('Image is required'),
 });
 
-const handleBack = () => {
-  navigate(-1);
-};
-
 const AddRetailShop = () => {
-  const navigate = useNavigate(); // Correctly initialize the hook here
+  const navigate = useNavigate();
+  const [regions, setRegions] = useState([]);
+  const [imageFile, setImageFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
 
-  const regions = [
-    { RegionID: 1, RegionName: 'North Region' },
-    { RegionID: 2, RegionName: 'South Region' },
-    { RegionID: 3, RegionName: 'East Region' },
-  ];
+
+  useEffect(() => {
+    const fetchRegions = async () => {
+      try {
+        const response = await getAllRegions();
+        setRegions(response.data);
+      } catch (error) {
+        console.error('Failed to fetch regions', error);
+      }
+    };
+    fetchRegions();
+  }, []);
+
+  const handleBack = () => {
+    navigate(-1);
+  };
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      const response = await addRetailShop(values);
+      const formData = new FormData();
+      formData.append('RetailShopName', values.RetailShopName);
+      formData.append('Address', values.Address);
+      formData.append('Email', values.Email);
+      formData.append('Phone', values.Phone);
+      formData.append('IsMainOffice', values.IsMainOffice);
+      formData.append('Status', values.Status);
+      formData.append('Fax', values.Fax);
+      formData.append('RegionId', values.RegionId);
+      if (imageFile) {
+        formData.append('imageFile', imageFile);
+      }
+
+      const response = await addRetailShop(formData);
       console.log('Retail Shop added successfully:', response);
       alert('Retail Shop added successfully!');
-      resetForm(); // Clear the form
-      navigate('/admin/retailshoplist'); // Redirect to the retail shop list page
+      resetForm();
+      setImageFile(null);
+      navigate('/admin/retailshoplist');
     } catch (error) {
       console.error('Failed to add Retail Shop:', error);
       alert('Failed to add Retail Shop. Please try again.');
     } finally {
-      setSubmitting(false); // Enable the form submission button
+      setSubmitting(false);
     }
   };
 
@@ -70,13 +95,15 @@ const AddRetailShop = () => {
           Email: '',
           Phone: '',
           IsMainOffice: false,
+          status: true,
           Fax: '',
           RegionId: '',
+          Image: null,
         }}
         validationSchema={retailShopValidationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, setFieldValue }) => (
           <Form>
             <div className="mb-3">
               <label htmlFor="RetailShopName">Name</label>
@@ -102,9 +129,41 @@ const AddRetailShop = () => {
               <ErrorMessage name="Phone" component="div" className="text-danger" />
             </div>
 
-            <div className="mb-3">
-              <label htmlFor="IsMainOffice">Main Office</label>
-              <Field name="IsMainOffice" type="checkbox" className="form-check-input" />
+            <div className={`mb-3 ${styles.checkboxWrapper}`}>
+              <Field name="IsMainOffice">
+                {({ field }) => (
+                  <div className="d-flex align-items-center">
+                    <input
+                      {...field}
+                      type="checkbox"
+                      className={`${styles.checkbox} ${field.value ? styles.checkboxChecked : ''}`}
+                    />
+                    <label htmlFor="IsMainOffice" className={styles.checkboxLabel}>
+                      Main Office
+                    </label>
+                  </div>
+                )}
+              </Field>
+              <ErrorMessage name="IsMainOffice" component="div" className="text-danger" />
+            </div>
+
+
+            <div className={`mb-3 ${styles.checkboxWrapper}`}>
+              <Field name="Status">
+                {({ field }) => (
+                  <div className="d-flex align-items-center">
+                    <input
+                      {...field}
+                      type="checkbox"
+                      className={`${styles.checkbox} ${field.value ? styles.checkboxChecked : ''}`}
+                    />
+                    <label htmlFor="Status" className={styles.checkboxLabel}>
+                      Status
+                    </label>
+                    <ErrorMessage name="Status" component="div" className="text-danger" />
+                  </div>
+                )}
+              </Field>
             </div>
 
             <div className="mb-3">
@@ -118,12 +177,39 @@ const AddRetailShop = () => {
               <Field as="select" name="RegionId" className="form-control">
                 <option value="">Select Region</option>
                 {regions.map((region) => (
-                  <option key={region.RegionID} value={region.RegionID}>
-                    {region.RegionName}
+                  <option key={region.regionId} value={region.regionId}>
+                    {region.regionName}
                   </option>
                 ))}
               </Field>
               <ErrorMessage name="RegionId" component="div" className="text-danger" />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="Image">Image</label>
+              <input
+                type="file"
+                className="form-control"
+                accept="image/*"
+                onChange={(event) => {
+                  const file = event.currentTarget.files[0];
+                  setFieldValue('Image', file);
+                  setImageFile(file);
+
+                  // Tạo URL xem trước ảnh
+                  if (file) {
+                    const imageUrl = URL.createObjectURL(file);
+                    setPreviewImage(imageUrl);
+                  }
+                }}
+              />
+              <ErrorMessage name="Image" component="div" className="text-danger" />
+
+              {previewImage && (
+                <div className="mt-3">
+                  <img src={previewImage} alt="Preview" className="img-thumbnail" style={{ width: '30%', important: true }} />
+                </div>
+              )}
             </div>
 
             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
