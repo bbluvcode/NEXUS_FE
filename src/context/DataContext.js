@@ -1,4 +1,5 @@
-/* eslint-disable prettier/prettier */
+
+import { useAuth } from "./AuthContext";
 import React, { createContext, useContext, useState } from 'react'
 import PropTypes from 'prop-types'
 
@@ -6,7 +7,9 @@ export const DataContext = createContext()
 export const useDataContext = () => {
     return useContext(DataContext);
 };
+
 export const DataProvider = ({ children }) => {
+    const { employee } = useAuth() || {};
     const [employees, setEmployees] = useState([]);
     const [plans, setPlans] = useState([]);
     const [planFees, setPlanFees] = useState([]);
@@ -17,13 +20,28 @@ export const DataProvider = ({ children }) => {
     const [employeeTypes, setEmployeeTypes] = useState([]);
     const [equipments, setEquipments] = useState([]);
     const [equipmentTypes, setEquipmentTypes] = useState([]);
-    const [stocks, setStocks] = useState([]);
-    const [InstockOrders, setInStockOrders] = useState([]);
-    //usestate form
+    const [stocks, setStocks] = useState([]); 
+    const [InstockOrders, setInStockOrders] = useState([]); 
+
     const [iform, setIform] = useState("");
     const [serviceSelected, setServiceSelected] = useState(null);
+    const [currentEmployee, setCurrentEmployee] = useState(() => {
+        return JSON.parse(localStorage.getItem("currentEmployee")) || null;
+    });
+
+    useEffect(() => {
+        if (employee) {
+            setCurrentEmployee(employee);
+            localStorage.setItem("currentEmployee", JSON.stringify(employee));
+        }
+        else{
+            setCurrentEmployee(null);
+            localStorage.removeItem("currentEmployee");
+        }
+    }, [employee]);
 
     const data = {
+        currentEmployee,
         employees,
         setEmployees,
         plans,

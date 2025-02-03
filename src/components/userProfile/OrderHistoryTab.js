@@ -32,7 +32,7 @@ function OrderHistoryTab({ orders }) {
                         {orders.map((order, index) => (
                             <TableRow key={index}>
                                 <TableCell>{order.orderId}</TableCell>
-                                <TableCell align="center">{order.orderDate}</TableCell>
+                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>{order.orderDate}</TableCell>
                                 <TableCell align="center">{order.total}</TableCell>
                                 <TableCell align="center">{order.status}</TableCell>
                                 <TableCell align="center">

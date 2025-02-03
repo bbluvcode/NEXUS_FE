@@ -10,35 +10,35 @@ import {
   CDropdownToggle,
 } from '@coreui/react'
 import {
-  cilBell,
-  cilCreditCard,
-  cilCommentSquare,
   cilEnvelopeOpen,
-  cilFile,
-  cilLockLocked,
-  cilSettings,
   cilTask,
   cilUser,
+  cilPenNib,
+  cilHttps,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
+import { useAuth } from '../../context/AuthContext'
 
-import avatar8 from './../../assets/images/avatars/8.jpg'
+import avatar10 from './../../assets/images/avatars/10.png'
+import { useNavigate } from 'react-router-dom'
 
 const AppHeaderDropdown = () => {
+
+  const { employee, logoutEmployee } = useAuth()
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutEmployee(); 
+    navigate("/employeeLogin"); 
+  };
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
-        <CAvatar src={avatar8} size="md" />
+      <CAvatar src={employee?.avatar || avatar10} size="md" />
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Account</CDropdownHeader>
-        <CDropdownItem href="#">
-          <CIcon icon={cilBell} className="me-2" />
-          Updates
-          <CBadge color="info" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
+        <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Working</CDropdownHeader>
         <CDropdownItem href="#">
           <CIcon icon={cilEnvelopeOpen} className="me-2" />
           Messages
@@ -53,40 +53,23 @@ const AppHeaderDropdown = () => {
             42
           </CBadge>
         </CDropdownItem>
+        <CDropdownHeader className="bg-body-secondary fw-semibold my-2">Account</CDropdownHeader>
         <CDropdownItem href="#">
-          <CIcon icon={cilCommentSquare} className="me-2" />
-          Comments
-          <CBadge color="warning" className="ms-2">
-            42
-          </CBadge>
+          <CIcon icon={cilUser} className="me-2" />
+          {employee?.email || 'Profile'}
         </CDropdownItem>
-        <CDropdownHeader className="bg-body-secondary fw-semibold my-2">Settings</CDropdownHeader>
         <CDropdownItem href="#">
           <CIcon icon={cilUser} className="me-2" />
           Profile
         </CDropdownItem>
         <CDropdownItem href="#">
-          <CIcon icon={cilSettings} className="me-2" />
-          Settings
-        </CDropdownItem>
-        <CDropdownItem href="#">
-          <CIcon icon={cilCreditCard} className="me-2" />
-          Payments
-          <CBadge color="secondary" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
-        <CDropdownItem href="#">
-          <CIcon icon={cilFile} className="me-2" />
-          Projects
-          <CBadge color="primary" className="ms-2">
-            42
-          </CBadge>
+          <CIcon icon={cilPenNib} className="me-2" />
+          Change Password
         </CDropdownItem>
         <CDropdownDivider />
-        <CDropdownItem href="#">
-          <CIcon icon={cilLockLocked} className="me-2" />
-          Lock Account
+        <CDropdownItem onClick={handleLogout}> 
+          <CIcon icon={cilHttps} className="me-2" />
+          Logout
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>
