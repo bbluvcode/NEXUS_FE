@@ -47,3 +47,18 @@ export const updateRetailShop = async (id, retailShop) => {
         throw error;
     }
 };
+
+// Update RetailShop status
+export const updateRetailShopStatus = async (id, status) => {
+    try {
+        let response = await axios.patch(`${apiRetailShop}${id}/status`, status, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(`Error updating RetailShop status with ID ${id}`, error);
+        throw error;
+    }
+};

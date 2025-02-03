@@ -90,3 +90,61 @@
 .search-container input.form-control {
   padding-left: 1rem;
 }
+/* ManStyle.module.css */
+/* Styling for the checkbox wrapper to align the elements */
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  font-family: Arial, sans-serif;
+}
+
+/* Basic checkbox style */
+.checkbox {
+  position: relative;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px; /* Slightly larger for better usability */
+  height: 22px;
+  border-radius: 50%; /* Make the checkbox circular */
+  border: 2px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-right: 10px; /* Space between the checkbox and the label */
+}
+
+/* When checkbox is checked, apply this style */
+.checkboxChecked {
+  background-color: #007bff; /* Blue color for checked state */
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3); /* Subtle shadow to highlight the checkbox */
+}
+
+/* Create the checkmark inside the checkbox when checked */
+.checkboxChecked::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%; /* Make the checkmark circular */
+}
+
+/* Style for the label next to the checkbox */
+.checkboxLabel {
+  font-size: 16px;
+  font-weight: 600; /* Slightly bolder text for clarity */
+  color: #333;
+  cursor: pointer;
+  user-select: none; /* Disable text selection */
+  display: inline-block;
+  transition: color 0.3s ease; /* Smooth transition for color change */
+}
+
+/* Hover effect on label for better UX */
+.checkboxLabel:hover {
+  color: #007bff; /* Change color on hover */
+}
