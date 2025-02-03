@@ -77,7 +77,6 @@ const supportRequestSlice = createSlice({
       gender: '',
       dateOfBirth: '',
       address: '',
-      email: '',
       phoneNumber: '',
     },
     status: 'idle',

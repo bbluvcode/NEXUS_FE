@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ProfileCard from "./ProfileCard";
 import SettingProfileCard from "./SettingProfileCard";
+import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
 
 // FONTS
 import "@fontsource/roboto/300.css";
@@ -15,108 +17,88 @@ import "@fontsource/roboto/700.css";
 const theme = createTheme();
 
 function ProfileUser() {
-    const [user, setUser] = useState({
-        dt1: "4 Orders",
-        dt2: "150 Points",
-        dt3: "01/2024",
-        fullName: "Nguyen Van ABC",
-        gender: "male",
-        phone: "0123456789",
-        email: "abc@gmail.com",
-        dateOfBirth: "2000-01-01",
-        orders: [
-            { orderId: "D0000000001", orderDate: "2025-01-01", total: "1000$", status: "Complete" },
-            { orderId: "T0000000003", orderDate: "2025-01-05", total: "2000$", status: "Pending" },
-            { orderId: "B0000000009", orderDate: "2025-01-10", total: "3000$", status: "Complete" },
-            { orderId: "D0000000004", orderDate: "2025-01-15", total: "4000$", status: "Pending" },
-        ],
-        requests: [
-            {
-                RequestTitle: "Broadband Installation",
-                ServiceRequest: "Request to install a broadband internet connection.",
-                EquipmentRequest: "Broadband Router Model BR123",
-                DateCreate: "2025-01-01",
-                IsResponse: false,
-            },
-            {
-                RequestTitle: "Land-line Issue",
-                ServiceRequest: "The land-line phone has no dial tone.",
-                EquipmentRequest: "Replacement Handset Model LH456",
-                DateCreate: "2025-01-01",
-                IsResponse: false,
-            },
-            {
-                RequestTitle: "Land-line Installation",
-                ServiceRequest: "Request to install a new land-line phone.",
-                EquipmentRequest: "Land-line Phone Model LL321",
-                DateCreate: "2025-01-11",
-                IsResponse: true,
-            },
-            {
-                RequestTitle: "Dial-up Assistance",
-                ServiceRequest: "Unable to connect to the internet using dial-up.",
-                EquipmentRequest: "Dial-up Modem Model DM789",
-                DateCreate: "2025-01-13",
-                IsResponse: false,
-            },
-        ],
-    });
+  const { customer } = useAuth();
+  const [user, setUser] = useState(null);
 
-    const updateUser = (updatedFields) => {
-        setUser((prev) => ({ ...prev, ...updatedFields }));
-    };
+  useEffect(() => {
+    if (customer?.email) {
+      fetchCustomerData(customer.email);
+    }
+  }, [customer]);
 
-    return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline>
-                <Grid container direction="column" sx={{ overflowX: "hidden", minHeight: "100vh" }}>
-                    {/* Background Image */}
-                    <Grid item xs={12} md={6}>
-                        <img
-                            alt="avatar"
-                            style={{
-                                width: "100%",
-                                height: "30vh",
-                                objectFit: "cover",
-                                objectPosition: "center",
+  const fetchCustomerData = async (email) => {
+    try {
+      const response = await axios.get(`http://localhost:5185/api/Customer/customer-by-email/${email}`);
+      setUser(response.data.data);
+      console.log("User: ", response.data.data);
+    } catch (error) {
+      console.error("Error fetching customer data:", error);
+    }
+  };
 
-                            }}
-                            src="https://iris2.gettimely.com/images/default-cover-image.jpg"
-                        />
-                    </Grid>
+  const updateUser = (updatedFields) => {
+    setUser((prev) => ({ 
+      ...prev, 
+      ...updatedFields,
+      accounts: updatedFields.accounts || prev.accounts,
+      customerRequests: updatedFields.customerRequests || prev.customerRequests }));
+  };
 
-                    {/* Components */}
-                    <Grid
-                        container
-                        spacing={3}
-                        sx={{
-                            position: "absolute",
-                            top: "30vh",
-                            mt: { xs: 3, md: 5 },
-                            px: { xs: 2, md: 7 },
-                        }}
-                    >
-                        {/* Profile Card */}
-                        <Grid item xs={12} md={3}>
-                            <ProfileCard
-                                name={user.fullName}
-                                sub={user.email}
-                                dt1={user.dt1}
-                                dt2={user.dt2}
-                                dt3={user.dt3}
-                            />
-                        </Grid>
+  if (!user) {
+    return <p>Loading customer data...</p>;
+  }
 
-                        {/* Settings Card */}
-                        <Grid item xs={12} md={9}>
-                            <SettingProfileCard user={user} updateUser={updateUser} />
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </CssBaseline>
-        </ThemeProvider>
-    );
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline>
+        <Grid container direction="column" sx={{ overflowX: "hidden", minHeight: "100vh" }}>
+          {/* Background Image */}
+          <Grid item xs={12} md={6}>
+            <img
+              alt="avatar"
+              style={{
+                width: "100%",
+                height: "30vh",
+                objectFit: "cover",
+                objectPosition: "center",
+              }}
+              src={user.image || "https://iris2.gettimely.com/images/default-cover-image.jpg"}
+            />
+          </Grid>
+
+          {/* Components */}
+          <Grid
+            container
+            spacing={3}
+            sx={{
+              position: "absolute",
+              top: "30vh",
+              mt: { xs: 3, md: 5 },
+              px: { xs: 2, md: 7 },
+            }}
+          >
+            {/* Profile Card */}
+            <Grid item xs={12} md={3}>
+              <ProfileCard
+                name={user.fullName}
+                sub={user.email}
+                dt1={Array.isArray(user.accounts) ? user.accounts.length : 0}
+                dt2={Array.isArray(user.accounts) ? user.accounts.length * 10 : 0}
+                dt3={(Array.isArray(user?.customerRequests) && user.customerRequests.length > 0 && user.customerRequests[0]?.dateCreate)
+                  ? new Date(user.customerRequests[0].dateCreate).toISOString().split("T")[0]
+                  : "N/A"}              
+              />
+            </Grid>
+
+            {/* Settings Card */}
+            <Grid item xs={12} md={9}>
+              <SettingProfileCard user={user} updateUser={updateUser} />
+            </Grid>
+          </Grid>
+        </Grid>
+      </CssBaseline>
+    </ThemeProvider>
+  );
 }
 
 export default ProfileUser;
-

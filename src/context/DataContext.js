@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
-import React, { createContext, useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { createContext, useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { useAuth } from "./AuthContext";
 
-export const DataContext = createContext()
+export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
+    const { employee } = useAuth() || {};
     const [employees, setEmployees] = useState([]);
     const [retailShops, setRetailShops] = useState([]);
     const [employeeTypes, setEmployeeTypes] = useState([]);
@@ -12,11 +14,25 @@ export const DataProvider = ({ children }) => {
     const [equipmentTypes, setEquipmentTypes] = useState([]);
     const [stocks, setStocks] = useState([]); 
     const [InstockOrders, setInStockOrders] = useState([]); 
-    //usestate form
     const [iform, setIform] = useState("");
     const [serviceSelected, setServiceSelected] = useState(null);
+    const [currentEmployee, setCurrentEmployee] = useState(() => {
+        return JSON.parse(localStorage.getItem("currentEmployee")) || null;
+    });
+
+    useEffect(() => {
+        if (employee) {
+            setCurrentEmployee(employee);
+            localStorage.setItem("currentEmployee", JSON.stringify(employee));
+        }
+        else{
+            setCurrentEmployee(null);
+            localStorage.removeItem("currentEmployee");
+        }
+    }, [employee]);
 
     const data = {
+        currentEmployee,
         employees,
         setEmployees,
         retailShops,
