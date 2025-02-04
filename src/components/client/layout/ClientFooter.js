@@ -10,7 +10,7 @@ const ClientFooter = () => {
         <div className="row">
           <div className="col-lg-4">
             <a href="index.html" className="logo">
-              <img src="logo_textwhite_trans.png" alt style={{ width: 160 }} />
+              <img src="logo_textwhite_trans.png" alt="Company Logo" style={{ width: 160 }} />
             </a>
             <p>
               Propel Your Business Forward with Expert Technology Partnerships. At Nexus Systems
@@ -30,12 +30,12 @@ const ClientFooter = () => {
             <ul className="info">
               <li>
                 <a href="#">
-                <CIcon icon={cilPhone} style={{ transform: 'rotate(90deg)' }} /> 010-020-0340
+                  <CIcon icon={cilPhone} style={{ transform: 'rotate(90deg)' }} /> 010-020-0340
                 </a>
               </li>
               <li>
                 <a href="#">
-                <CIcon icon={cilEnvelopeLetter} /> nexus@company.com
+                  <CIcon icon={cilEnvelopeLetter} /> nexus@company.com
                 </a>
               </li>
               <li>
@@ -50,7 +50,7 @@ const ClientFooter = () => {
         <div className="row">
           <div className="col-lg-12">
             <p>
-              Copyright © 2022 Nexus Service Marketing System Co., Ltd. All Rights Reserved. <br />
+              Copyright © 2024-2025 Nexus Service Marketing System Co., Ltd. All Rights Reserved. <br />
               T1.2308A0 - GROUP 4: MAN NHAT HUY BINH
             </p>
           </div>

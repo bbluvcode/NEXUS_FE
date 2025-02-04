@@ -1,199 +1,139 @@
-/* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from "react";
-import SearchBar from "./components/SearchBar";
-import SortDropdown from "./components/SortDropdown";
-import RetainshopSection from "./components/RetainshopSection";
-import styles from "../../../style/ManStyle.module.css";
-import { getAllRetainShops } from "../../../services/retainShopSerivce";
-import { getAllEmployeeRoles, getAllEmployees, updateEmployeeRole, toggleEmployeeStatus } from "../../../services/employeeService";
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getAllRetailShops } from '../../../services/retailShopSerivce'
+import { getAllEmployees } from '../../../services/employeeService'
+import { apiImage } from '../../../constant/apiConstant'
 
-const EmployeesList = () => {
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortOption, setSortOption] = useState("name");
-  const [retainShopData, setRetainShopData] = useState([]);
-  const [employeeData, setEmployeeData] = useState([]);
-  const [originalEmployeeData, setOriginalEmployeeData] = useState([]);
-  const [roles, setRoles] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [roleChanges, setRoleChanges] = useState({}); // Store temporary role changes
+const EmployeeList = () => {
+  const [shops, setShops] = useState([])
+  const [employeeStatus, setEmployeeStatus] = useState({})
+  const navigate = useNavigate()
+  const maxDots = 5
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
+    const fetchShopsAndEmployees = async () => {
       try {
-        const [retainShopsResponse, employeesResponse, rolesResponse] = await Promise.all([
-          getAllRetainShops(),
-          getAllEmployees(),
-          getAllEmployeeRoles(),
-        ]);
+        const shopResponse = await getAllRetailShops()
+        const fetchedShops = shopResponse.data.filter((shop) => shop.status) // Chỉ lấy shops có status === true
+        setShops(fetchedShops)
 
-        const employees = employeesResponse.data || [];
-        setRetainShopData(retainShopsResponse.data || []);
-        setEmployeeData(employees); // Lưu dữ liệu employees vào state
-        setOriginalEmployeeData(JSON.parse(JSON.stringify(employees))); // Tạo bản sao gốc của dữ liệu employees
-        setRoles(rolesResponse.data || []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value.toLowerCase());
-  };
-
-  const handleSortChange = (event) => {
-    setSortOption(event.target.value);
-  };
-
-  const toggleStatus = async (retainshopName, employee) => {
-    try {
-      const updatedEmployee = await toggleEmployeeStatus(employee.employeeId);
-
-      setEmployeeData((prevData) =>
-        prevData.map((emp) =>
-          emp.employeeId === updatedEmployee.employeeId
-            ? { ...emp, status: updatedEmployee.status }
-            : emp
-        )
-      );
-    } catch (error) {
-      console.error("Failed to toggle status:", error);
-    }
-  };
-
-  const handleRoleUpdate = (employeeId, newRoleId) => {
-    const employee = employeeData.find((emp) => emp.employeeId === employeeId);
-
-    // Prevent updates to or from admin role (roleId === 1)
-    if (employee.employeeRoleId === 1 || newRoleId === 1) {
-      alert("Cannot assign or remove the admin role.");
-      return;
-    }
-
-    // Save the role change temporarily
-    setRoleChanges((prev) => ({
-      ...prev,
-      [employeeId]: newRoleId,
-    }));
-  };
-
-
-  const handleSaveChanges = async () => {
-    const restrictedChanges = Object.entries(roleChanges).filter(
-      ([employeeId, newRoleId]) => {
-        const employee = employeeData.find((emp) => emp.employeeId === parseInt(employeeId, 10));
-        return employee.employeeRoleId === 1 || newRoleId === 1; // Prevent admin role changes
-      }
-    );
-
-    if (restrictedChanges.length > 0) {
-      alert("Cannot update roles involving the admin role.");
-      return;
-    }
-
-    // Apply all valid role changes to the server
-    const updatePromises = Object.entries(roleChanges).map(([employeeId, newRoleId]) =>
-      updateEmployeeRole(parseInt(employeeId, 10), newRoleId)
-    );
-
-    try {
-      await Promise.all(updatePromises);
-
-      // Update the state with new roles
-      setEmployeeData((prevData) =>
-        prevData.map((employee) => ({
-          ...employee,
-          employeeRoleId: roleChanges[employee.employeeId] || employee.employeeRoleId,
-        }))
-      );
-
-      // Clear temporary changes
-      setRoleChanges({});
-    } catch (error) {
-      console.error("Failed to save role changes:", error);
-    }
-  };
-
-
-  const handleResetChanges = () => {
-    setEmployeeData(JSON.parse(JSON.stringify(originalEmployeeData))); // Khôi phục trạng thái từ bản sao gốc
-    setRoleChanges({}); // Xóa các thay đổi tạm thời
-  };
-
-
-  const groupedData = retainShopData.map((shop) => ({
-    ...shop,
-    employees: employeeData
-      .filter((employee) => employee.retainShopId === shop.retainShopId)
-      .map((employee) => {
-        const originalEmployee = originalEmployeeData.find(
-          (original) => original.employeeId === employee.employeeId
-        );
-
-        return {
-          ...employee,
-          employeeRoleId: roleChanges[employee.employeeId] || employee.employeeRoleId,
-          originalEmployeeRoleId: originalEmployee?.employeeRoleId,
-          role: Array.isArray(roles)
-            ? roles.find(
-              (role) =>
-                role.roleId ===
-                (roleChanges[employee.employeeId] || employee.employeeRoleId)
-            )?.roleName || "No Role Assigned"
-            : "No Role Assigned",
-        };
-      })
-      .filter((employee) =>
-        employee.fullName.toLowerCase().includes(searchTerm) // Lọc theo tên
-      )
-      .sort((a, b) => {
-        if (sortOption === "name") {
-          return a.fullName.localeCompare(b.fullName);
+        const statusMap = {}
+        for (const shop of fetchedShops) {
+          const employeeResponse = await getAllEmployees(shop.retailShopId)
+          const employees = employeeResponse.data
+          const relevantEmployees = employees.filter(
+            (employee) => employee.retailShopId === shop.retailShopId,
+          )
+          const statusCounts = relevantEmployees.map((employee) => employee.status)
+          statusMap[shop.retailShopId] = statusCounts
         }
-        return 0;
-      }),
-  }));
+        setEmployeeStatus(statusMap)
+      } catch (error) {
+        console.error('Error loading retail shops or employees', error)
+      }
+    }
+    fetchShopsAndEmployees()
+  }, [])
 
+  const handleShopClick = (id) => {
+    navigate(`/admin/retailshop/${id}`)
+  }
 
-
-  if (isLoading) {
-    return <div>Loading...</div>;
+  const renderEmployeeDots = (statuses = []) => {
+    const statusColors = statuses.slice(0, maxDots).map((status) => (status ? 'green' : 'red'))
+    return (
+      <div style={{ display: 'flex', gap: '5px' }}>
+        {statusColors.map((color, index) => (
+          <div
+            key={index}
+            style={{
+              width: '10px',
+              height: '10px',
+              borderRadius: '50%',
+              backgroundColor: color,
+            }}
+          ></div>
+        ))}
+        {statuses.length > maxDots && <span>+{statuses.length - maxDots}</span>}
+      </div>
+    )
   }
 
   return (
-    <div className={styles.container}>
-      <SearchBar
-        isSearchVisible={isSearchVisible}
-        handleSearchClick={() => setIsSearchVisible((prev) => !prev)}
-        handleSearchChange={handleSearchChange}
-        handleSaveChanges={handleSaveChanges}
-        handleResetChanges={handleResetChanges}
-      />
-      <SortDropdown handleSortChange={handleSortChange} />
-      {groupedData.length > 0 ? (
-        groupedData.map((shop) => (
-          <RetainshopSection
-            key={shop.retainShopId}
-            retainshopName={shop.retainShopName}
-            employees={shop.employees}
-            roles={roles}
-            sortOption={sortOption}
-            toggleStatus={toggleStatus}
-            onUpdateRole={handleRoleUpdate}
-            originalEmployeeData={originalEmployeeData} // Truyền dữ liệu gốc xuống
-          />
-        ))
-      ) : (
-        <div>No data available</div>
-      )}
-    </div>
-  );
-};
+    <div>
+      {/* Thanh điều hướng trên cùng */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '20px',
+        }}
+      >
+        <button className="btn btn-primary" onClick={() => navigate('/admin/AddRetailShop')}>
+          Add Shop
+        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <div
+              style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                backgroundColor: 'green',
+              }}
+            ></div>
+            <span>Active employees</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <div
+              style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: 'red' }}
+            ></div>
+            <span>Inactive employees</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <span>Max visible dots: {maxDots}</span>
+          </div>
+        </div>
+      </div>
 
-export default EmployeesList;
+      {/* Danh sách cửa hàng */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '20px',
+        }}
+      >
+        {shops.map((shop) => (
+          <div
+            key={shop.retailShopId}
+            className="shop-card"
+            onClick={() => handleShopClick(shop.retailShopId)}
+            style={{
+              cursor: 'pointer',
+              padding: '15px',
+              border: '1px solid #ccc',
+              borderRadius: '10px',
+              textAlign: 'center',
+              boxShadow: '2px 2px 10px rgba(0,0,0,0.1)',
+              backgroundColor: '#fff',
+              marginBottom: '20px',
+            }}
+          >
+            <img
+              src={`${apiImage}${shop.image.split('/').pop()}`}
+              alt={shop.retailShopName}
+              style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+            />
+            <h3>{shop.retailShopName}</h3>
+            <p>{shop.address}</p>
+            {renderEmployeeDots(employeeStatus[shop.retailShopId] || [])}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default EmployeeList

@@ -1,57 +1,68 @@
-/* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getAllVendors, updateVendorStatus } from '../../../services/vendorService'
+import { getAllRegions } from '../../../services/regionService' // Thêm hàm lấy dữ liệu khu vực\
+import styles from '../../../style/ManStyle.module.css'
 
 const VendorList = () => {
-  const [vendors, setVendors] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchField, setSearchField] = useState('VendorName');
-  const navigate = useNavigate();
+  const [vendors, setVendors] = useState([])
+  const [regions, setRegions] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [searchField, setSearchField] = useState('vendorName')
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const data = [
-      {
-        VendorID: 1,
-        RegionID: 101,
-        VendorName: 'Vendor A',
-        Address: '123 Vendor St, City A',
-        Email: 'vendora@example.com',
-        Phone: '123-456-7890',
-        Fax: '123-456-7891',
-        Description: 'Main vendor for supplies',
-      },
-      {
-        VendorID: 2,
-        RegionID: 102,
-        VendorName: 'Vendor B',
-        Address: '456 Supplier Rd, City B',
-        Email: 'vendorb@example.com',
-        Phone: '987-654-3210',
-        Fax: '987-654-3211',
-        Description: 'Secondary vendor for products',
-      },
-    ];
-    setVendors(data);
-  }, []);
+    fetchVendors()
+    fetchRegions()
+  }, [])
+
+  const fetchVendors = async () => {
+    try {
+      const data = await getAllVendors()
+      setVendors(data.data)
+      console.log(data.data)
+    } catch (error) {
+      console.error('Failed to fetch vendors', error)
+    }
+  }
+
+  const fetchRegions = async () => {
+    try {
+      const data = await getAllRegions()
+      setRegions(data.data)
+      console.log(data.data)
+    } catch (error) {
+      console.error('Failed to fetch regions', error)
+    }
+  }
+  const toggleStatus = async (vendorId, currentStatus) => {
+    try {
+      const updatedStatus = !currentStatus // Đảo ngược trạng thái hiện tại
+      await updateVendorStatus(vendorId, updatedStatus) // Gọi API cập nhật trạng thái
+      // Cập nhật trạng thái trong state sau khi thành công
+      setVendors((prevVendors) =>
+        prevVendors.map((vendor) =>
+          vendor.vendorId === vendorId ? { ...vendor, status: updatedStatus } : vendor,
+        ),
+      )
+    } catch (error) {
+      console.error('Error toggling vendor status:', error)
+    }
+  }
 
   const filteredVendors = vendors.filter((vendor) =>
-    vendor[searchField]?.toString().toLowerCase().includes(searchTerm)
-  );
+    vendor[searchField]?.toString().toLowerCase().includes(searchTerm),
+  )
 
   return (
     <div className="container mt-5">
       <h2 className="text-center mb-4">Vendor List</h2>
 
-      {/* Nút Add */}
       <div className="d-flex justify-content-between mb-3">
-        <button
-          className="btn btn-primary"
-          onClick={() => navigate('/admin/AddVendor')}
-        >
+        <button className="btn btn-primary" onClick={() => navigate('/admin/AddVendor')}>
           Add Vendor
         </button>
 
-        {/* Bộ lọc tìm kiếm */}
         <div className="d-flex">
           <select
             className="form-select me-2"
@@ -73,41 +84,60 @@ const VendorList = () => {
         </div>
       </div>
 
-      {/* Bảng hiển thị */}
-      <table className="table table-striped table-bordered">
+      <table className="table table-hover table-bordered">
         <thead>
           <tr>
             <th>#</th>
-            <th>Region ID</th>
+            <th>Region</th>
             <th>Vendor Name</th>
             <th>Address</th>
             <th>Email</th>
             <th>Phone</th>
             <th>Fax</th>
             <th>Description</th>
+            <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {filteredVendors.map((vendor, index) => (
-            <tr key={vendor.VendorID}>
+            <tr key={vendor.vendorId}>
               <td>{index + 1}</td>
-              <td>{vendor.RegionID}</td>
-              <td>{vendor.VendorName}</td>
-              <td>{vendor.Address}</td>
-              <td>{vendor.Email}</td>
-              <td>{vendor.Phone}</td>
-              <td>{vendor.Fax}</td>
-              <td>{vendor.Description}</td>
               <td>
-                <button className="btn btn-primary btn-sm">Update</button>
+                {regions.find((region) => region.regionId === vendor.regionId)?.regionName ||
+                  'Unknown Region'}
+              </td>
+              <td>{vendor.vendorName}</td>
+              <td>{vendor.address}</td>
+              <td>{vendor.email}</td>
+              <td>{vendor.phone}</td>
+              <td>{vendor.fax || 'N/A'}</td>
+              <td>{vendor.description}</td>
+              <td>
+                <span className={vendor.status ? styles.activeStatus : styles.inactiveStatus}>
+                  {vendor.status ? 'Active' : 'Inactive'}
+                </span>
+              </td>
+              <td>
+                <button
+                  className="btn mb-2 btn-primary btn-sm me-2"
+                  onClick={() => navigate(`/admin/UpdateVendor/${vendor.vendorId}`)}
+                >
+                  Update
+                </button>
+                <button
+                  onClick={() => toggleStatus(vendor.vendorId, vendor.status)}
+                  className={`btn btn-outline-${vendor.status ? 'warning' : 'success'} btn-sm me-2 mb-2`}
+                >
+                  {vendor.status ? 'Deactivate' : 'Activate'}
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default VendorList;
+export default VendorList

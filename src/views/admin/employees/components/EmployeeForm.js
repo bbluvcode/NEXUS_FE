@@ -53,14 +53,14 @@ const employeeSchema = yup.object().shape({
   .nullable() // Allow null
   .notOneOf([""], "Role is required.") // Prevent empty value
   .required("Role is required."), // Ensures a role is selected
-  retainShopId: yup
+  retailShopId: yup
   .number()
-  .typeError("Retain shop is required.") // Handles cases where no number is selected
-  .required("Retain shop is required.") // Ensures the field is not empty
-  .min(1, "Retain shop is required."), // Ensures a valid retain shop ID (e.g., assuming IDs start from 1)
+  .typeError("Retail shop is required.") // Handles cases where no number is selected
+  .required("Retail shop is required.") // Ensures the field is not empty
+  .min(1, "Retail shop is required."), // Ensures a valid retail shop ID (e.g., assuming IDs start from 1)
 });
 
-const EmployeeForm = ({ onSubmit, retainShops, roles }) => {
+const EmployeeForm = ({ onSubmit, retailShops, roles }) => {
   const {
     register,
     handleSubmit,
@@ -105,16 +105,16 @@ const EmployeeForm = ({ onSubmit, retainShops, roles }) => {
             <p className="text-danger">{errors.address?.message}</p>
           </div>
           <div className="mb-3">
-            <label className="form-label">Retain Shop:</label>
-            <select className="form-select" {...register('retainShopId')}>
-              <option value="">Select Retain Shop</option>
-              {retainShops.map((shop) => (
-                <option key={shop.retainShopId} value={shop.retainShopId}>
-                  {shop.retainShopName}
+            <label className="form-label">Retail Shop:</label>
+            <select className="form-select" {...register('retailShopId')}>
+              <option value="">Select Retail Shop</option>
+              {retailShops.map((shop) => (
+                <option key={shop.retailShopId} value={shop.retailShopId}>
+                  {shop.retailShopName}
                 </option>
               ))}
             </select>
-            <p className="text-danger">{errors.retainShopId?.message}</p>
+            <p className="text-danger">{errors.retailShopId?.message}</p>
           </div>
         </div>
         {/* Right Column */}
@@ -172,7 +172,7 @@ const EmployeeForm = ({ onSubmit, retainShops, roles }) => {
 
 EmployeeForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  retainShops: PropTypes.array.isRequired,
+  retailShops: PropTypes.array.isRequired,
   roles: PropTypes.array.isRequired,
 };
 

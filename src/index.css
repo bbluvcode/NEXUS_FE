@@ -264,7 +264,7 @@ header
 */
 
 .pre-header {
-  background-color: #efefef;
+  background-color:rgba(117, 109, 230, 0.88);
   height: 60px;
   padding: 15px 0px;
 }
@@ -278,7 +278,7 @@ header
 }
 
 .pre-header ul.info li a {
-  color: #afafaf;
+  color: #ffffff;
   font-size: 14px;
   transition: all 0.3s;
 }
@@ -986,7 +986,7 @@ Banner Style
 About Style
 --------------------------------------------- 
 */
-
+/* 
 #about {
   padding-top: 130px;
 }
@@ -998,7 +998,7 @@ About Style
 .about-right-content p {
   margin-top: 30px;
   margin-bottom: 45px;
-}
+} */
 
 .skills-content {
   position: relative;
@@ -1943,7 +1943,6 @@ footer {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
-  margin-top: 130px;
 }
 
 footer p {

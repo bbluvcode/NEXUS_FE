@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
+import { AppContent, AppSidebar, AppFooter, AppHeader, ModalComponent } from '../components/index'
 
 const AdminLayout = () => {
   return (
@@ -12,6 +12,7 @@ const AdminLayout = () => {
         </div>
         <AppFooter />
       </div>
+      <ModalComponent />
     </div>
   )
 }

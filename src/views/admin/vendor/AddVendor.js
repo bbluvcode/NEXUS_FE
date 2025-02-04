@@ -2,39 +2,43 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { addVendor } from '../../../services/vendorService';
+import { getAllRegions } from '../../../services/regionService';
 
 const vendorValidationSchema = Yup.object().shape({
-  VendorName: Yup.string()
-    .max(50, 'Name must be at most 50 characters')
+  vendorName: Yup.string()
+    .max(15, 'Name must be at most 15 characters')
     .required('Name is required'),
-  Address: Yup.string()
-    .max(100, 'Address must be at most 100 characters')
+  address: Yup.string()
+    .max(50, 'Address must be at most 50 characters')
     .required('Address is required'),
-  Email: Yup.string()
+  email: Yup.string()
     .email('Invalid email format')
     .required('Email is required'),
-  Phone: Yup.string()
-    .matches(/^\d{10}$/, 'Phone must be exactly 10 digits')
+  phone: Yup.string()
+    .length(10, 'Phone must be exactly 10 digits')
+    .matches(/^\d+$/, 'Phone must contain only digits')
     .required('Phone is required'),
-  Fax: Yup.string()
+  fax: Yup.string()
     .max(15, 'Fax must be at most 15 characters')
     .required('Fax is required'),
-  RegionId: Yup.number()
-    .required('Region ID is required')
-    .typeError('Region ID must be a number'),
-  Description: Yup.string()
-    .max(255, 'Description must be at most 255 characters')
+  description: Yup.string()
+    .max(1000, 'Description must be at most 1000 characters')
     .required('Description is required'),
+  status: Yup.boolean().required('Status is required'),
+  regionId: Yup.number()
+    .nullable()
+    .typeError('Region ID must be a number'),
 });
 
 const AddVendor = () => {
   const [regions, setRegions] = useState([]);
 
-  // Lấy danh sách vùng từ backend
+  // Fetch danh sách regions từ backend
   useEffect(() => {
     const fetchRegions = async () => {
       try {
-        const response = await axios.get('/api/regions');
+        const response = await getAllRegions();
         setRegions(response.data);
       } catch (error) {
         console.error('Failed to fetch regions', error);
@@ -43,9 +47,17 @@ const AddVendor = () => {
     fetchRegions();
   }, []);
 
-  const handleSubmit = (values) => {
-    console.log('Submitted data:', values);
-    // Gửi dữ liệu tới API backend
+  // Xử lý submit form
+  const handleSubmit = async (values, { resetForm }) => {
+    try {
+      const response = await addVendor(values);
+      console.log('Vendor added successfully:', response);
+      alert('Vendor added successfully!');
+      resetForm();
+    } catch (error) {
+      console.error('Error adding vendor:', error);
+      alert('Failed to add vendor. Please try again.');
+    }
   };
 
   return (
@@ -53,13 +65,14 @@ const AddVendor = () => {
       <h2>Add Vendor</h2>
       <Formik
         initialValues={{
-          VendorName: '',
-          Address: '',
-          Email: '',
-          Phone: '',
-          Fax: '',
-          RegionId: '',
-          Description: '',
+          vendorName: '',
+          address: '',
+          email: '',
+          phone: '',
+          fax: '',
+          regionId: '',
+          description: '',
+          status: true,
         }}
         validationSchema={vendorValidationSchema}
         onSubmit={handleSubmit}
@@ -67,53 +80,65 @@ const AddVendor = () => {
         {({ isSubmitting }) => (
           <Form>
             <div className="mb-3">
-              <label htmlFor="VendorName">Name</label>
-              <Field name="VendorName" className="form-control" />
-              <ErrorMessage name="VendorName" component="div" className="text-danger" />
+              <label htmlFor="vendorName">Name</label>
+              <Field name="vendorName" className="form-control" />
+              <ErrorMessage name="vendorName" component="div" className="text-danger" />
             </div>
 
             <div className="mb-3">
-              <label htmlFor="Address">Address</label>
-              <Field name="Address" className="form-control" />
-              <ErrorMessage name="Address" component="div" className="text-danger" />
+              <label htmlFor="address">Address</label>
+              <Field name="address" className="form-control" />
+              <ErrorMessage name="address" component="div" className="text-danger" />
             </div>
 
             <div className="mb-3">
-              <label htmlFor="Email">Email</label>
-              <Field name="Email" className="form-control" type="email" />
-              <ErrorMessage name="Email" component="div" className="text-danger" />
+              <label htmlFor="email">Email</label>
+              <Field name="email" className="form-control" />
+              <ErrorMessage name="email" component="div" className="text-danger" />
             </div>
 
             <div className="mb-3">
-              <label htmlFor="Phone">Phone</label>
-              <Field name="Phone" className="form-control" />
-              <ErrorMessage name="Phone" component="div" className="text-danger" />
+              <label htmlFor="phone">Phone</label>
+              <Field name="phone" className="form-control" />
+              <ErrorMessage name="phone" component="div" className="text-danger" />
             </div>
 
             <div className="mb-3">
-              <label htmlFor="Fax">Fax</label>
-              <Field name="Fax" className="form-control" />
-              <ErrorMessage name="Fax" component="div" className="text-danger" />
+              <label htmlFor="fax">Fax</label>
+              <Field name="fax" className="form-control" />
+              <ErrorMessage name="fax" component="div" className="text-danger" />
             </div>
 
-            {/* Dropdown Region */}
             <div className="mb-3">
-              <label htmlFor="RegionId">Region</label>
-              <Field as="select" name="RegionId" className="form-control">
+              <label htmlFor="regionId">Region</label>
+              <Field as="select" name="regionId" className="form-control">
                 <option value="">Select Region</option>
                 {regions.map((region) => (
-                  <option key={region.RegionID} value={region.RegionID}>
-                    {region.RegionName}
+                  <option key={region.regionId} value={region.regionId}>
+                    {region.regionName}
                   </option>
                 ))}
               </Field>
-              <ErrorMessage name="RegionId" component="div" className="text-danger" />
+              <ErrorMessage name="regionId" component="div" className="text-danger" />
             </div>
 
             <div className="mb-3">
-              <label htmlFor="Description">Description</label>
-              <Field name="Description" className="form-control" />
-              <ErrorMessage name="Description" component="div" className="text-danger" />
+              <label htmlFor="description">Description</label>
+              <Field name="description" className="form-control" />
+              <ErrorMessage name="description" component="div" className="text-danger" />
+            </div>
+
+            <div className="mb-3 form-check">
+              <Field
+                type="checkbox"
+                name="status"
+                className="form-check-input"
+                id="status"
+              />
+              <label htmlFor="status" className="form-check-label">
+                Active
+              </label>
+              <ErrorMessage name="status" component="div" className="text-danger" />
             </div>
 
             <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
