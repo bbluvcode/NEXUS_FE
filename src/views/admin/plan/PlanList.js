@@ -5,6 +5,7 @@ import { getAllPlanFees } from '../../../services/planFeeService'
 import { changePlanStatus } from '../../../services/planService'
 import { changePlanFeeStatus } from '../../../services/planFeeService'
 import { useDataContext } from '../../../context/DataContext'
+import Loading from '../../../components/Loading'
 
 const PlanList = () => {
   const navigate = useNavigate()
@@ -87,9 +88,7 @@ const PlanList = () => {
   }
 
   if (loading) {
-    return (
-      <div style={{ fontSize: '24px', textAlign: 'center', marginTop: '50px' }}>Loading...</div>
-    )
+    return <Loading message="Loading data..." />
   }
 
   return (

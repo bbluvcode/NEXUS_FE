@@ -13,6 +13,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import Loading from "../Loading";
 
 const theme = createTheme();
 
@@ -45,7 +46,7 @@ function ProfileUser() {
   };
 
   if (!user) {
-    return <p>Loading customer data...</p>;
+    return <Loading message="Loading customer data..." />;
   }
 
   return (
