@@ -5,6 +5,7 @@ const API_BASE_URL = `http://localhost:${API_PORT}`;
 export const apiKeyword = `http://localhost:${API_PORT}/api/Keyword/`;
 export const apiCustomer = `http://localhost:${API_PORT}/api/Customer/`;
 export const apiStock = `http://localhost:${API_PORT}/api/Stock/`;
+export const apiInStockRequest = `http://localhost:${API_PORT}/api/apiInStockRequest/`;
 export const apiInStockOrder = `http://localhost:${API_PORT}/api/InStockOrder/`;
 export const apiOutStockOrder = `http://localhost:${API_PORT}/api/OutStockOrder/`;
 export const apiEquipment = `http://localhost:${API_PORT}/api/Equipment/`;

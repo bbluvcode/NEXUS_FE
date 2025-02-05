@@ -71,11 +71,11 @@ const EquipmentList = () => {
                     <td>{item.status ? 'Active' : 'Inactive'}</td>
                     <td>{item.discount?.discountName || 'No Discount'}</td>
                     <td onClick={() => handleEditEquipment(item)}>
-                      <BtnModal
+                      {/* <BtnModal
                         name={<i className="fa fa-edit"></i>}
                         iform="EquipmentEditForm"
                         style="warning"
-                      />
+                      /> */}
                     </td>
                   </tr>
                 ))
