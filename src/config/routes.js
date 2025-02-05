@@ -14,6 +14,7 @@ const AddCustomer = React.lazy(() => import('../views/admin/customer/AddCustomer
 const SupportRequest = React.lazy(() => import('../views/admin/customer/SupportRequest'))
 const Feedbacks = React.lazy(() => import('../views/admin/customer/Feedbacks'))
 //employee
+const TestPage = React.lazy(() => import('../views/admin/employees/TestPage'))
 const EmployeeList = React.lazy(() => import('../views/admin/employees/EmployeesList'))
 const EmployeeDetail = React.lazy(() => import('../views/admin/employees/EmployeeDetail'))
 const AddEmployee = React.lazy(() => import('../views/admin/employees/AddEmployee'))
@@ -148,6 +149,7 @@ const routes = [
   { path: '/Feedbacks', exact: true, name: 'Feedbacks', element: Feedbacks },
   { path: '/SupportRequest', exact: true, name: 'SupportRequest', element: SupportRequest },
   //employee
+  { path: '/TestPage', exact: true, name: 'TestPage', element: TestPage },
   { path: '/EmployeeList', exact: true, name: 'EmployeeList', element: EmployeeList },
   { path: '/EmployeeDetail/:id', exact: true, name: 'EmployeeDetail', element: EmployeeDetail },
   { path: '/AddEmployee', exact: true, name: 'AddEmployee', element: AddEmployee },

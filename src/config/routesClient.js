@@ -18,6 +18,7 @@ const OrderHistoryTab = React.lazy(() => import('../components/userProfile/Order
 const SupportHistoryTab = React.lazy(() => import('../components/userProfile/SupportHistoryTab'))
 const RequestHistoryTab = React.lazy(() => import('../components/userProfile/RequestHistoryTab'))
 const FeedbackHistoryTab = React.lazy(() => import('../components/userProfile/FeedbackHistoryTab'))
+const TestPage = React.lazy(() => import('../views/admin/employees/TestPage'))
 
 const routesClient = [
   { path: '/', exact: true, name: 'Home', element: Home },
@@ -27,14 +28,15 @@ const routesClient = [
   { path: '/request', exact: true, name: 'Request', element: Request },
   { path: '/support', exact: true, name: 'Support', element: Support },
   { path: '/equipment', exact: true, name: 'Equipment', element: Equipment },
-  { path: '/login', exact: true, name: 'Login', element: Login }, 
+  { path: '/login', exact: true, name: 'Login', element: Login },
   { path: '/forgotpassword', exact: true, name: 'ForgotPassword', element: ForgotPassword },
-  { path: '/profile', exact: true, name: 'ProfileUser', element: () => <PrivateRoute element={ProfileUser} />,},
-  { path: '/changepassword', exact: true, name: 'ChangePasswordTab', element: () => <PrivateRoute element={ChangePasswordTab} />,},
-  { path: '/orderhistory', exact: true, name: 'OrderHistoryTab', element: () => <PrivateRoute element={OrderHistoryTab} />,},
-  { path: '/supporthistory', exact: true, name: 'SupportHistoryTab', element: () => <PrivateRoute element={SupportHistoryTab} />,},
-  { path: '/requesthistory', exact: true, name: 'RequestHistoryTab', element: () => <PrivateRoute element={RequestHistoryTab} />,},
-  { path: '/feedbackhistory', exact: true, name: 'FeedbackHistoryTab', element: () => <PrivateRoute element={FeedbackHistoryTab} />,},
+  { path: '/profile', exact: true, name: 'ProfileUser', element: () => <PrivateRoute element={ProfileUser} />, },
+  { path: '/changepassword', exact: true, name: 'ChangePasswordTab', element: () => <PrivateRoute element={ChangePasswordTab} />, },
+  { path: '/orderhistory', exact: true, name: 'OrderHistoryTab', element: () => <PrivateRoute element={OrderHistoryTab} />, },
+  { path: '/supporthistory', exact: true, name: 'SupportHistoryTab', element: () => <PrivateRoute element={SupportHistoryTab} />, },
+  { path: '/requesthistory', exact: true, name: 'RequestHistoryTab', element: () => <PrivateRoute element={RequestHistoryTab} />, },
+  { path: '/feedbackhistory', exact: true, name: 'FeedbackHistoryTab', element: () => <PrivateRoute element={FeedbackHistoryTab} />, },
+  { path: '/TestPage', exact: true, name: 'TestPage', element: TestPage },
 
 ]
 
