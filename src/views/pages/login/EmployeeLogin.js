@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthContext"; // Import useAuth
 import { useNavigate } from "react-router-dom";

@@ -8,6 +8,8 @@ import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { createCusRequest, handleSetCusRequest } from '../../../redux/customer/cusRequestSlice'
 import { DataContext } from '../../../context/DataContext'
 import { fetchRegions } from '../../../redux/others/regionSlice'
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 function CusReqCreateForm() {
   const dispatch = useDispatch()
@@ -28,6 +30,7 @@ function CusReqCreateForm() {
   }
 
   const { customerId, fullName, address } = customerInfo
+  
   const { planName, securityDeposit } = serviceSelected
 
   const schema = yup.object().shape({
