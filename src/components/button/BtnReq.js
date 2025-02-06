@@ -7,10 +7,12 @@ import Swal from 'sweetalert2'
 const BtnReq = (props) => {
   const { setIform,serviceSelected, setServiceSelected } = useContext(DataContext)
   const navigate = useNavigate()
-
+  
   // handleRegisterClick.js
   const handleRegisterClick = () => {
     setServiceSelected(props.serviceSelected)
+    console.log("🚀 ~ BtnReq ~ serviceSelected:", serviceSelected)
+    
     const customerInfo = localStorage.getItem('customerInfo')
     const parsedCustomerInfo = customerInfo ? JSON.parse(customerInfo) : null
     const cusId = parsedCustomerInfo?.customerId
@@ -41,6 +43,7 @@ const BtnReq = (props) => {
       })
     }
   }
+    console.log("🚀 ~ handleRegisterClick ~ props.serviceSelected:", props.serviceSelected)
 
   return (
     <div>

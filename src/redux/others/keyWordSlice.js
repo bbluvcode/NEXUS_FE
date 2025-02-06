@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-
 import { apiKeyword } from '../../constant/apiConstant'
 import Swal from 'sweetalert2'
 
@@ -25,6 +24,20 @@ export const createKeyword = createAsyncThunk('keywords/createKeywords', async (
   }
 })
 
+// Delete Keyword
+export const deleteKeyword = createAsyncThunk(
+  'keywords/deleteKeyword',
+  async (id, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${apiKeyword}${id}`)
+      return id
+    } catch (error) {
+      console.log('🚀 ~ deleteKeyword ~ error:', error)
+      return rejectWithValue(error.response?.data || 'Failed to delete')
+    }
+  },
+)
+
 const keywordSlice = createSlice({
   name: 'keywords',
   initialState: {
@@ -44,7 +57,6 @@ const keywordSlice = createSlice({
       .addCase(fetchKeywords.fulfilled, (state, action) => {
         state.status = 'succeeded'
         state.items = action.payload
-        console.log('🚀 ~ .addCase ~ action.payload:', action.payload)
       })
       .addCase(createKeyword.fulfilled, (state, action) => {
         state.status = 'succeeded'
@@ -56,9 +68,24 @@ const keywordSlice = createSlice({
             icon: 'error',
             title: 'Oops...',
             text: 'Cannot add. Word is existed!',
-            // footer: '<a href="#">Why do I have this issue?</a>',
           })
         }
+      })
+      .addCase(deleteKeyword.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.items = state.items.filter((item) => item.id !== action.payload)
+        Swal.fire({
+          icon: 'success',
+          title: 'Deleted!',
+          text: 'Keyword has been removed successfully.',
+        })
+      })
+      .addCase(deleteKeyword.rejected, (state, action) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: action.payload || 'Something went wrong!',
+        })
       })
   },
 })
