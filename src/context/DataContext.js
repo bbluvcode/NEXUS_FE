@@ -9,6 +9,7 @@ export const useDataContext = () => {
 };
 
 export const DataProvider = ({ children }) => {
+    
     const { employee } = useAuth() || {};
     const [employees, setEmployees] = useState([]);
     const [plans, setPlans] = useState([]);
@@ -22,7 +23,6 @@ export const DataProvider = ({ children }) => {
     const [equipmentTypes, setEquipmentTypes] = useState([]);
     const [stocks, setStocks] = useState([]); 
     const [InstockOrders, setInStockOrders] = useState([]); 
-
     const [iform, setIform] = useState("");
     const [serviceSelected, setServiceSelected] = useState(null);
     const [currentEmployee, setCurrentEmployee] = useState(() => {
