@@ -31,7 +31,6 @@ function ProfileUser() {
     try {
       const response = await axios.get(`http://localhost:5185/api/Customer/customer-by-email/${email}`);
       setUser(response.data.data);
-      console.log("User: ", response.data.data);
     } catch (error) {
       console.error("Error fetching customer data:", error);
     }
