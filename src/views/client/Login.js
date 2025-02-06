@@ -8,10 +8,10 @@ import Swal from 'sweetalert2';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import showToast from '../../components/customerLogin/ShowToast'
-import { DataContext } from '../../context/DataContext';
+import { useAuth } from '../../context/AuthContext';
 
 function Login() {
-  const { setUserId } = useContext(DataContext)
+    const { loginCustomer } = useAuth();
     const [email, setEmail] = useState('');
     const [emailRegister, setEmailRegister] = useState('');
     const [password, setPassword] = useState('');
@@ -19,7 +19,7 @@ function Login() {
     const [fullName, setFullName] = useState('');
     const [loginError, setLoginError] = useState('');
     const [registerError, setRegisterError] = useState('');
-  const [showPassword, setShowPassword] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const loginEmailRef = useRef(null);
     const registerNameRef = useRef(null);
@@ -76,38 +76,15 @@ function Login() {
             return;
         }
         try {
-            const response = await axios.post('http://localhost:5112/api/Auth/login', { email, password });
-            const { id: userId, role: userRole } = response.data.data;
-            console.log("id", userId);
-            console.log("role", userRole);
-            setUserId(userId);
-            localStorage.setItem("userIdLogin", userId);
-            localStorage.setItem("userRoleLogin", userRole);
-            if (userRole === "ADMIN") {
-                Swal.fire({
-                    title: 'Login Successful!',
-                    text: 'Redirecting to the management page...',
-                    icon: 'success',
-                    confirmButtonText: 'OK',
-                }).then(() => {
-                    navigate('/admin/');
-                });
-            } else {
-                Swal.fire({
-                    title: 'Login Successful!',
-                    text: 'Redirecting to the home page...',
-                    icon: 'success',
-                    confirmButtonText: 'OK',
-                }).then(() => {
-                    navigate('/');
-                });
-            }
-        } catch (err) {
-            if (err.response.data) {
-                setLoginError(err.response.data.message);
-            } else {
-                setLoginError('Network error. Please try again.');
-            }
+            await loginCustomer(email, password);
+            Swal.fire({
+                title: 'Login Successful!',
+                text: 'Redirecting to the home page...',
+                icon: 'success',
+                confirmButtonText: 'OK',
+            }).then(() => navigate('/'));
+        } catch (error) {
+            setLoginError(error.message);
         }
     };
 

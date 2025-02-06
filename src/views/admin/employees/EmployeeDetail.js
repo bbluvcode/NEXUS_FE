@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getAllEmployeeRoles, getEmployeeById } from "../../../services/employeeService";
 import styles from "../../../style/ManStyle.module.css";
+import Loading from "../../../components/Loading";
 
 const EmployeeDetail = () => {
     const { id } = useParams();
@@ -47,7 +48,7 @@ const EmployeeDetail = () => {
     }, [id]);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Loading message="Loading data..." />;
     }
 
     if (!employee) {

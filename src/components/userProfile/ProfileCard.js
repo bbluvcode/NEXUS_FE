@@ -5,6 +5,9 @@ import Avatar from "@mui/material/Avatar";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import Badge from "@mui/material/Badge";
 import Button from "@mui/material/Button";
+import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
+import React, { useState } from "react";
 
 const styles = {
     detailsprofile: {
@@ -14,12 +17,48 @@ const styles = {
     valueprofile: {
         padding: "1rem 2rem",
         borderTop: "1px solid #e1e1e1",
-        color: "#333333", 
+        color: "#333333",
         fontWeight: "bold",
     }
 };
 
-function ProfileCard(props) {
+function ProfileCard({ name, sub, dt1, dt2, dt3, avatar }) {
+    const { customer } = useAuth(); // Lấy customer từ AuthContext
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [preview, setPreview] = useState(avatar || "~/default-avatar.png");
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            setPreview(URL.createObjectURL(file));
+        }
+    };
+
+    const handleUpload = async () => {
+        if (!selectedFile || !customer?.id) {
+            alert("Please select an image first.");
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+    
+        try {
+            const response = await axios.put(
+                `http://localhost:5185/api/Customer/update-image/${customer.id}`,
+                formData,
+                { headers: { "Content-Type": "multipart/form-data" } }
+            );
+            alert("Avatar updated successfully!");
+            setPreview(response.data.imageUrl);
+        } catch (error) {
+            console.error("Error updating avatar:", error.response?.data || error.message);
+            alert("Failed to update avatar.");
+        }
+    };
+    
+
     return (
         <Card
             variant="outlined"
@@ -41,42 +80,32 @@ function ProfileCard(props) {
                         overlap="circular"
                         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                         badgeContent={
-                            <PhotoCameraIcon
-                                sx={{
-                                    border: "5px solid white",
-                                    backgroundColor: "#ff558f",
-                                    borderRadius: "50%",
-                                    padding: ".2rem",
-                                    width: 35,
-                                    height: 35
-                                }}
-                            ></PhotoCameraIcon>
+                            <label htmlFor="avatar-upload">
+                                <PhotoCameraIcon sx={{ border: "5px solid white", backgroundColor: "#ff558f", borderRadius: "50%", padding: ".2rem", width: 35, height: 35, cursor: "pointer" }} />
+                                <input type="file" id="avatar-upload" style={{ display: "none" }} accept="image/*" onChange={handleFileChange} />
+                            </label>
                         }
                     >
-                        <Avatar
-                            sx={{ width: 100, height: 100, mb: 1.5 }}
-                            src="~/default-avatar.png"
-                        ></Avatar>
+                        <Avatar sx={{ width: 100, height: 100, mb: 1.5 }} src={preview}></Avatar>
                     </Badge>
-
                     {/* DESCRIPTION */}
                     <Typography
                         variant="h6"
                         sx={{
-                            color: "#1a1a1a", 
+                            color: "#1a1a1a",
                             fontWeight: "bold",
                         }}
                     >
-                        {props.name}
+                        {name}
                     </Typography>
                     <Typography
                         color="text.secondary"
                         sx={{
-                            color: "#555555", 
+                            color: "#555555",
                             fontWeight: "500",
                         }}
                     >
-                        {props.sub}
+                        {sub}
                     </Typography>
                 </Grid>
                 {/* CARD HEADER END */}
@@ -89,9 +118,9 @@ function ProfileCard(props) {
                         <Typography style={styles.detailsprofile}>Member Since</Typography>
                     </Grid>
                     <Grid item xs={6} sx={{ textAlign: "end" }}>
-                        <Typography style={styles.valueprofile}>{props.dt1}</Typography>
-                        <Typography style={styles.valueprofile}>{props.dt2}</Typography>
-                        <Typography style={styles.valueprofile}>{props.dt3}</Typography>
+                        <Typography style={styles.valueprofile}>{dt1}</Typography>
+                        <Typography style={styles.valueprofile}>{dt2}</Typography>
+                        <Typography style={styles.valueprofile}>{dt3}</Typography>
                     </Grid>
                 </Grid>
 
@@ -101,6 +130,7 @@ function ProfileCard(props) {
                         variant="contained"
                         color="secondary"
                         sx={{ width: "99%", p: 1, my: 2 }}
+                        onClick={handleUpload} disabled={!selectedFile}
                     >
                         Change Avatar
                     </Button>

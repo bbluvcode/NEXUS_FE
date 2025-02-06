@@ -29,7 +29,7 @@ export const createCustomer = createAsyncThunk('Customers/createCustomer', async
     formData.append('password', customer.password)
 
     const response = await axios.post(apiCustomer, formData)
-    
+
     console.log('response: ', response)
     bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
     return response.data.data
@@ -42,7 +42,6 @@ export const createCustomer = createAsyncThunk('Customers/createCustomer', async
 export const updateCustomer = createAsyncThunk(
   'Customers/updateCustomer',
   async ({ id, customer }) => {
-
     try {
       const formData = new FormData()
       formData.append('fullName', customer.fullName)
@@ -66,6 +65,15 @@ export const updateCustomer = createAsyncThunk(
     }
   },
 )
+export const getCustomerInfo = createAsyncThunk('Customers/getCustomerInfo', async (email) => {
+  try {
+    const response = await axios.get(apiCustomer + 'customer-info/' + email)
+    console.log("🚀 ~ getCustomerInfo ~ response:", response)    
+    return response.data.data
+  } catch (error) {
+    console.log('🚀 ~ getCustomerInfo ~ error:', error)
+  }
+})
 
 const customerSlice = createSlice({
   name: 'customers',
@@ -100,6 +108,10 @@ const customerSlice = createSlice({
         state.status = 'succeeded'
         state.items = action.payload
       })
+      .addCase(getCustomerInfo.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.customer = action.payload
+      })
       .addCase(createCustomer.fulfilled, (state, action) => {
         console.log('extraReducers-createCustomer: ', action)
         state.status = 'succeeded'
@@ -113,7 +125,7 @@ const customerSlice = createSlice({
         if (updatedItem) {
           const index = state.items.findIndex((item) => item.customerId === updatedItem.customerId)
           if (index !== -1) {
-            state.items[index] = updatedItem 
+            state.items[index] = updatedItem
           }
         }
       })

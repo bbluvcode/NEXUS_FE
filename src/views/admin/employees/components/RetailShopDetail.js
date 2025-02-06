@@ -9,6 +9,7 @@ import {
     toggleEmployeeStatus,
 } from '../../../../services/employeeService'
 import styles from '../../../../style/ManStyle.module.css' // Import CSS module
+import { apiImage } from '../../../../constant/apiConstant'
 
 const RetailShopDetail = () => {
     const { id } = useParams()
@@ -169,6 +170,11 @@ const RetailShopDetail = () => {
             <div className="row">
                 <div className="col-md-3">
                     <h2>Retail Shop Details</h2>
+                    <img
+                                  src={`${apiImage}${shop.image.split('/').pop()}`}
+                                  alt={shop.retailShopName}
+                                  style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+                                />
                     <span>
                         <strong>Name:</strong> {shop.retailShopName}
                     </span>

@@ -2,7 +2,7 @@ import React from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, IconButton } from "@mui/material";
 import AssignmentIcon from '@mui/icons-material/Assignment';
 
-function RequestHistoryTab({ requests }) {
+function SupportHistoryTab({ requests }) {
     const handleDetailClick = (request) => {
         console.log("request detail", request);
     };
@@ -22,9 +22,9 @@ function RequestHistoryTab({ requests }) {
                         <TableRow>
                             <TableCell>No.</TableCell>
                             <TableCell align="center">Title</TableCell>
-                            <TableCell align="center">Service</TableCell>
-                            <TableCell align="center">Equipment</TableCell>
-                            <TableCell align="center">Request Date</TableCell>
+                            <TableCell align="center">DetailContent</TableCell>
+                            <TableCell align="center">Date Request</TableCell>
+                            <TableCell align="center">Date Resolved</TableCell>
                             <TableCell align="center">Status</TableCell>
                         </TableRow>
                     </TableHead>
@@ -33,10 +33,10 @@ function RequestHistoryTab({ requests }) {
                         {requests.map((request, index) => (
                             <TableRow key={index}>
                                 <TableCell>{index + 1}</TableCell>
-                                <TableCell align="center">{request.requestTitle}</TableCell>
-                                <TableCell align="center">{request.serviceRequest}</TableCell>
-                                <TableCell align="center">{request.equipmentRequest}</TableCell>
-                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>{request.dateCreate}</TableCell>
+                                <TableCell align="center">{request.title}</TableCell>
+                                <TableCell align="center">{request.detailContent}</TableCell>
+                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>{request.dateRequest}</TableCell>
+                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>{request.dateResolved || "N/A"}</TableCell>
                                 <TableCell align="center">{request.isResponse ? "Processed" : "Processing"}</TableCell>
                             </TableRow>
                         ))}
@@ -47,4 +47,4 @@ function RequestHistoryTab({ requests }) {
     );
 }
 
-export default RequestHistoryTab;
+export default SupportHistoryTab;
