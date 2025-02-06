@@ -52,21 +52,6 @@ function ProfileUser() {
     <ThemeProvider theme={theme}>
       <CssBaseline>
         <Grid container direction="column" sx={{ overflowX: "hidden", minHeight: "100vh" }}>
-          {/* Background Image */}
-          <Grid item xs={12} md={6}>
-            <img
-              alt="avatar"
-              style={{
-                width: "100%",
-                height: "30vh",
-                objectFit: "cover",
-                objectPosition: "center",
-              }}
-              src={user.image || "https://iris2.gettimely.com/images/default-cover-image.jpg"}
-            />
-          </Grid>
-
-          {/* Components */}
           <Grid
             container
             spacing={3}

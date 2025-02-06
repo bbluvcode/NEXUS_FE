@@ -9,6 +9,10 @@ import {
 import BtnModal from '../../../components/button/BtnModal'
 import CIcon from '@coreui/icons-react'
 import { cilCheck, cilUser, cilWarning } from '@coreui/icons'
+import AssignSurveyorModal from '../../../components/modalbody/admin/AssignSurveyorModal'
+import { toast } from 'react-toastify'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CustomerRequest = () => {
   const dispatch = useDispatch()
@@ -25,12 +29,34 @@ const CustomerRequest = () => {
   const handleEditCusReq = (cusReq) => {
     dispatch(handleSetCusRequest(cusReq))
   }
+
+  const [showAssignModal, setShowAssignModal] = useState(false)
+  const [selectedRequestId, setSelectedRequestId] = useState(null)
+
+  const handleOpenAssignModal = (requestId) => {
+    setSelectedRequestId(requestId)
+    setShowAssignModal(true)
+  }
+
+  const handleChangeStatus = async (requestId, isResponse) => {
+    if (!isResponse) {
+      handleOpenAssignModal(requestId)
+    } else {
+      await dispatch(changeStatusCusRequest(requestId))
+      await dispatch(fetchCusRequests()) 
+    }
+  }
+
   return (
     <div>
       <div className="d-flex justify-content-between">
         <h2>List of Customer Request</h2>
-        {/* <BtnModal name="Create New Customer Request" iform="CusReqCreateForm" style="primary" /> */}
       </div>
+      <AssignSurveyorModal
+        show={showAssignModal}
+        handleClose={() => setShowAssignModal(false)}
+        requestId={selectedRequestId}
+      />
       <div className="row">
         <table className="table table-hover">
           <thead>
@@ -59,18 +85,15 @@ const CustomerRequest = () => {
                   <td>{item.requestTitle}</td>
                   <td>{item.serviceRequest}</td>
                   <td>{item.equipmentRequest}</td>
-                  <td>${item.deposit??0}</td>
+                  <td>${item.deposit ?? 0}</td>
                   <td>{item.dateResolve ? formatDateSystem(item.dateResolve) : 'Waiting'}</td>
                   <td className="d-flex" onClick={() => handleEditCusReq(item)}>
                     <button
                       className={`text-white me-1 btn btn-${item.isResponse ? 'success' : 'danger'}`}
-                      onClick={() => {
-                        dispatch(changeStatusCusRequest(item.requestId))
-                      }}
+                      onClick={() => handleChangeStatus(item.requestId, item.isResponse)}
                     >
                       <CIcon icon={item.isResponse ? cilCheck : cilWarning} />
                     </button>
-
                     <BtnModal name={<CIcon icon={cilUser} />} iform="CusReqDetail" style="outline-primary" />
                     <BtnModal
                       name={<i className="fa fa-edit"></i>}
@@ -107,6 +130,7 @@ const CustomerRequest = () => {
           </tbody>
         </table>
       </div>
+      <ToastContainer />
     </div>
   )
 }
