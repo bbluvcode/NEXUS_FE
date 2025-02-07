@@ -138,95 +138,95 @@ function Services() {
               <div key={plan.planId} className="mb-5">
                 <h4 className="card-title">{plan.planName}</h4>
 
-                {planFeeList.length <= 5 ? (
-                  <div className="container" style={{ maxWidth: '1200px' }}>
-                    <Carousel
-                      style={{
-                        width: '100%',
-                        margin: '0 auto',
-                        paddingLeft: '0',
-                        position: 'relative',
-                        zIndex: 0,
-                      }}
-                      showThumbs={false}
-                      infiniteLoop
-                      useKeyboardArrows
-                      showStatus={false}
-                      showIndicators={false}
-                      centerMode
-                      centerSlidePercentage={33.33} // Show 3 items at once
-                    >
-                      {planFeeList.map((fee) => (
-                        <div
-                          key={fee.planFeeId}
-                          style={{
-                            width: '70%',
-                            marginRight: 'auto',
-                            marginLeft: 'auto',
-                            marginTop: '20px',
-                            marginBottom: '20px',
-                            backgroundColor: 'white',
-                            boxSizing: 'border-box',
-                            transition: 'transform 0.3s ease-in-out',
-                            textAlign: 'center',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'space-between',
-                            borderRadius: '8px',
-                            border: '1px solid rgba(0, 0, 0, 0.125)',
-                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                            padding: '20px',
-                            position: 'relative',
-                            paddingBottom: '30px',  // Add extra padding to the bottom to prevent cutting off content
-                          }}
-                        >
-                          <div className="card-body">
-                            <p>
-                              <strong>{fee.planFeeName}:</strong> ${fee.rental.toFixed(2)}
-                            </p>
-                            <p>{fee.description}</p>
-                            <button
-                              className="btn btn-info btn-sm"
-                              onClick={() => alert(`View details for ${fee.planFeeName}`)}
-                            >
-                              View
-                            </button>
-                          </div>
+              {planFeeList.length <= 5 ? (
+                <div className="container" style={{ maxWidth: '1200px' }}>
+                  <Carousel
+                    style={{
+                      width: '100%',
+                      margin: '0 auto',
+                      paddingLeft: '0',
+                      position: 'relative',
+                      zIndex: 0,
+                    }}
+                    showThumbs={false}
+                    infiniteLoop
+                    useKeyboardArrows
+                    showStatus={false}
+                    showIndicators={false}
+                    centerMode
+                    centerSlidePercentage={33.33} // Show 3 items at once
+                  >
+                    {planFeeList.map((fee) => (
+                      <div
+                        key={fee.planFeeId}
+                        style={{
+                          width: '70%',
+                          marginRight: 'auto',
+                          marginLeft: 'auto',
+                          marginTop: '20px',
+                          marginBottom: '20px',
+                          backgroundColor: 'white',
+                          boxSizing: 'border-box',
+                          transition: 'transform 0.3s ease-in-out',
+                          textAlign: 'center',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          borderRadius: '8px',
+                          border: '1px solid rgba(0, 0, 0, 0.125)',
+                          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                          padding: '20px',
+                          position: 'relative',
+                          paddingBottom: '30px',  // Add extra padding to the bottom to prevent cutting off content
+                        }}
+                      >
+                        <div className="card-body">
+                          <p>
+                            <strong>{fee.planFeeName}:</strong> ${fee.rental.toFixed(2)}
+                          </p>
+                          <p>{fee.description}</p>
+                          <button
+                            className="btn btn-info btn-sm"
+                            onClick={() => alert(`View details for ${fee.planFeeName}`)}
+                          >
+                            View
+                          </button>
                         </div>
-                      ))}
-                    </Carousel>
-                  </div>
-                ) : (
-                  <div style={{ overflowX: 'auto', minHeight: '350px' }}>
-                    <table className="table table-hover table-bordered mt-3" style={{ tableLayout: 'fixed' }}>
-                      <thead>
-                        <tr>
-                          <th>Plan Fee Name</th>
-                          <th>Rental</th>
-                          <th>Description</th>
-                          <th>Action</th>
+                      </div>
+                    ))}
+                  </Carousel>
+                </div>
+              ) : (
+                <div style={{ overflowX: 'auto', minHeight: '350px' }}>
+                  <table className="table table-hover table-bordered mt-3" style={{ tableLayout: 'fixed' }}>
+                    <thead>
+                      <tr>
+                        <th>Plan Fee Name</th>
+                        <th>Rental</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {displayedFees.map((fee) => (
+                        <tr key={fee.planFeeId}>
+                          <td>{fee.planFeeName}</td>
+                          <td>${fee.rental.toFixed(2)}</td>
+                          <td>{fee.description}</td>
+                          <td>
+                            <button
+                              className="btn btn-primary btn-sm"
+                              onClick={() => alert(`Register for ${fee.planFeeName}`)}
+                            >
+                              Register
+                            </button>
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {displayedFees.map((fee) => (
-                          <tr key={fee.planFeeId}>
-                            <td>{fee.planFeeName}</td>
-                            <td>${fee.rental.toFixed(2)}</td>
-                            <td>{fee.description}</td>
-                            <td>
-                              <button
-                                className="btn btn-primary btn-sm"
-                                onClick={() => alert(`Register for ${fee.planFeeName}`)}
-                              >
-                                Register
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
 
                 {planFeeList.length > 5 && (
                   <Pagination className="justify-content-center">

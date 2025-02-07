@@ -8,8 +8,8 @@ import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { createCusRequest, handleSetCusRequest } from '../../../redux/customer/cusRequestSlice'
 import { DataContext } from '../../../context/DataContext'
 import { fetchRegions } from '../../../redux/others/regionSlice'
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 function CusReqCreateForm() {
   const dispatch = useDispatch()
@@ -30,9 +30,10 @@ function CusReqCreateForm() {
   }
 
   const { customerId, fullName, address } = customerInfo
-  
-  const { planName, securityDeposit } = serviceSelected
 
+  const { planFeeName, rental, plan } = serviceSelected
+  console.log('🚀 ~ CusReqCreateForm ~ plan:', plan.planName)
+  const planName = plan.planName
   const schema = yup.object().shape({
     requestTitle: yup.string().required('Request title is required'),
     serviceRequest: yup.string().required('Service request is required'),
@@ -49,12 +50,12 @@ function CusReqCreateForm() {
     resolver: yupResolver(schema),
     mode: 'onTouched',
     defaultValues: {
-      requestTitle: '',
-      serviceRequest: planName || '',
+      requestTitle: planName || '',
+      serviceRequest: planFeeName || '',
       equipmentRequest: '',
       regionId: '',
       installationAddress: address || '',
-      deposit: securityDeposit * rateDeposit || 0,
+      deposit: rental * rateDeposit || 0,
     },
   })
 
@@ -91,6 +92,7 @@ function CusReqCreateForm() {
             id="requestTitle"
             name="requestTitle"
             className="form-control"
+            value={planName}
             aria-invalid={!!errors.requestTitle}
           />
           {errors.requestTitle && <p className="text-danger">{errors.requestTitle.message}</p>}
@@ -106,7 +108,7 @@ function CusReqCreateForm() {
             id="serviceRequest"
             name="serviceRequest"
             className="form-control"
-            value={planName}
+            value={planFeeName}
             aria-invalid={!!errors.serviceRequest}
           />
           {errors.serviceRequest && <p className="text-danger">{errors.serviceRequest.message}</p>}
@@ -177,7 +179,7 @@ function CusReqCreateForm() {
             id="deposit"
             name="deposit"
             className="form-control"
-            value={securityDeposit * rateDeposit}
+            value={rental * rateDeposit}
             aria-invalid={!!errors.deposit}
             disabled
           />
