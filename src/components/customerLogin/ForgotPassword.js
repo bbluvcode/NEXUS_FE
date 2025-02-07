@@ -51,7 +51,7 @@ function ForgotPassword() {
                     focusRef.current?.focus();
                     return;
                 }
-                const response = await axios.post("http://localhost:5112/api/Auth/send-code", { email });
+                const response = await axios.post("http://localhost:5185/api/Auth/send-code", { email });
                 const expiryTime = response.data.data;
                 showToast("A verification code has been sent to your email", "success", 3000);
                 setTimeLeft(parseInt(expiryTime) * 60);
@@ -62,7 +62,7 @@ function ForgotPassword() {
                     setError("Code has expired. Please request a new code");
                     return;
                 }
-                const response = await axios.post("http://localhost:5112/api/Auth/check-code", { code });
+                const response = await axios.post("http://localhost:5185/api/Auth/check-code", { code });
                 const { data } = response.data;
                 localStorage.setItem("userIdForgot", data);
                 showToast(
@@ -97,7 +97,7 @@ function ForgotPassword() {
                     return;
                 }
                 const userId = localStorage.getItem("userIdForgot");
-                const response = await axios.post("http://localhost:5112/api/Auth/update-password", { userId, password: newPassword });
+                const response = await axios.post("http://localhost:5185/api/Auth/update-password", { userId, password: newPassword });
                 setStep(4);
                 showToast(
                     [
@@ -130,7 +130,7 @@ function ForgotPassword() {
 
     const handleResendCode = async () => {
         try {
-            const response = await axios.post("http://localhost:5112/api/Auth/send-code", { email }, { params: { isResend: true } });
+            const response = await axios.post("http://localhost:5185/api/Auth/send-code", { email }, { params: { isResend: true } });
             const expiryTime = response.data.data;
             setTimeLeft(parseInt(expiryTime) * 60);
             setError();
