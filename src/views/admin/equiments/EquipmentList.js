@@ -31,7 +31,7 @@ const EquipmentList = () => {
         <table className="table table-bordered table-hover">
           <thead className="thead-dark">
             <tr>
-              <th>ID</th>
+              {/* <th>ID</th> */}
               <th>Name</th>
               <th>Price</th>
               <th>Stock</th>
@@ -61,7 +61,7 @@ const EquipmentList = () => {
             {status === 'succeeded' && equipments?.length > 0
               ? equipments.map((item) => (
                   <tr key={item.equipmentId}>
-                    <td>{item.equipmentId}</td>
+                    {/* <td>{item.equipmentId}</td> */}
                     <td>{item.equipmentName}</td>
                     <td>${item.price.toFixed(2)}</td>
                     <td>{item.stockQuantity}</td>

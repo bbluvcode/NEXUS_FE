@@ -36,7 +36,7 @@ const InStockOrder = () => {
         <table className="table table-hover">
           <thead>
             <tr>
-              <th>Order ID</th>
+              {/* <th>Order ID</th> */}
               <th>Supplier</th>
               <th>Instock Date</th>
               <th>Pay Date</th>
@@ -51,7 +51,7 @@ const InStockOrder = () => {
             {inStockOrders.length > 0 ? (
               inStockOrders.map((order, index) => (
                 <tr key={index}>
-                  <td>{order.inStockOrderId}</td>
+                  {/* <td>{order.inStockOrderId}</td> */}
                   <td>{order.vendorName}</td>
                   <td>{formatDateSystem(order.instockDate)}</td>
                   <td>{formatDateSystem(order.payDate)}</td>

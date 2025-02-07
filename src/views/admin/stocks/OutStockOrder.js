@@ -35,7 +35,7 @@ const OutStockOrder = () => {
         <table className="table table-hover">
           <thead>
             <tr>
-              <th>Order ID</th>
+              {/* <th>Order ID</th> */}
               <th>Stock</th>
               <th>Employee</th>
               <th>Create Date</th>
@@ -50,7 +50,7 @@ const OutStockOrder = () => {
             {outStockOrders.length > 0 ? (
               outStockOrders.map((order, index) => (
                 <tr key={index}>
-                  <td>{order.outStockId}</td>
+                  {/* <td>{order.outStockId}</td> */}
                   <td>{order.stock?.stockName || 'N/A'}</td>
                   <td>{order.employee?.employeeName || 'N/A'}</td>
                   <td>{formatDateSystem(order.createDate)}</td>
