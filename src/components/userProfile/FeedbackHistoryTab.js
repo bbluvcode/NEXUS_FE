@@ -9,9 +9,9 @@ function FeedbackHistoryTab({ requests }) {
     return (
         <TableContainer component={Paper} sx={{ mt: 2, background: "transparent", }}>
             {(!requests || requests.length === 0) ? (
-                <Typography 
-                    variant="h6" 
-                    align="center" 
+                <Typography
+                    variant="h6"
+                    align="center"
                     sx={{ p: 4, color: "text.secondary" }}
                 >
                     No feedback history yet.
@@ -34,7 +34,16 @@ function FeedbackHistoryTab({ requests }) {
                                 <TableCell>{index + 1}</TableCell>
                                 <TableCell align="center">{request.title}</TableCell>
                                 <TableCell align="center">{request.feedBackContent}</TableCell>
-                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>{request.date}</TableCell>
+                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
+                                    {new Date(request.date).toLocaleString("en-GB", {
+                                        year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                    })}
+                                </TableCell>
                                 <TableCell align="center">{request.status ? "Processed" : "Not yet"}</TableCell>
                             </TableRow>
                         ))}

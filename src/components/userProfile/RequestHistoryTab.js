@@ -9,9 +9,9 @@ function RequestHistoryTab({ requests }) {
     return (
         <TableContainer component={Paper} sx={{ mt: 2, background: "transparent", }}>
             {(!requests || requests.length === 0) ? (
-                <Typography 
-                    variant="h6" 
-                    align="center" 
+                <Typography
+                    variant="h6"
+                    align="center"
                     sx={{ p: 4, color: "text.secondary" }}
                 >
                     No requests history yet.
@@ -36,8 +36,17 @@ function RequestHistoryTab({ requests }) {
                                 <TableCell align="center">{request.requestTitle}</TableCell>
                                 <TableCell align="center">{request.serviceRequest}</TableCell>
                                 <TableCell align="center">{request.equipmentRequest}</TableCell>
-                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>{request.dateCreate}</TableCell>
-                                <TableCell align="center">{request.isResponse ? "Processed" : "Processing"}</TableCell>
+                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
+                                    {new Date(request.dateCreate).toLocaleString("en-GB", {
+                                        year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                    })}
+                                </TableCell>
+                                <TableCell align="center">{request.isResponse ? "Processed" : "Pending"}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

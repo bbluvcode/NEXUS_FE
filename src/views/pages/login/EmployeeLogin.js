@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthContext"; // Import useAuth
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   CButton,
   CCard,
@@ -114,7 +114,7 @@ const EmployeeLogin = () => {
                       </CCol>
                       <CCol xs={6} className="text-right">
                         <CButton color="link" className="px-0">
-                          Forgot password?
+                          <Link to="/forgotpassword">Forget Password?</Link>
                         </CButton>
                       </CCol>
                     </CRow>

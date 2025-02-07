@@ -79,7 +79,7 @@ function Login() {
             await loginCustomer(email, password);
             Swal.fire({
                 title: 'Login Successful!',
-                text: 'Redirecting to the home page...',
+                text: 'Welcome to NEXUS System...',
                 icon: 'success',
                 confirmButtonText: 'OK',
             }).then(() => navigate('/'));

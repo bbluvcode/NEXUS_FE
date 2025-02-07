@@ -9,9 +9,9 @@ function SupportHistoryTab({ requests }) {
     return (
         <TableContainer component={Paper} sx={{ mt: 2, background: "transparent", }}>
             {(!requests || requests.length === 0) ? (
-                <Typography 
-                    variant="h6" 
-                    align="center" 
+                <Typography
+                    variant="h6"
+                    align="center"
                     sx={{ p: 4, color: "text.secondary" }}
                 >
                     No requests history yet.
@@ -35,8 +35,26 @@ function SupportHistoryTab({ requests }) {
                                 <TableCell>{index + 1}</TableCell>
                                 <TableCell align="center">{request.title}</TableCell>
                                 <TableCell align="center">{request.detailContent}</TableCell>
-                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>{request.dateRequest}</TableCell>
-                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>{request.dateResolved || "N/A"}</TableCell>
+                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
+                                    {new Date(request.dateRequest).toLocaleString("en-GB", {
+                                        year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                    })}
+                                </TableCell>
+                                <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>
+                                    {new Date(request.dateResolved).toLocaleString("en-GB", {
+                                        year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                    }) || "N/A"}
+                                </TableCell>
                                 <TableCell align="center">{request.isResponse ? "Processed" : "Processing"}</TableCell>
                             </TableRow>
                         ))}

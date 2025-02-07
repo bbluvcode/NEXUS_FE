@@ -122,30 +122,30 @@ const ClientHeader = () => {
                             <CIcon icon={cilEnvelopeOpen} className="me-2" />
                             Messages
                             <CBadge color="success" className="ms-2">
-                              42
+                              0
                             </CBadge>
                           </CDropdownItem>
                           <CDropdownItem onClick={() => navigate('/profile')}>
                             <CIcon icon={cilUser} className="me-2" />
                             Profile
                           </CDropdownItem>
-                          <CDropdownItem onClick={() => navigate('/changepassword')}>
+                          <CDropdownItem onClick={() => navigate('/profile?tab=change-password')}>
                             <CIcon icon={cilPenNib} className="me-2" />
                             Change Password
                           </CDropdownItem>
-                          <CDropdownItem onClick={() => navigate('/requesthistory')}>
+                          <CDropdownItem onClick={() => navigate('/profile?tab=account-connection')}>
+                            <CIcon icon={cilCart} className="me-2" />
+                            Account And Connection
+                          </CDropdownItem>
+                          <CDropdownItem onClick={() => navigate('/profile?tab=request-history')}>
                             <CIcon icon={cilBasket} className="me-2" />
                             Request History
                           </CDropdownItem>           
-                          <CDropdownItem onClick={() => navigate('/orderhistory')}>
-                            <CIcon icon={cilCart} className="me-2" />
-                            Order History
-                          </CDropdownItem>
-                          <CDropdownItem onClick={() => navigate('/supporthistory')}>
+                          <CDropdownItem onClick={() => navigate('/profile?tab=support-history')}>
                             <CIcon icon={cilPaperPlane} className="me-2" />
                             Support History
                           </CDropdownItem>
-                          <CDropdownItem onClick={() => navigate('/feedbackhistory')}>
+                          <CDropdownItem onClick={() => navigate('/profile?tab=feedback-history')}>
                             <CIcon icon={cilNewspaper} className="me-2" />
                             Feedback History
                           </CDropdownItem>
