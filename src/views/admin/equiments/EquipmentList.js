@@ -40,7 +40,7 @@ const EquipmentList = () => {
               <th>Vendor</th>
               <th>Status</th>
               <th>Discount</th>
-              <th>Actions</th>
+              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
@@ -70,13 +70,13 @@ const EquipmentList = () => {
                     <td>{item.vendor?.vendorName || 'Unknown'}</td>
                     <td>{item.status ? 'Active' : 'Inactive'}</td>
                     <td>{item.discount?.discountName || 'No Discount'}</td>
-                    <td onClick={() => handleEditEquipment(item)}>
-                      {/* <BtnModal
+                    {/* <td onClick={() => handleEditEquipment(item)}>
+                      <BtnModal
                         name={<i className="fa fa-edit"></i>}
                         iform="EquipmentEditForm"
                         style="warning"
-                      /> */}
-                    </td>
+                      />
+                    </td> */}
                   </tr>
                 ))
               : status === 'succeeded' && (

@@ -44,7 +44,7 @@ const InStockOrder = () => {
               <th>Tax</th>
               <th>Currency</th>
               <th>Status</th>
-              <th></th>
+              {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
@@ -60,12 +60,12 @@ const InStockOrder = () => {
                   <td>{order.currencyUnit}</td>
                   <td>{order.isPay ? 'Paid' : 'Pending'}</td>
                   <td onClick={() => handleEditInStockOrder(order)}>
-                    <BtnModal
+                    {/* <BtnModal
                       name={<i className="fa fa-edit"></i>}
                       iform="InStockOrderEditForm"
                       style="warning"
                       order={order}
-                    />
+                    /> */}
                   </td>
                 </tr>
               ))

@@ -43,7 +43,7 @@ const OutStockOrder = () => {
               <th>Total</th>
               <th>Tax</th>
               <th>Status</th>
-              <th></th>
+              {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
@@ -59,12 +59,12 @@ const OutStockOrder = () => {
                   <td>{formatCurrency(order.tax)}</td>
                   <td>{order.isPay ? 'Paid' : 'Pending'}</td>
                   <td onClick={() => handleEditOutStockOrder(order)}>
-                    <BtnModal
+                    {/* <BtnModal
                       name={<i className="fa fa-edit"></i>}
                       iform="OutStockOrderEditForm"
                       style="warning"
                       order={order}
-                    />
+                    /> */}
                   </td>
                 </tr>
               ))

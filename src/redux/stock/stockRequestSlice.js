@@ -11,7 +11,6 @@ export const fetchStockRequests = createAsyncThunk(
       const response = await axios.get(apiInStockRequest)
       return response.data.data
     } catch (error) {
-      console.error('Error fetching stock requests:', error)
       return rejectWithValue(error.response?.data?.message || 'Failed to load stock requests.')
     }
   },
@@ -25,7 +24,6 @@ export const fetchStockRequestById = createAsyncThunk(
       const response = await axios.get(`${apiInStockRequest}/${id}`)
       return response.data.data
     } catch (error) {
-      console.error('Error fetching stock request:', error)
       return rejectWithValue(error.response?.data?.message || 'Failed to load stock request.')
     }
   },
@@ -39,7 +37,6 @@ export const createStockRequest = createAsyncThunk(
       const response = await axios.post(apiInStockRequest, stockRequest)
       return response.data.data
     } catch (error) {
-      console.error('Error creating stock request:', error)
       return rejectWithValue(error.response?.data?.message || 'Failed to create stock request.')
     }
   },
@@ -53,7 +50,6 @@ export const updateStockRequest = createAsyncThunk(
       const response = await axios.put(`${apiInStockRequest}/${id}`, stockRequest)
       return response.data.data
     } catch (error) {
-      console.error('Error updating stock request:', error)
       return rejectWithValue(error.response?.data?.message || 'Failed to update stock request.')
     }
   },
@@ -62,23 +58,14 @@ export const updateStockRequest = createAsyncThunk(
 const stockRequestSlice = createSlice({
   name: 'stockRequests',
   initialState: {
-    items: [],  // Holds the list of stock requests
-    stockRequest: {
-      inStockRequestId: null,
-      employeeId: null,
-      employee: null,
-      createDate: '',
-      totalNumber: 0,
-      inStockRequestDetails: [],
-      inStockOrders: [],
-    },
-    status: 'idle',  // Status of the request (loading, succeeded, failed)
-    error: null,  // Holds error messages
+    items: [],
+    stockRequest: null,
+    status: 'idle',
+    error: null,
   },
   reducers: {
-    handleSetStockRequest: (state, action) => {
+    setStockRequest: (state, action) => {
       state.stockRequest = action.payload
-      console.log('Selected stock request:', state.stockRequest)
     },
   },
   extraReducers: (builder) => {
@@ -88,11 +75,11 @@ const stockRequestSlice = createSlice({
       })
       .addCase(fetchStockRequests.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        state.items = action.payload  // Store fetched stock requests
+        state.items = action.payload
       })
       .addCase(fetchStockRequests.rejected, (state, action) => {
         state.status = 'failed'
-        state.error = action.payload  // Store error if any
+        state.error = action.payload
       })
       .addCase(fetchStockRequestById.pending, (state) => {
         state.status = 'loading'
@@ -110,7 +97,7 @@ const stockRequestSlice = createSlice({
       })
       .addCase(createStockRequest.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        state.items.unshift(action.payload)  // Add new stock request to the top
+        state.items.unshift(action.payload)
       })
       .addCase(createStockRequest.rejected, (state, action) => {
         state.status = 'failed'
@@ -135,5 +122,5 @@ const stockRequestSlice = createSlice({
   },
 })
 
-export const { handleSetStockRequest } = stockRequestSlice.actions
+export const { setStockRequest } = stockRequestSlice.actions
 export default stockRequestSlice.reducer
