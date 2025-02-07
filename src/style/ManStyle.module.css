@@ -1,4 +1,8 @@
+
 /* Center the container in the middle of the screen */
+.error{
+  color: red;
+}
 .containerDetail {
   display: flex;
   justify-content: center;
@@ -269,4 +273,243 @@
 .carouselPlanFeeContainer:hover .controlPrev,
 .carouselPlanFeeContainer:hover .controlNext {
   opacity: 1; /* Arrows visible on hover */
+}
+/*News*/
+.addNewsContainer{
+  margin-bottom: 10px;
+}
+/* Cấu trúc chính của form */
+.formContainer {
+  display: flex; /* Sử dụng Flexbox để xếp hai bảng cạnh nhau */
+  gap: 10px; /* Khoảng cách giữa các bảng */
+}
+
+/* Bảng nhập liệu */
+.inputForm {
+  flex: 1; /* Chiếm phần không gian còn lại */
+}
+
+/* Các ô nhập liệu (Title, Content, Employee) */
+.titleInput,
+.editorGroup,
+.employeeSelect {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease-in-out; /* Thêm hiệu ứng chuyển tiếp mượt mà */
+  margin-top: 10px; /* Thêm khoảng cách trên */
+  margin-bottom: 10px; /* Thêm khoảng cách dưới */
+}
+
+/* Hiệu ứng cho các ô khi hover */
+.titleInput:hover,
+.editorGroup:hover,
+.employeeSelect:hover {
+  border-color: #0056b3; /* Đổi màu viền khi hover */
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4); /* Thêm bóng nhẹ khi hover */
+  transform: translateY(-2px); /* Di chuyển ô lên một chút khi hover */
+}
+
+/* Hiệu ứng khi submit */
+.submitButton {
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease; /* Thêm animation cho nút submit */
+}
+
+.submitButton:hover {
+  background-color: #45a049;
+}
+
+.errorText {
+  color: red;
+  font-size: 0.875rem;
+}
+
+/* Bảng hiển thị preview */
+/* Bảng hiển thị preview */
+.previewContainer {
+  flex: 1; /* Chiếm phần không gian còn lại */
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transform: translateX(0); /* Khi phần tử được hiển thị, nó sẽ ở vị trí ban đầu */
+  opacity: 1; /* Phần tử sẽ hiển thị khi có lớp này */
+  transition: transform 0.5s ease, opacity 0.5s ease; /* Thêm hiệu ứng trượt */
+}
+
+/* Khi preview bị ẩn (isPreviewVisible là true) */
+.previewContainerHidden {
+  transform: translateX(100%); /* Đẩy phần tử ra ngoài màn hình */
+  opacity: 0; /* Làm cho phần tử không nhìn thấy khi ẩn */
+}
+
+
+
+/* Thêm style cho container chứa các nút "Back" và "Preview" */
+.buttonContainer {
+  display: flex;
+  justify-content: space-between; /* Đảm bảo khoảng cách giữa các nút */
+  margin-bottom: 0px;
+  align-items: center; /* Căn giữa các nút dọc theo chiều cao */
+}
+
+/* Style cho nút Preview */
+/* Style cho nút Preview */
+.togglePreviewButton {
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease-in-out; /* Thêm transition để hiệu ứng mượt mà */
+}
+
+/* Hiệu ứng khi hover */
+.togglePreviewButton:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4); /* Thêm bóng */
+  transform: translateY(-3px); /* Hiệu ứng nâng nút lên khi hover */
+}
+
+
+/* Thêm hiệu ứng khi hover vào button */
+.togglePreviewButton:active {
+  transform: translateY(1px); /* Khi nhấn vào nút, nó sẽ hạ xuống một chút */
+}
+
+
+
+
+/* Media Queries cho màn hình nhỏ */
+@media (max-width: 800px) {
+  .formContainer {
+    flex-direction: column; /* Đẩy các bảng xuống dưới nhau khi màn hình nhỏ */
+  }
+
+  .previewContainer {
+    margin-top: 20px; /* Thêm khoảng cách giữa bảng nhập liệu và bảng preview */
+  }
+
+  .inputForm, .previewContainer {
+    flex: none; /* Đảm bảo không gian của các bảng không bị co lại quá nhiều */
+  }
+}
+/* ManStyle.module.css */
+.planDetailContainer {
+  padding: 40px;
+}
+
+.planFeeCard {
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.planFeeInfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.planFeeItem {
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  text-align: center;
+}
+
+.planFeeItem strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.planDetails {
+  font-size: 14px;
+  color: #555;
+  margin-top: 15px;
+}
+
+.registerBtn {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.registerBtn button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.registerBtn button:hover {
+  background-color: #0056b3;
+}
+/* ManStyle.module.css */
+
+/* Kiểu cho các card trong carousel */
+.planFeeSliderItem {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Kiểu cho các phần tử thông tin trong planFee */
+.planFeeInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.planFeeItem {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.registerBtn button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.registerBtn button:hover {
+  background-color: #0056b3;
+}
+/* Điều chỉnh kích thước carousel */
+.planFeeSliderItem {
+  width: 70%; /* Thay đổi độ rộng của mỗi item trong carousel */
+  margin: 0 auto; /* Căn giữa các item */
+  transition: transform 0.3s ease; /* Thêm hiệu ứng chuyển động mượt mà */
+}
+
+/* Điều chỉnh khoảng cách giữa phần "Plan Fees" và carousel */
+.planDetailContainer {
+  margin-bottom: 40px; /* Khoảng cách giữa các phần */
+}
+
+/* Điều chỉnh carousel */
+.carouselContainerService {
+  margin-top: 100px; /* Khoảng cách từ phần "Plan Fees" tới carousel */
 }

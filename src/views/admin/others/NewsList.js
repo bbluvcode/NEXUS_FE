@@ -1,73 +1,97 @@
-/* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import { useDataContext } from '../../../context/DataContext'
+import { getAllEmployees } from '../../../services/employeeService'
+import { useNavigate } from 'react-router-dom'
 
-// Dữ liệu tin tức giả lập (bạn có thể thay đổi theo dữ liệu thật nếu cần)
-const mockNewsData = [
-  {
-    NewsID: 1,
-    Title: 'Tin tức 1',
-    EmpID: 'emp123',
-    Content: 'Nội dung tin tức 1',
-    CreateDate: '2025-01-01T12:00:00',
-    Status: true,
-  },
-  {
-    NewsID: 2,
-    Title: 'Tin tức 2',
-    EmpID: 'emp123',
-    Content: 'Nội dung tin tức 2',
-    CreateDate: '2025-01-02T12:00:00',
-    Status: false,
-  },
-  {
-    NewsID: 3,
-    Title: 'Tin tức 3',
-    EmpID: 'emp124',
-    Content: 'Nội dung tin tức 3',
-    CreateDate: '2025-01-03T12:00:00',
-    Status: true,
-  },
-];
+const API_BASE_URL = 'http://localhost:5185/api/news'
 
 const NewsList = () => {
-  const [news, setNews] = useState([]);
+  const [newsList, setNewsList] = useState([])
+  const { employees, setEmployees } = useDataContext()
+  const navigate = useNavigate()
 
-  // Gán cứng dữ liệu tin tức
   useEffect(() => {
-    setNews(mockNewsData);
-  }, []);
+    const fetchNews = async () => {
+      try {
+        const newsResponse = await axios.get(API_BASE_URL)
+        const employeeResponse = await getAllEmployees()
+        console.log(newsResponse.data)
+        setNewsList(newsResponse.data)
+        setEmployees(employeeResponse.data)
+      } catch (error) {
+        console.error('Error fetching news', error)
+      }
+    }
+
+    fetchNews()
+  }, [setEmployees])
+
+  // Hàm để lọc các thẻ <img> trong nội dung
+  const extractImages = (htmlContent) => {
+    const doc = new DOMParser().parseFromString(htmlContent, 'text/html')
+    const images = doc.querySelectorAll('img')
+    return Array.from(images)
+  }
+
+  // Hàm để chuyển hướng tới trang chỉnh sửa
+  const handleEdit = (newsId) => {
+    navigate(`/admin/EditNews/${newsId}`)
+  }
 
   return (
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">News List</h2>
-
-      {/* Hiển thị các tin tức */}
+    <div className="container mt-4">
+      <h1 className="text-center mb-4">News List</h1>
+      <button className="btn btn-primary mb-3" onClick={() => navigate('/admin/AddNews')}>
+        Add Shop
+      </button>
       <table className="table table-hover table-bordered">
         <thead>
           <tr>
-            <th>NewsID</th>
             <th>Title</th>
-            <th>EmpID</th>
-            <th>Content</th>
-            <th>CreateDate</th>
+            <th>Images</th>
+            <th>Employee</th>
             <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {news.map((item, index) => (
-            <tr key={item.NewsID}>
-              <td>{item.NewsID}</td>
-              <td>{item.Title}</td>
-              <td>{item.EmpID}</td>
-              <td>{item.Content}</td>
-              <td>{new Date(item.CreateDate).toLocaleString()}</td>
-              <td>{item.Status ? 'Active' : 'Inactive'}</td>
-            </tr>
-          ))}
+          {newsList.map((news) => {
+            const employee = employees.find((emp) => emp.employeeId === news.employeeId)
+            const images = extractImages(news.content)
+            const status = news.status
+
+            return (
+              <tr key={news.newsId}>
+                <td>{news.title}</td>
+                <td>
+                  {images.length > 0 ? (
+                    images.map((image, index) => (
+                      <img
+                        key={index}
+                        src={image.src}
+                        alt={`news-image-${index}`}
+                        style={{ width: '100px', height: 'auto', margin: '5px' }}
+                      />
+                    ))
+                  ) : (
+                    <p>No images found</p>
+                  )}
+                </td>
+                <td>{employee ? employee.fullName : 'Unknown Employee'}</td>
+                <td>{status ? 'Active' : 'Inactive'}</td>
+                <td>
+                  <button onClick={() => handleEdit(news.newsId)} className="btn btn-primary">
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default NewsList;
+export default NewsList
