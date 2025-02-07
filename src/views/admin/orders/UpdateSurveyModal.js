@@ -66,9 +66,9 @@ const UpdateSurveyModal = ({ show, handleClose, orderId, onSurveyUpdate }) => {
 
     const updateSurveyDto = {
       SurveyStatus: surveyStatus,
-      PlanFeeId: selectedPlanFeeId || null, 
-      EquipmentId: equipmentId || null, 
-      NumberOfConnections: numberOfConnections ? Number(numberOfConnections) : null, 
+      PlanFeeId: selectedPlanFeeId || null,
+      EquipmentId: equipmentId || null,
+      NumberOfConnections: numberOfConnections ? Number(numberOfConnections) : null,
       CancellationReason: cancellationReason || null,
     };
     try {
@@ -93,7 +93,7 @@ const UpdateSurveyModal = ({ show, handleClose, orderId, onSurveyUpdate }) => {
       <Modal.Body>
         {error && <div className="alert alert-danger">{error}</div>}
         <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="formSurveyStatus">
+          <Form.Group controlId="formSurveyStatus" className='mb-2'>
             <Form.Label>Survey Status</Form.Label>
             <Form.Control as="select" value={surveyStatus} onChange={(e) => setSurveyStatus(e.target.value)}>
               <option value="">Select Status</option>
@@ -105,7 +105,33 @@ const UpdateSurveyModal = ({ show, handleClose, orderId, onSurveyUpdate }) => {
           {surveyStatus === 'Invalid' && (
             <Form.Group controlId="formCancellationReason">
               <Form.Label>Cancellation Reason</Form.Label>
-              <Form.Control type="text" value={cancellationReason} onChange={(e) => setCancellationReason(e.target.value)} />
+              {['Out of Coverage Area', 'Technical Limitations', 'Service Unavailable', 'Plan Mismatch'].map((reason, index) => (
+                <Form.Check
+                  key={index}
+                  type="radio"
+                  label={reason}
+                  name="cancellationReason"
+                  value={reason}
+                  checked={cancellationReason === reason}
+                  onChange={(e) => setCancellationReason(e.target.value)}
+                />
+              ))}
+              <Form.Check
+                type="radio"
+                label="Other"
+                name="cancellationReason"
+                value="Other"
+                checked={!['Out of Coverage Area', 'Technical Limitations', 'Service Unavailable', 'Plan Mismatch'].includes(cancellationReason)}
+                onChange={() => setCancellationReason('')}
+              />
+              {cancellationReason === '' && (
+                <Form.Control
+                  type="text"
+                  placeholder="Enter custom reason"
+                  value={cancellationReason}
+                  onChange={(e) => setCancellationReason(e.target.value)}
+                />
+              )}
             </Form.Group>
           )}
 
@@ -133,12 +159,12 @@ const UpdateSurveyModal = ({ show, handleClose, orderId, onSurveyUpdate }) => {
             </>
           )}
 
-          <Button variant="primary" type="submit" disabled={loading}>
+          <Button variant="primary" type="submit" disabled={loading} className='mt-2'>
             {loading ? 'Updating...' : 'Update'}
           </Button>
         </Form>
       </Modal.Body>
-      <ToastContainer/>
+      <ToastContainer />
     </Modal>
   );
 };

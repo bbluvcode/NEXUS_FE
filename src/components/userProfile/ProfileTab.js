@@ -125,7 +125,7 @@ function ProfileTab({ user, updateUser }) {
                                 value={localUser.gender}
                                 onChange={handleChange}
                                 title="Gender"
-                                dis={!editMode}
+                                dis={true}
                                 content={[
                                     <MenuItem key="male" value="Male">Male</MenuItem>,
                                     <MenuItem key="female" value="Female">Female</MenuItem>,
