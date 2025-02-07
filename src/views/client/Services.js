@@ -159,12 +159,13 @@ function Services() {
                           <td>${fee.rental.toFixed(2)}</td>
                           <td>{fee.description}</td>
                           <td>
-                            <button
+                            {/* <button
                               className="btn btn-primary btn-sm"
                               onClick={() => alert(`Register for ${fee.planFeeName}`)}
                             >
                               Register
-                            </button>
+                            </button> */}
+                            <BtnReq serviceSelected={fee}/>
                           </td>
                         </tr>
                       ))}

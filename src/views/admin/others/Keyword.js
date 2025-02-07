@@ -1,16 +1,33 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchKeywords } from '../../../redux/others/keyWordSlice';
-import BtnModal from '../../../components/button/BtnModal';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchKeywords, deleteKeyword } from '../../../redux/others/keyWordSlice'
+import BtnModal from '../../../components/button/BtnModal'
+import Swal from 'sweetalert2'
 
 const Keyword = () => {
-  const dispatch = useDispatch();
-  const { items: keywords, loading, error } = useSelector((state) => state.keywords);
+  const dispatch = useDispatch()
+  const { items: keywords, loading, error } = useSelector((state) => state.keywords)
 
   useEffect(() => {
-    dispatch(fetchKeywords());
-  }, [dispatch]);
+    dispatch(fetchKeywords())
+  }, [dispatch])
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You won’t be able to revert this!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteKeyword(id))
+      }
+    })
+  }
 
   return (
     <div>
@@ -28,7 +45,8 @@ const Keyword = () => {
               <tr>
                 <th>Id</th>
                 <th>Word</th>
-                <th>Status</th>
+                {/* <th>Status</th> */}
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -37,12 +55,22 @@ const Keyword = () => {
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.words}</td>
-                    <td>{item.status?"active":"disactive"}</td>
+                    {/* <td>{item.status ? 'Active' : 'Inactive'}</td> */}
+                    <td>
+                      <button
+                        className="btn btn-danger btn-sm text-white"
+                        onClick={() => handleDelete(item.id)}
+                      >
+                          <i className="fa fa-trash" aria-hidden="true" />
+                      </button>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="text-center">No keywords available</td>
+                  <td colSpan="4" className="text-center">
+                    No keywords available
+                  </td>
                 </tr>
               )}
             </tbody>
@@ -50,7 +78,7 @@ const Keyword = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Keyword;
+export default Keyword
