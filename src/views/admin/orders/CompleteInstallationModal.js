@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 const CompleteInstallationModal = ({ show, handleClose, installationId, onComplete }) => {
     const [notes, setNotes] = useState('');
     const [loading, setLoading] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState('');
 
     const handleCompleteInstallation = async () => {
         if (!installationId) {
@@ -15,10 +16,14 @@ const CompleteInstallationModal = ({ show, handleClose, installationId, onComple
             return;
         }
         setLoading(true);
+        const finalNotes = paymentMethod
+            ? `${notes}\nPayment Method: ${paymentMethod}`
+            : notes;
+
         try {
             const response = await axios.put(
                 `http://localhost:5185/api/ServiceOrder/complete-installation/${installationId}`,
-                { notes }
+                { notes: finalNotes }
             );
 
             if (response.status === 200) {
@@ -48,6 +53,25 @@ const CompleteInstallationModal = ({ show, handleClose, installationId, onComple
                             rows={3}
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="formPaymentMethod" className="mt-3">
+                        <Form.Label>Payment Method</Form.Label>
+                        <Form.Check
+                            type="radio"
+                            label="Cash"
+                            name="paymentMethod"
+                            value="Cash"
+                            checked={paymentMethod === "Cash"}
+                            onChange={(e) => setPaymentMethod(e.target.value)}
+                        />
+                        <Form.Check
+                            type="radio"
+                            label="Bank Transfer"
+                            name="paymentMethod"
+                            value="Bank Transfer"
+                            checked={paymentMethod === "Bank Transfer"}
+                            onChange={(e) => setPaymentMethod(e.target.value)}
                         />
                     </Form.Group>
                 </Form>

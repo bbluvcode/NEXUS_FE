@@ -14,7 +14,7 @@ const AssignTechnicianModal = ({ show, handleClose, orderId, onTechnicianAssigne
       axios.get(`http://localhost:5185/api/ServiceOrder/get-technicals/${orderId}`)
         .then((res) => {
           if (res.status === 200) {
-            setTechnicians(res.data.data);
+            setTechnicians(res.data.data) ;
           }
         })
         .catch((err) => {
@@ -35,8 +35,9 @@ const AssignTechnicianModal = ({ show, handleClose, orderId, onTechnicianAssigne
     })
     .then((res) => {
       if (res.status === 200) {
+        const { installationOrderId } = res.data.data.installationId;
         toast.success("Technician assigned successfully");
-        onTechnicianAssigned(orderId, "Technician Assigned");
+        onTechnicianAssigned(orderId, "Technician Assigned", installationOrderId);
         handleClose();
       }
     })
