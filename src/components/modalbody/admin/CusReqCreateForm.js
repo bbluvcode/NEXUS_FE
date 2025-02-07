@@ -80,7 +80,7 @@ function CusReqCreateForm() {
 
   return (
     <div className="request-create-form">
-      <h2 className="text-center">Create New Request</h2>
+      <h2 className="text-center">Register New Plan</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
         <div className="col-md-6">
           <label htmlFor="requestTitle" className="form-label">

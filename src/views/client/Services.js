@@ -191,6 +191,12 @@ function Services() {
                           >
                             View
                           </button>
+                          <button
+                            className="btn btn-info btn-sm"
+                            onClick={() => alert(`View details for ${fee.planFeeName}`)}
+                          >
+                            View
+                          </button>
                         </div>
                       </div>
                     ))}
@@ -214,12 +220,7 @@ function Services() {
                           <td>${fee.rental.toFixed(2)}</td>
                           <td>{fee.description}</td>
                           <td>
-                            <button
-                              className="btn btn-primary btn-sm"
-                              onClick={() => alert(`Register for ${fee.planFeeName}`)}
-                            >
-                              Register
-                            </button>
+                          <BtnReq serviceSelected={fee}/>
                           </td>
                         </tr>
                       ))}

@@ -3,14 +3,32 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchCustomers, handleSetCustomer } from '../../../redux/customer/customerSlice'
 import BtnModal from '../../../components/button/BtnModal'
+import ReactPaginate from 'react-paginate'
 
 const CustomerList = () => {
   const dispatch = useDispatch()
   const customers = useSelector((state) => state.customers.items)
 
+    //pagination
+    const [filteredOrders, setFilteredOrders] = useState([])
+    const [pageNumber, setPageNumber] = useState(0)
+    const itemsPerPage = 8
+    const pagesVisited = pageNumber * itemsPerPage
+    const pageCount = Math.ceil(filteredOrders.length / itemsPerPage)
+    const displayOrders = filteredOrders.slice(pagesVisited, pagesVisited + itemsPerPage)
+    const handlePageChange = ({ selected }) => {
+      setPageNumber(selected)
+    }
+
+
   useEffect(() => {
     dispatch(fetchCustomers())
   }, [dispatch])
+
+  useEffect(() => {
+      setFilteredOrders(customers)
+    }, [customers])
+
 
   const formatDateSystem = (dateString) => {
     const date = new Date(dateString)
@@ -44,8 +62,8 @@ const CustomerList = () => {
             </tr>
           </thead>
           <tbody>
-            {customers.length > 0 ? (
-              customers.map((item, index) => (
+            {displayOrders.length > 0 ? (
+              displayOrders.map((item, index) => (
                 <tr key={index}>
                   <td>{item.customerId}</td>
                   <td>{item.fullName}</td>
@@ -93,6 +111,22 @@ const CustomerList = () => {
             )}
           </tbody>
         </table>
+      </div>
+      <div className="d-flex justify-content-center mt-3">
+        <ReactPaginate
+          previousLabel={<i className="fa fa-chevron-left"></i>}
+          nextLabel={<i className="fa fa-chevron-right"></i>}
+          pageCount={pageCount}
+          onPageChange={handlePageChange}
+          containerClassName={'pagination justify-content-center'}
+          activeClassName={'active'}
+          pageClassName={'page-item'}
+          pageLinkClassName={'page-link'}
+          previousClassName={'page-item'}
+          nextClassName={'page-item'}
+          previousLinkClassName={'page-link'}
+          nextLinkClassName={'page-link'}
+        />
       </div>
     </div>
   )

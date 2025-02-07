@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   changeStatusFeedback,
@@ -11,6 +11,7 @@ import CIcon from '@coreui/icons-react'
 import { cilAssistiveListeningSystem, cilMouthSlash, cilUser } from '@coreui/icons'
 import { useNavigate } from 'react-router-dom'
 import { fetchKeywords } from '../../../redux/others/keyWordSlice'
+import ReactPaginate from 'react-paginate'
 
 const Feedbacks = () => {
   const navigate = useNavigate()
@@ -18,10 +19,25 @@ const Feedbacks = () => {
   const feedbacks = useSelector((state) => state.feedbacks.items)
   const keywords = useSelector((state) => state.keywords.items)
 
+  //pagination
+  const [filteredOrders, setFilteredOrders] = useState([])
+  const [pageNumber, setPageNumber] = useState(0)
+  const itemsPerPage = 8
+  const pagesVisited = pageNumber * itemsPerPage
+  const pageCount = Math.ceil(filteredOrders.length / itemsPerPage)
+  const displayOrders = filteredOrders.slice(pagesVisited, pagesVisited + itemsPerPage)
+  const handlePageChange = ({ selected }) => {
+    setPageNumber(selected)
+  }
+
   useEffect(() => {
     dispatch(fetchFeedbacks())
     dispatch(fetchKeywords())
   }, [dispatch])
+
+  useEffect(() => {
+    setFilteredOrders(feedbacks)
+  }, [feedbacks])
 
   const formatDateSystem = (dateString) => {
     const date = new Date(dateString)
@@ -56,8 +72,8 @@ const Feedbacks = () => {
             </tr>
           </thead>
           <tbody>
-            {feedbacks.length > 0 ? (
-              feedbacks.map((item) => (
+            {displayOrders.length > 0 ? (
+              displayOrders.map((item) => (
                 <tr key={item.feedBackId}>
                   <td>{item.feedBackId}</td>
                   <td>{formatDateSystem(item.date)}</td>
@@ -65,10 +81,8 @@ const Feedbacks = () => {
                   <td>{maskSensitiveWords(item.feedBackContent, keywords)}</td>
                   <td>
                     {keywords.some((keyword) =>
-                      item.feedBackContent.toLowerCase().includes(keyword.words)
-                    ) && (
-                      <span className="badge bg-warning text-dark">Sensitive</span>
-                    )}
+                      item.feedBackContent.toLowerCase().includes(keyword.words),
+                    ) && <span className="badge bg-warning text-dark">Sensitive</span>}
                   </td>
                   <td>{item.fullName}</td>
                   <td
@@ -99,6 +113,22 @@ const Feedbacks = () => {
             )}
           </tbody>
         </table>
+      </div>
+      <div className="d-flex justify-content-center mt-3">
+        <ReactPaginate
+          previousLabel={<i className="fa fa-chevron-left"></i>}
+          nextLabel={<i className="fa fa-chevron-right"></i>}
+          pageCount={pageCount}
+          onPageChange={handlePageChange}
+          containerClassName={'pagination justify-content-center'}
+          activeClassName={'active'}
+          pageClassName={'page-item'}
+          pageLinkClassName={'page-link'}
+          previousClassName={'page-item'}
+          nextClassName={'page-item'}
+          previousLinkClassName={'page-link'}
+          nextLinkClassName={'page-link'}
+        />
       </div>
     </div>
   )

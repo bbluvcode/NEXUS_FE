@@ -8,14 +8,29 @@ import {
 import BtnModal from '../../../components/button/BtnModal'
 import CIcon from '@coreui/icons-react'
 import { cilCheck, cilUser, cilWarning } from '@coreui/icons'
+import ReactPaginate from 'react-paginate'
 
 const SupportRequest = () => {
   const dispatch = useDispatch()
   const supportRequests = useSelector((state) => state.supportRequests.items)
-
+  //pagination
+  const [filteredOrders, setFilteredOrders] = useState([])
+  const [pageNumber, setPageNumber] = useState(0)
+  const itemsPerPage = 8
+  const pagesVisited = pageNumber * itemsPerPage
+  const pageCount = Math.ceil(filteredOrders.length / itemsPerPage)
+  const displayOrders = filteredOrders.slice(pagesVisited, pagesVisited + itemsPerPage)
+  const handlePageChange = ({ selected }) => {
+    setPageNumber(selected)
+  }
   useEffect(() => {
     dispatch(fetchSuppportRequests())
   }, [dispatch])
+
+  useEffect(() => {
+    setFilteredOrders(supportRequests)
+  }, [supportRequests])
+
   const formatDateSystem = (dateString) => {
     const date = new Date(dateString)
     return date.toLocaleDateString()
@@ -96,6 +111,22 @@ const SupportRequest = () => {
             )}
           </tbody>
         </table>
+      </div>
+      <div className="d-flex justify-content-center mt-3">
+        <ReactPaginate
+          previousLabel={<i className="fa fa-chevron-left"></i>}
+          nextLabel={<i className="fa fa-chevron-right"></i>}
+          pageCount={pageCount}
+          onPageChange={handlePageChange}
+          containerClassName={'pagination justify-content-center'}
+          activeClassName={'active'}
+          pageClassName={'page-item'}
+          pageLinkClassName={'page-link'}
+          previousClassName={'page-item'}
+          nextClassName={'page-item'}
+          previousLinkClassName={'page-link'}
+          nextLinkClassName={'page-link'}
+        />
       </div>
     </div>
   )

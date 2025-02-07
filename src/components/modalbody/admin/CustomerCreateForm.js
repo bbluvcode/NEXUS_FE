@@ -33,6 +33,7 @@ function CustomerCreateForm(props) {
     phoneNumber: yup
       .string()
       .matches(/^[0-9]+$/, 'Phone number must be numeric')
+      .min(8).max(12)
       .optional(),
     identificationNo: yup.string().optional(),
     image: yup.string().optional(), // Add validation if needed for images (e.g., file type)
@@ -86,7 +87,7 @@ function CustomerCreateForm(props) {
 
   return (
     <div className="customer-create-form">
-      <h2 className="text-center">Register New Customer</h2>
+      <h2 className="text-center">Register Customer Info</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
         <div className="col-md-6">
           <label htmlFor="fullName" className="form-label">
