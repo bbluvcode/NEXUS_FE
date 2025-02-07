@@ -1,95 +1,103 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  fetchStockRequests,
-  changeStatusStockRequest,
-  handleSetStockRequest,
-} from '../../../redux/stock/stockRequestSlice.js'
+import { fetchStockRequests, handleSetStockRequest } from '../../../redux/stock/stockRequestSlice'
 import BtnModal from '../../../components/button/BtnModal'
-import CIcon from '@coreui/icons-react'
-import { cilCheck, cilStorage, cilWarning } from '@coreui/icons'
 
-const StockRequest = () => {
+const StockRequestList = () => {
   const dispatch = useDispatch()
-  const { items, status, error } = useSelector((state) => state.stockRequests)
 
+  // Select stock request data from Redux store
+  const stockRequests = useSelector((state) => state.stockRequests?.items || [])
+  const status = useSelector((state) => state.stockRequests?.status)
+  const error = useSelector((state) => state.stockRequests?.error)
+
+  // Fetch stock requests when component mounts
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchStockRequests())
     }
   }, [dispatch, status])
 
-  const formatDateSystem = (dateString) => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString()
-  }
-
-  const handleEditStockReq = (stockReq) => {
-    dispatch(handleSetStockRequest(stockReq))
-  }
-
-  if (status === 'loading') {
-    return <div>Loading...</div>
-  }
-
-  if (status === 'failed') {
-    return <div>Error: {error}</div>
+  const handleEditStockRequest = (stockRequest) => {
+    dispatch(handleSetStockRequest(stockRequest))
   }
 
   return (
     <div>
       <div className="d-flex justify-content-between">
-        <h2>List of Stock Requests</h2>
+        <h2>Stock Request List</h2>
+        <BtnModal name="Add New Stock Request" iform="StockRequestCreateForm" style="primary" />
       </div>
       <div className="row">
-        <table className="table table-hover">
-          <thead>
+        <table className="table table-bordered table-hover">
+          <thead className="thead-dark">
             <tr>
-              <th>Id</th>
-              <th>Employee Id</th>
-              <th>Date Created</th>
+              <th>ID</th>
+              <th>Employee</th>
+              <th>Create Date</th>
               <th>Total Number</th>
-              <th className="text-center">Action</th>
+              <th>Details</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {items.length > 0 ? (
-              items.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.inStockRequestId}</td>
-                  <td>{item.employeeId}</td>
-                  <td>{formatDateSystem(item.createDate)}</td>
-                  <td>{item.totalNumber}</td>
-                  <td className="d-flex" onClick={() => handleEditStockReq(item)}>
-                    <button
-                      className={`text-white me-1 btn btn-${item.status ? 'success' : 'danger'}`}
-                      onClick={() => {
-                        dispatch(changeStatusStockRequest(item.inStockRequestId))
-                      }}
-                    >
-                      <CIcon icon={item.status ? cilCheck : cilWarning} />
-                    </button>
-
-                    <BtnModal
-                      name={<CIcon icon={cilStorage} />}
-                      iform="StockReqDetail"
-                      style="outline-primary"
-                    />
-                    <BtnModal
-                      name={<i className="fa fa-edit"></i>}
-                      iform="StockReqEditForm"
-                      style="outline-warning"
-                    />
-                  </td>
-                </tr>
-              ))
-            ) : (
+            {status === 'loading' && (
               <tr>
-                <td colSpan="5" style={{ textAlign: 'center', color: 'red' }}>
-                  No in-stock request data available
+                <td colSpan="6" style={{ textAlign: 'center' }}>
+                  Loading...
                 </td>
               </tr>
             )}
+            {status === 'failed' && (
+              <tr>
+                <td colSpan="6" style={{ textAlign: 'center', color: 'red' }}>
+                  {error || 'Failed to load data.'}
+                </td>
+              </tr>
+            )}
+            {status === 'succeeded' && stockRequests.length > 0
+              ? stockRequests.map((item) => (
+                  <tr key={item.inStockRequestId}>
+                    <td>{item.inStockRequestId}</td>
+                    <td>
+                      {item.employee
+                        ? `${item.employee.firstName} ${item.employee.lastName}`
+                        : `ID: ${item.employeeId}`}
+                    </td>
+                    <td>{new Date(item.createDate).toLocaleDateString()}</td>
+                    <td>{item.totalNumber}</td>
+                    <td>
+                      {item.inStockRequestDetails?.length > 0 ? (
+                        <ul>
+                          {item.inStockRequestDetails.map((detail) => (
+                            <li key={detail.inStockRequestDetailId}>
+                              {detail.equipment?.equipmentName ||
+                                `Equipment ID: ${detail.equipmentId}`}{' '}
+                              - Quantity: {detail.quantity}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        'No details'
+                      )}
+                    </td>
+                    <td>
+                      <button
+                        className="btn btn-warning"
+                        onClick={() => handleEditStockRequest(item)}
+                      >
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              : status === 'succeeded' && (
+                  <tr>
+                    <td colSpan="6" style={{ textAlign: 'center', color: 'red' }}>
+                      No data available
+                    </td>
+                  </tr>
+                )}
           </tbody>
         </table>
       </div>
@@ -97,4 +105,4 @@ const StockRequest = () => {
   )
 }
 
-export default React.memo(StockRequest)
+export default React.memo(StockRequestList)
