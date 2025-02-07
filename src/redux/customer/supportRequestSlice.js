@@ -22,8 +22,7 @@ export const createSuppportRequest = createAsyncThunk(
   'SuppportRequests/createSuppportRequest',
   async (supReq) => {
     try {
-      console.log('hello slice:', supReq)
-      const formData = new FormData()
+     const formData = new FormData()
       formData.append('title', supReq.title)
       formData.append('detailContent', supReq.detailContent)
       formData.append('isResolved', false)
