@@ -9,6 +9,7 @@ import * as Yup from 'yup'
 import styles from '../../../style/ManStyle.module.css' // Import CSS Module
 import { useNavigate, useParams } from 'react-router-dom'
 import { useDataContext } from '../../../context/DataContext'
+import Swal from 'sweetalert2' // Import sweetalert2
 
 const API_BASE_URL = 'http://localhost:5185/api/news'
 
@@ -29,9 +30,6 @@ const EditNews = () => {
             try {
                 const newsResponse = await axios.get(`${API_BASE_URL}/${newsId}`)
                 const employeeResponse = await getAllEmployees()
-
-                console.log(newsResponse.data)
-                console.log(employeeResponse.data)
 
                 setFormData({
                     title: newsResponse.data.title,
@@ -85,8 +83,6 @@ const EditNews = () => {
                 headers: { 'Content-Type': 'multipart/form-data' },
             })
 
-            console.log('Response from update:', response)
-
             setFormData({
                 title: values.title,
                 content: updatedContent,
@@ -94,11 +90,25 @@ const EditNews = () => {
                 status: values.status,
             })
 
-            alert('News updated successfully')
+            // Show success message with sweetalert2
+            Swal.fire({
+                title: 'Success!',
+                text: 'News updated successfully',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            })
+
             navigate('/admin/NewsList')
         } catch (error) {
             console.error('Error updating news:', error)
-            alert('Error updating news')
+
+            // Show error message with sweetalert2
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was an error updating the news',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            })
         }
     }
 
@@ -157,7 +167,7 @@ const EditNews = () => {
 
                                 <div className={styles.editorGroup}>
                                     <SunEditor
-                                        setContents={values.content} // Đảm bảo truyền giá trị content từ Formik
+                                        setContents={values.content}
                                         onChange={(content) => {
                                             setFieldValue('content', content);
                                             setFormData((prev) => ({ ...prev, content }));
@@ -165,10 +175,15 @@ const EditNews = () => {
                                         setOptions={{
                                             height: 500,
                                             buttonList: [
+                                                ['undo', 'redo'],
+                                                ['font', 'fontSize', 'formatBlock'],
                                                 ['bold', 'italic', 'underline', 'strike'],
-                                                ['image', 'video', 'link'],
-                                                ['fullScreen', 'codeView'],
+                                                ['align', 'list', 'lineHeight'],
+                                                ['table', 'image', 'video', 'link'],
+                                                ['fullScreen', 'showBlocks', 'codeView'],
+                                                ['removeFormat', 'preview']
                                             ],
+                                            mode: 'dark',
                                         }}
                                     />
                                     <ErrorMessage name="content" component="div" className={styles.errorText} />

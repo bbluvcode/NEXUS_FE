@@ -5,6 +5,7 @@ import * as yup from 'yup'
 import { useParams, useNavigate } from 'react-router-dom' // Dùng useParams để lấy ID từ URL và useHistory để chuyển hướng
 import { getAllPlans } from '../../../services/planService'
 import { getPlanFeeById, updatePlanFee } from '../../../services/planFeeService'
+import Swal from 'sweetalert2' // Import SweetAlert2
 
 const schema = yup.object().shape({
   planFeeName: yup
@@ -93,10 +94,24 @@ const UpdatePlanFee = () => {
   const onSubmit = async (data) => {
     try {
       await updatePlanFee(planId, data) // Gửi yêu cầu cập nhật PlanFee
-      alert('Plan Fee updated successfully')
+
+      // Success message with SweetAlert2
+      Swal.fire({
+        title: 'Success!',
+        text: 'Plan Fee updated successfully',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      })
+
       navigate('/admin/planlist') // Điều hướng về trang danh sách
     } catch (error) {
-      alert('Error updating Plan Fee')
+      // Error message with SweetAlert2
+      Swal.fire({
+        title: 'Error!',
+        text: 'There was an error updating the Plan Fee',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      })
       console.error(error)
     }
   }
@@ -153,19 +168,6 @@ const UpdatePlanFee = () => {
           <input type="number" className="form-control" {...register('localCallCharge')} />
           <p className="text-danger">{errors.localCallCharge?.message}</p>
         </div>
-        {/* 
-        <div className="mb-3">
-          <label className="form-label">Plan</label>
-          <select className="form-control" {...register('planId')}>
-            <option value="">Select Plan</option>
-            {plans.map((plan) => (
-              <option key={plan.planId} value={plan.planId}>
-                {plan.planName}
-              </option>
-            ))}
-          </select>
-          <p className="text-danger">{errors.planId?.message}</p>
-        </div> */}
 
         <div className="mb-3 form-check">
           <input type="checkbox" className="form-check-input" {...register('isUsing')} />

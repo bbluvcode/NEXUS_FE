@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { getPlanById, updatePlan } from '../../../services/planService'
 import { useNavigate, useParams } from 'react-router-dom' // Import useParams
+import Swal from 'sweetalert2' // Import SweetAlert2
 
 const schema = yup.object().shape({
   planName: yup.string().required('Plan name is required').max(50, 'Max length is 50 characters'),
@@ -55,10 +56,25 @@ const UpdatePlan = () => {
   const onSubmit = async (data) => {
     try {
       await updatePlan(planId, data)
-      alert('Plan updated successfully')
-      window.location.href = '/admin/planlist'
+
+      // Success message with SweetAlert2
+      Swal.fire({
+        title: 'Success!',
+        text: 'Plan updated successfully',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      })
+
+      window.location.href = '/admin/planlist' // Redirect to plan list page
     } catch (error) {
-      alert('Error updating plan')
+      // Error message with SweetAlert2
+      Swal.fire({
+        title: 'Error!',
+        text: 'There was an error updating the plan',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      })
+      console.error(error)
     }
   }
 

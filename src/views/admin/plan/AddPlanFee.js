@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { getAllPlans } from '../../../services/planService'
 import { createPlanFee } from '../../../services/planFeeService'
+import Swal from 'sweetalert2'  // Import SweetAlert2
 
 const schema = yup.object().shape({
     planFeeName: yup
@@ -62,7 +63,7 @@ const AddPlanFee = () => {
                 const data = await getAllPlans()
                 console.log(data);
 
-                setPlans(data || []) // Đảm bảo giá trị không bị undefined
+                setPlans(data || []) // Ensure data is not undefined
             } catch (error) {
                 console.error('Failed to fetch plans:', error)
             }
@@ -73,10 +74,24 @@ const AddPlanFee = () => {
     const onSubmit = async (data) => {
         try {
             await createPlanFee(data)
-            alert('Plan Fee added successfully')
-            window.location.href = '/admin/planlist'
+
+            // Success message with SweetAlert2
+            Swal.fire({
+                title: 'Success!',
+                text: 'Plan Fee added successfully',
+                icon: 'success',
+                confirmButtonText: 'OK',
+            })
+
+            window.location.href = '/admin/planlist'  // Redirect to plan list page
         } catch (error) {
-            alert('Error adding Plan Fee')
+            // Error message with SweetAlert2
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was an error adding the Plan Fee',
+                icon: 'error',
+                confirmButtonText: 'OK',
+            })
             console.error(error)
         }
     }

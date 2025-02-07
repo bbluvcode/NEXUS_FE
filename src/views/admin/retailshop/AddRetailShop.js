@@ -5,7 +5,8 @@ import * as Yup from 'yup';
 import { addRetailShop } from '../../../services/retailShopSerivce';
 import { useNavigate } from 'react-router-dom';
 import { getAllRegions } from '../../../services/regionService';
-import styles from '../../../style/ManStyle.module.css'
+import Swal from 'sweetalert2'; // Import SweetAlert2
+import styles from '../../../style/ManStyle.module.css';
 
 const retailShopValidationSchema = Yup.object().shape({
   RetailShopName: Yup.string()
@@ -35,7 +36,6 @@ const AddRetailShop = () => {
   const [regions, setRegions] = useState([]);
   const [imageFile, setImageFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
-
 
   useEffect(() => {
     const fetchRegions = async () => {
@@ -70,13 +70,28 @@ const AddRetailShop = () => {
 
       const response = await addRetailShop(formData);
       console.log('Retail Shop added successfully:', response);
-      alert('Retail Shop added successfully!');
+      
+      // Replace alert with SweetAlert
+      Swal.fire({
+        title: 'Success!',
+        text: 'Retail Shop added successfully!',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
+
       resetForm();
       setImageFile(null);
       navigate('/admin/retailshoplist');
     } catch (error) {
       console.error('Failed to add Retail Shop:', error);
-      alert('Failed to add Retail Shop. Please try again.');
+      
+      // Replace alert with SweetAlert
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to add Retail Shop. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
     } finally {
       setSubmitting(false);
     }
@@ -147,7 +162,6 @@ const AddRetailShop = () => {
               <ErrorMessage name="IsMainOffice" component="div" className="text-danger" />
             </div>
 
-
             <div className={`mb-3 ${styles.checkboxWrapper}`}>
               <Field name="Status">
                 {({ field }) => (
@@ -207,7 +221,7 @@ const AddRetailShop = () => {
 
               {previewImage && (
                 <div className="mt-3">
-                  <img src={previewImage} alt="Preview" className="img-thumbnail" style={{ width: '30%', important: true }} />
+                  <img src={previewImage} alt="Preview" className="img-thumbnail" style={{ width: '30%' }} />
                 </div>
               )}
             </div>

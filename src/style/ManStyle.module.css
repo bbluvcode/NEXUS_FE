@@ -360,6 +360,7 @@
   justify-content: space-between; /* Đảm bảo khoảng cách giữa các nút */
   margin-bottom: 0px;
   align-items: center; /* Căn giữa các nút dọc theo chiều cao */
+  gap: 10px; /* Khoảng cách giữa các nút */
 }
 
 /* Style cho nút Preview */
@@ -513,3 +514,176 @@
 .carouselContainerService {
   margin-top: 100px; /* Khoảng cách từ phần "Plan Fees" tới carousel */
 }
+/* 🌟 Tổng quan */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.containerCustom {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* 📌 Card gói phí */
+.planFeeCard {
+  width: 70%;
+  margin: 20px auto;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s;
+}
+
+.planFeeCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 📌 Bố cục thông tin gói phí */
+.planFeeInfo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+/* 📌 Các item trong gói phí */
+.planFeeItem {
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.planFeeItem:hover {
+  transform: scale(1.05);
+}
+
+/* 📌 Nút đăng ký */
+.registerBtn {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.registerBtn button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.registerBtn button:hover {
+  background-color: #0056b3;
+}
+
+/* 📌 Nút View */
+.viewButton {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.viewButton:hover {
+  background-color: #218838;
+}
+
+/* 📌 Bảng dữ liệu */
+.planFeeTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  table-layout: fixed; /* Cố định độ rộng của bảng */
+}
+
+.planFeeTable th, .planFeeTable td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: center;
+  word-wrap: break-word; /* Đảm bảo văn bản không làm lệch bảng */
+}
+
+.planFeeTable th {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.planFeeTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* 📌 Giới hạn chiều cao của tbody để tránh nhảy layout khi phân trang */
+.planFeeTable tbody {
+  display: block;
+  min-height: 550px; /* Đặt chiều cao tối đa của tbody */
+  overflow-y: auto;  /* Cuộn dọc khi nội dung vượt quá chiều cao */
+}
+
+.planFeeTable thead, .planFeeTable tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* 📌 Điều chỉnh Carousel */
+.carouselContainerService {
+  margin-top: 100px;
+}
+
+.planFeeSliderItem {
+  width: 70%;
+  margin: 0 auto;
+  transition: transform 0.3s ease;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.planFeeSliderItem:hover {
+  transform: scale(1.05);
+}
+
+/* 📌 Tin tức */
+.newsCard {
+  transition: transform 0.3s ease-in-out;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: white;
+}
+
+.newsCard:hover {
+  transform: scale(1.05);
+}
+
+.newsImage {
+  width: 100%;
+  height: 200px;
+  object-fit: contain; /* Hiển thị toàn bộ ảnh mà không bị cắt */
+  border-radius: 8px 8px 0 0;
+  background-color: #f8f8f8; /* Để tránh khoảng trống trắng khi ảnh không đủ kích thước */
+}
+

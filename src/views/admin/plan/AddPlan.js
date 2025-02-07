@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import { addPlan } from '../../../services/planService'
+import Swal from 'sweetalert2' // Import sweetalert2
 
 const schema = yup.object().shape({
   planName: yup.string().required('Plan name is required').max(50, 'Max length is 50 characters'),
@@ -30,10 +31,24 @@ const AddPlan = () => {
   const onSubmit = async (data) => {
     try {
       await addPlan(data)
-      alert('Plan added successfully')
+
+      // Success message with SweetAlert
+      Swal.fire({
+        title: 'Success!',
+        text: 'Plan added successfully',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      })
+
       window.location.href = '/admin/planlist'
     } catch (error) {
-      alert('Error adding plan')
+      // Error message with SweetAlert
+      Swal.fire({
+        title: 'Error!',
+        text: 'There was an error adding the plan',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      })
     }
   }
 

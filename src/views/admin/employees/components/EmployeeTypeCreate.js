@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { addEmployeeRole } from '../../../../services/employeeService';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import Swal from 'sweetalert2';
 
 const EmployeeTypeCreate = ({ setEmployeeTypes }) => {
   // Xác thực sử dụng Yup
@@ -23,10 +24,19 @@ const EmployeeTypeCreate = ({ setEmployeeTypes }) => {
       setEmployeeTypes((prevEmployeeTypes) => [...prevEmployeeTypes, result]);
       resetForm(); // Reset form sau khi gửi
 
-      // Hiển thị thông báo thành công
-      alert('New role added successfully!');
+      // Hiển thị thông báo thành công với SweetAlert
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'New role added successfully!',
+      });
     } catch (error) {
       console.error('Failed to add employee role:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Failed to add employee role. Please try again.',
+      });
     }
 
     setSubmitting(false); // Dừng trạng thái đang gửi

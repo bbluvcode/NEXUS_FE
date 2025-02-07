@@ -43,7 +43,7 @@ const NewsList = () => {
     <div className="container mt-4">
       <h1 className="text-center mb-4">News List</h1>
       <button className="btn btn-primary mb-3" onClick={() => navigate('/admin/AddNews')}>
-        Add Shop
+        Add News
       </button>
       <table className="table table-hover table-bordered">
         <thead>

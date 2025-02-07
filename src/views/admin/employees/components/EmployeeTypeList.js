@@ -1,55 +1,71 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import { updateEmployeeRole } from '../../../../services/employeeService'
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { updateEmployeeRole } from '../../../../services/employeeService';
+import Swal from 'sweetalert2';
 
 const EmployeeTypeList = ({ employeeTypes, setEmployeeTypes }) => {
-  const [isEditing, setIsEditing] = useState(null)
-  const [newRoleName, setNewRoleName] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isEditing, setIsEditing] = useState(null);
+  const [newRoleName, setNewRoleName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRoleNameChange = (event) => {
-    setNewRoleName(event.target.value)
-  }
+    setNewRoleName(event.target.value);
+  };
 
   const handleUpdate = async (employeeId, newRoleId) => {
     const isRoleNameDuplicate = employeeTypes.some(
       (type) => type.roleName === newRoleName && type.roleId !== employeeId
-    )
+    );
 
     if (isRoleNameDuplicate) {
-      alert('The role name already exists. Please choose a different name.')
-      setIsEditing(null)
-      return
+      Swal.fire({
+        icon: 'warning',
+        title: 'Duplicate Role',
+        text: 'The role name already exists. Please choose a different name.',
+      });
+      setIsEditing(null);
+      return;
     }
 
     try {
-      setIsLoading(true)
-      const updatedEmployee = await updateEmployeeRole(employeeId, newRoleId, newRoleName)
+      setIsLoading(true);
+      const updatedEmployee = await updateEmployeeRole(employeeId, newRoleId, newRoleName);
       setEmployeeTypes((prevEmployeeTypes) =>
         prevEmployeeTypes.map((type) =>
           type.roleId === employeeId
             ? { ...type, roleId: updatedEmployee.roleId, roleName: updatedEmployee.roleName }
             : type
         )
-      )
-      setIsEditing(null)
-      setNewRoleName('')
+      );
+      setIsEditing(null);
+      setNewRoleName('');
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'Employee role updated successfully!',
+      });
     } catch (error) {
-      console.error('Failed to update employee role:', error)
+      console.error('Failed to update employee role:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Failed to update employee role. Please try again.',
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleCancel = () => {
-    setIsEditing(null)
-    setNewRoleName('')
-  }
+    setIsEditing(null);
+    setNewRoleName('');
+  };
 
   const handleAccept = (employeeId) => {
-    handleUpdate(employeeId, employeeId)
-  }
+    handleUpdate(employeeId, employeeId);
+  };
 
   return (
     <div>
@@ -102,8 +118,8 @@ const EmployeeTypeList = ({ employeeTypes, setEmployeeTypes }) => {
                       <button
                         className="btn btn-outline-info"
                         onClick={() => {
-                          setIsEditing(type.roleId)
-                          setNewRoleName(type.roleName)
+                          setIsEditing(type.roleId);
+                          setNewRoleName(type.roleName);
                         }}
                         disabled={isLoading}
                       >
@@ -118,8 +134,8 @@ const EmployeeTypeList = ({ employeeTypes, setEmployeeTypes }) => {
         </tbody>
       </table>
     </div>
-  )
-}
+  );
+};
 
 EmployeeTypeList.propTypes = {
   employeeTypes: PropTypes.arrayOf(
@@ -129,6 +145,6 @@ EmployeeTypeList.propTypes = {
     })
   ).isRequired,
   setEmployeeTypes: PropTypes.func.isRequired,
-}
+};
 
-export default EmployeeTypeList
+export default EmployeeTypeList;

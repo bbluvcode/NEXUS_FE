@@ -7,6 +7,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from '../../style/ManStyle.module.css';
+import BtnReq from '../../components/button/BtnReq';
 
 const PlanDetail = () => {
     const { planId } = useParams();
@@ -76,9 +77,7 @@ const PlanDetail = () => {
                         <br />
                     </div>
                     <div className={styles.registerBtn}>
-                        <button>
-                            Register
-                        </button>
+                        <BtnReq serviceSelected={fee} />
                     </div>
                 </div>
             );
