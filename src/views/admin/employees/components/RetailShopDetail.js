@@ -101,7 +101,7 @@ const RetailShopDetail = () => {
         navigate(-1)
     }
 
-    const handleActivateDeactivate = async (employeeId, currentStatus) => {
+    const handleActivateDeactivate = async (employeeId, currentStatus, roleName) => {
         try {
             if (roleName === 'Admin') {
                 Swal.fire({
@@ -130,6 +130,7 @@ const RetailShopDetail = () => {
             });
         }
     }
+    
 
     const handleRoleChange = async (employeeId, newRoleId) => {
         if (newRoleId === '1') {
