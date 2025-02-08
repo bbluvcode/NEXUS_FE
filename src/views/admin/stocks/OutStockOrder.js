@@ -35,7 +35,7 @@ const OutStockOrder = () => {
         <table className="table table-hover">
           <thead>
             <tr>
-              <th>Order ID</th>
+              {/* <th>Order ID</th> */}
               <th>Stock</th>
               <th>Employee</th>
               <th>Create Date</th>
@@ -43,14 +43,14 @@ const OutStockOrder = () => {
               <th>Total</th>
               <th>Tax</th>
               <th>Status</th>
-              <th></th>
+              {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
             {outStockOrders.length > 0 ? (
               outStockOrders.map((order, index) => (
                 <tr key={index}>
-                  <td>{order.outStockId}</td>
+                  {/* <td>{order.outStockId}</td> */}
                   <td>{order.stock?.stockName || 'N/A'}</td>
                   <td>{order.employee?.employeeName || 'N/A'}</td>
                   <td>{formatDateSystem(order.createDate)}</td>
@@ -59,12 +59,12 @@ const OutStockOrder = () => {
                   <td>{formatCurrency(order.tax)}</td>
                   <td>{order.isPay ? 'Paid' : 'Pending'}</td>
                   <td onClick={() => handleEditOutStockOrder(order)}>
-                    <BtnModal
+                    {/* <BtnModal
                       name={<i className="fa fa-edit"></i>}
                       iform="OutStockOrderEditForm"
                       style="warning"
                       order={order}
-                    />
+                    /> */}
                   </td>
                 </tr>
               ))

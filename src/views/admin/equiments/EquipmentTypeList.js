@@ -61,7 +61,7 @@ const EquipmentTypeList = () => {
             <th>ID</th>
             <th>Type Name</th>
             <th>Provider</th>
-            <th>Action</th>
+            {/* <th>Action</th> */}
           </tr>
         </thead>
         <tbody>
@@ -83,7 +83,7 @@ const EquipmentTypeList = () => {
                   )}
                 </td>
                 <td>{type.provider || "N/A"}</td>
-                <td>
+                {/* <td>
                   {isEditing === type.equipmentTypeId ? (
                     <>
                       <button className="btn btn-outline-danger m-1" onClick={handleCancel} disabled={isLoading}>
@@ -101,7 +101,7 @@ const EquipmentTypeList = () => {
                       Update
                     </button>
                   )}
-                </td>
+                </td> */}
               </tr>
             ))
           ) : (
