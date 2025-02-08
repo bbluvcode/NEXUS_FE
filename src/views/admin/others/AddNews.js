@@ -74,10 +74,6 @@ const AddNews = () => {
     formData.append('content', updatedContent)
     formData.append('employeeId', values.employeeId)
     formData.append('status', values.status ? 'true' : 'false')
-    // Kiểm tra dữ liệu FormData
-    for (let pair of formData.entries()) {
-      console.log(pair[0], pair[1])
-    }
 
     try {
       const response = await axios.post(API_BASE_URL, formData, {
