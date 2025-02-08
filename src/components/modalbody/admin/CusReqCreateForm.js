@@ -29,7 +29,7 @@ function CusReqCreateForm() {
     return <p className="text-danger">Customer information is missing!</p>
   }
 
-  const { customerId, fullName, address } = customerInfo
+  const { customerId, fullName, address, email } = customerInfo
 
   const { planFeeName, rental, plan } = serviceSelected
   console.log('🚀 ~ CusReqCreateForm ~ plan:', plan.planName)
@@ -80,7 +80,7 @@ function CusReqCreateForm() {
 
   return (
     <div className="request-create-form">
-      <h2 className="text-center">Create New Request</h2>
+      <h2 className="text-center">Register New Plan</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
         <div className="col-md-6">
           <label htmlFor="requestTitle" className="form-label">
@@ -186,7 +186,7 @@ function CusReqCreateForm() {
           {errors.deposit && <p className="text-danger">{errors.deposit.message}</p>}
         </div>
 
-        <div className="col-md-6">
+        {/* <div className="col-md-6">
           <label htmlFor="customerId" className="form-label">
             Customer ID
           </label>
@@ -198,8 +198,7 @@ function CusReqCreateForm() {
             value={customerId}
             disabled
           />
-        </div>
-
+        </div> */}
         <div className="col-md-6">
           <label htmlFor="customerName" className="form-label">
             Customer Name
@@ -210,6 +209,20 @@ function CusReqCreateForm() {
             name="customerName"
             className="form-control"
             value={fullName}
+            disabled
+          />
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="email" className="form-label">
+            Customer Email
+          </label>
+          <input
+            type="text"
+            id="email"
+            name="email"
+            className="form-control"
+            value={email}
             disabled
           />
         </div>

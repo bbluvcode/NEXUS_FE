@@ -17,6 +17,8 @@ import KeywordCreateForm from './modalbody/admin/KeywordCreateForm'
 import EquipmentTypeCreateForm from './modalbody/admin/EquipmentTypeCreateForm'
 import InStockOrderCreateForm from './modalbody/admin/InStockOrderCreateForm'
 import OutStockOrderCreateForm from './modalbody/admin/OutStockOrderCreateForm'
+import SupportResponseForm from './modalbody/admin/SupportResponseForm'
+
 
 function ModalComponent(props) {
   const { iform } = useContext(DataContext)
@@ -39,6 +41,7 @@ function ModalComponent(props) {
     SupReqCreateForm: <SupReqCreateForm />,
     SupReqEditForm: <SupReqEditForm />,
     FeedbackDetail: <FeedbackDetail />,
+    SupportResponseForm : <SupportResponseForm/>
   }
   return (
     <div>

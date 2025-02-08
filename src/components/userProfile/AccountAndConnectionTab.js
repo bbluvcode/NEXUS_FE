@@ -38,9 +38,7 @@ function AccountAndConnectionTab({ accounts }) {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center">ServiceOrderID</TableCell>
                             <TableCell align="center">AccountID</TableCell>
-                            <TableCell align="center">ConnectionID</TableCell>
                             <TableCell align="center">Status Connection</TableCell>
                             <TableCell align="center">Connection DateStart</TableCell>
                             <TableCell align="center">Connection DateEnd</TableCell>
@@ -51,9 +49,7 @@ function AccountAndConnectionTab({ accounts }) {
                         {accountData.map((accountInfo, index) => (
                             accountInfo.map((connection, connIndex) => (
                                 <TableRow key={`${index}-${connIndex}`}>
-                                    <TableCell align="center">{connection.orderId}</TableCell>
                                     <TableCell align="center">{accounts[index].accountId}</TableCell>
-                                    <TableCell align="center" sx={{ whiteSpace: "nowrap" }}>{connection.connectionId}</TableCell>
                                     <TableCell align="center">{connection.isActive ? "Active" : "Inactive"}</TableCell>
                                     <TableCell align="center">
                                         {new Date(connection.connectionDiaryDateStart).toLocaleString("en-GB", {

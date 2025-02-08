@@ -6,8 +6,6 @@ import UpdateSurveyModal from './UpdateSurveyModal';
 import AssignTechnicianModal from './AssignTechnicianModal';
 import CompleteInstallationModal from './CompleteInstallationModal';
 import ActivateConnectionModal from './ActivateConnectionModal';
-import { cilUser } from '@coreui/icons';
-import CIcon from '@coreui/icons-react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -28,8 +26,9 @@ const ServiceOrder = () => {
     axios.get("http://localhost:5185/api/ServiceOrder")
       .then((res) => {
         if (res.status === 200) {
-          setServiceOrders(res.data.data);
-          setFilteredOrders(res.data.data);
+          const sortedOrders = res.data.data.sort((a, b) => new Date(b.dateCreate) - new Date(a.dateCreate));
+          setServiceOrders(sortedOrders);
+          setFilteredOrders(sortedOrders);
         }
       })
       .catch((err) => console.log(err));
@@ -49,11 +48,34 @@ const ServiceOrder = () => {
     } else {
       const filtered = serviceOrders.filter(order =>
         order.orderId.toLowerCase().includes(value) ||
-        (order.empIDSurveyor && order.empIDSurveyor.toString().includes(value))
+        (order.surveyStatus && order.surveyStatus.toLowerCase().includes(value)) ||
+        (order.dateCreate && formatDateSystem(order.dateCreate).toLowerCase().includes(value))
       );
       setFilteredOrders(filtered);
     }
   };
+
+  const [selectedSurveyStatus, setSelectedSurveyStatus] = useState('');
+  const [selectedOrderType, setSelectedOrderType] = useState('');
+
+  const handleFilterChange = () => {
+    let filtered = serviceOrders;
+
+    if (selectedSurveyStatus) {
+      filtered = filtered.filter(order => order.surveyStatus === selectedSurveyStatus);
+    }
+
+    if (selectedOrderType) {
+      filtered = filtered.filter(order => order.orderId.startsWith(selectedOrderType));
+    }
+    filtered = filtered.sort((a, b) => new Date(b.dateCreate) - new Date(a.dateCreate));
+
+    setFilteredOrders(filtered);
+  };
+
+  useEffect(() => {
+    handleFilterChange();
+  }, [selectedSurveyStatus, selectedOrderType]);
 
   const handleSurveyUpdate = (orderId, newSurveyStatus) => {
     setServiceOrders(prevOrders =>
@@ -68,17 +90,20 @@ const ServiceOrder = () => {
     );
   };
 
-  const handleTechnicianAssigned = (orderId, newStatus) => {
-    setServiceOrders(prevOrders =>
-      prevOrders.map(order =>
-        order.orderId === orderId ? { ...order, surveyStatus: newStatus } : order
-      )
-    );
-    setFilteredOrders(prevOrders =>
-      prevOrders.map(order =>
-        order.orderId === orderId ? { ...order, surveyStatus: newStatus } : order
-      )
-    );
+  const fetchServiceOrders = () => {
+    axios.get("http://localhost:5185/api/ServiceOrder")
+      .then((res) => {
+        if (res.status === 200) {
+          const sortedOrders = res.data.data.sort((a, b) => new Date(b.dateCreate) - new Date(a.dateCreate));
+          setServiceOrders(sortedOrders);
+          setFilteredOrders(sortedOrders);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleTechnicianAssigned = (orderId, newStatus, installationId) => {
+    fetchServiceOrders();
   };
 
   const handleShowCompleteInstallationModal = (installationOrderId) => {
@@ -115,9 +140,9 @@ const ServiceOrder = () => {
         order.orderId === orderId ? { ...order, surveyStatus: "Activated Connection" } : order
       )
     );
-  };  
+  };
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
   const pagesVisited = pageNumber * itemsPerPage;
   const pageCount = Math.ceil(filteredOrders.length / itemsPerPage);
 
@@ -145,15 +170,43 @@ const ServiceOrder = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>List of Service Orders</h2>
         <input
           type="text"
-          placeholder="Search by Order ID or Surveyor ID"
+          placeholder="Search by Order ID, Survey Status, Date Created"
           value={searchTerm}
           onChange={handleSearch}
-          className="form-control w-25 mb-3"
+          className="form-control w-50"
         />
+      </div>
+
+      {/* Bộ lọc */}
+      <div className="d-flex gap-3 mb-3">
+        <select
+          className="form-select"
+          value={selectedSurveyStatus}
+          onChange={(e) => setSelectedSurveyStatus(e.target.value)}
+        >
+          <option value="">All Survey Status</option>
+          <option value="Surveyor Assigned">Surveyor Assigned</option>
+          <option value="Technician Assigned">Technician Assigned</option>
+          <option value="Installation">Installation</option>
+          <option value="Installation Completed">Installation Completed</option>
+          <option value="Activated Connection">Activated Connection</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+
+        <select
+          className="form-select"
+          value={selectedOrderType}
+          onChange={(e) => setSelectedOrderType(e.target.value)}
+        >
+          <option value="">All Order Types</option>
+          <option value="T">Telephone</option>
+          <option value="B">Broadband</option>
+          <option value="D">Dial-up</option>
+        </select>
       </div>
       <div className="row">
         <table className="table table-hover text-center align-middle">
@@ -182,28 +235,28 @@ const ServiceOrder = () => {
                     <button
                       className="btn btn-warning me-2"
                       onClick={() => handleShowSurveyModal(order.orderId)}
-                      disabled={order.surveyStatus === "Cancelled" || order.surveyStatus === "Installation" || order.surveyStatus === "Technician Assigned" || order.surveyStatus === "Installation Completed"}
+                      disabled={order.surveyStatus === "Cancelled" || order.surveyStatus === "Installation" || order.surveyStatus === "Technician Assigned" || order.surveyStatus === "Installation Completed" || order.surveyStatus === "Activated Connection"}
                     >
                       Survey
                     </button>
                     <button
                       className="btn btn-success me-2"
                       onClick={() => handleShowTechnicianModal(order.orderId)}
-                      disabled={order.surveyStatus === "Cancelled" || order.surveyStatus === "Surveyor Assigned" || order.surveyStatus === "Technician Assigned" || order.surveyStatus === "Installation Completed"}
+                      disabled={order.surveyStatus === "Cancelled" || order.surveyStatus === "Surveyor Assigned" || order.surveyStatus === "Technician Assigned" || order.surveyStatus === "Installation Completed" || order.surveyStatus === "Activated Connection"}
                     >
                       Technician
                     </button>
                     <button
                       className="btn btn-primary me-2"
                       onClick={() => handleShowCompleteInstallationModal(order.installationOrderId)}
-                      disabled={order.surveyStatus === "Cancelled" || order.surveyStatus === "Surveyor Assigned" || order.surveyStatus === "Installation" || order.surveyStatus === "Installation Completed"}
+                      disabled={order.surveyStatus === "Cancelled" || order.surveyStatus === "Surveyor Assigned" || order.surveyStatus === "Installation" || order.surveyStatus === "Installation Completed" || order.surveyStatus === "Activated Connection"}
                     >
                       Installated
                     </button>
                     <button
                       className="btn btn-info me-2"
                       onClick={() => handleShowActivateModal(order.orderId)}
-                      disabled={order.surveyStatus === "Cancelled" || order.surveyStatus === "Surveyor Assigned" || order.surveyStatus === "Installation"}
+                      disabled={order.surveyStatus === "Cancelled" || order.surveyStatus === "Surveyor Assigned" || order.surveyStatus === "Installation" || order.surveyStatus === "Activated Connection"}
                     >
                       Activate
                     </button>

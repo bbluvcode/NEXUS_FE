@@ -4,18 +4,34 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   changeStatusSupportRequest,
   fetchSuppportRequests,
+  handleSetSuppportRequest,
 } from '../../../redux/customer/supportRequestSlice'
 import BtnModal from '../../../components/button/BtnModal'
 import CIcon from '@coreui/icons-react'
-import { cilCheck, cilUser, cilWarning } from '@coreui/icons'
+import { cilCheck, cilInfo, cilUser, cilWarning } from '@coreui/icons'
+import ReactPaginate from 'react-paginate'
 
 const SupportRequest = () => {
   const dispatch = useDispatch()
   const supportRequests = useSelector((state) => state.supportRequests.items)
-
+  //pagination
+  const [filteredOrders, setFilteredOrders] = useState([])
+  const [pageNumber, setPageNumber] = useState(0)
+  const itemsPerPage = 8
+  const pagesVisited = pageNumber * itemsPerPage
+  const pageCount = Math.ceil(filteredOrders.length / itemsPerPage)
+  const displayOrders = filteredOrders.slice(pagesVisited, pagesVisited + itemsPerPage)
+  const handlePageChange = ({ selected }) => {
+    setPageNumber(selected)
+  }
   useEffect(() => {
     dispatch(fetchSuppportRequests())
   }, [dispatch])
+
+  useEffect(() => {
+    setFilteredOrders(supportRequests)
+  }, [supportRequests])
+
   const formatDateSystem = (dateString) => {
     const date = new Date(dateString)
     return date.toLocaleDateString()
@@ -57,13 +73,20 @@ const SupportRequest = () => {
                   <td>{item.detailContent}</td>
                   <td>{item.empIdResolver ? 'EMP' + item.empIdResolver : ''}</td>
                   <td>{item.dateResolved ? formatDateSystem(item.dateResolved) : 'Waiting'}</td>
-                  <td className="d-flex">
+                  <td className="d-flex" onClick={()=>{
+                    dispatch(handleSetSuppportRequest(item))
+                  }}>
                     <button
                       className={`text-white me-1 btn btn-${item.isResolved ? 'success' : 'danger'}`}
                       onClick={() => handleResolve(item.supportRequestId)}
                     >
                       <CIcon icon={item.isResolved ? cilCheck : cilWarning} />
                     </button>
+                      <BtnModal
+                        name={<CIcon icon={cilInfo} size="sm" />}
+                        iform="SupportResponseForm"
+                        style="primary"
+                      />
                     {/* <BtnModal name={<CIcon icon={cilUser} />} iform="SupReqEditForm" style="outline-primary" />
                     <BtnModal
                       name={<i className="fa fa-edit"></i>}
@@ -83,8 +106,7 @@ const SupportRequest = () => {
                   <td>TEST</td>
                   <td>TEST</td>
                   <td className="d-flex ">
-                    <BtnModal name={<i className="fa fa-edit"></i>} iform="1" style="warning" />
-                    <BtnModal name={<CIcon icon={cilUser} size="sm" />} iform="1" style="primary" />
+                    <BtnModal name={<CIcon icon={cilUser} size="sm" />} iform="SupportResponseForm" style="primary" />
                   </td>
                 </tr>
                 <tr key={'2'}>
@@ -96,6 +118,22 @@ const SupportRequest = () => {
             )}
           </tbody>
         </table>
+      </div>
+      <div className="d-flex justify-content-center mt-3">
+        <ReactPaginate
+          previousLabel={<i className="fa fa-chevron-left"></i>}
+          nextLabel={<i className="fa fa-chevron-right"></i>}
+          pageCount={pageCount}
+          onPageChange={handlePageChange}
+          containerClassName={'pagination justify-content-center'}
+          activeClassName={'active'}
+          pageClassName={'page-item'}
+          pageLinkClassName={'page-link'}
+          previousClassName={'page-item'}
+          nextClassName={'page-item'}
+          previousLinkClassName={'page-link'}
+          nextLinkClassName={'page-link'}
+        />
       </div>
     </div>
   )

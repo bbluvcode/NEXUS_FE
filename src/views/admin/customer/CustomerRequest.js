@@ -10,17 +10,32 @@ import BtnModal from '../../../components/button/BtnModal'
 import CIcon from '@coreui/icons-react'
 import { cilCheck, cilUser, cilWarning } from '@coreui/icons'
 import AssignSurveyorModal from '../../../components/modalbody/admin/AssignSurveyorModal'
-import { toast } from 'react-toastify'
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import ReactPaginate from 'react-paginate'
 
 const CustomerRequest = () => {
   const dispatch = useDispatch()
   const customers = useSelector((state) => state.cusRequests.items)
 
+  //pagination
+  const [filteredOrders, setFilteredOrders] = useState([])
+  const [pageNumber, setPageNumber] = useState(0)
+  const itemsPerPage = 8
+  const pagesVisited = pageNumber * itemsPerPage
+  const pageCount = Math.ceil(filteredOrders.length / itemsPerPage)
+  const displayOrders = filteredOrders.slice(pagesVisited, pagesVisited + itemsPerPage)
+  const handlePageChange = ({ selected }) => {
+    setPageNumber(selected)
+  }
+
   useEffect(() => {
     dispatch(fetchCusRequests())
   }, [dispatch])
+
+  useEffect(() => {
+    setFilteredOrders(customers)
+  }, [customers])
   const formatDateSystem = (dateString) => {
     const date = new Date(dateString)
     return date.toLocaleDateString()
@@ -43,7 +58,7 @@ const CustomerRequest = () => {
       handleOpenAssignModal(requestId)
     } else {
       await dispatch(changeStatusCusRequest(requestId))
-      await dispatch(fetchCusRequests()) 
+      await dispatch(fetchCusRequests())
     }
   }
 
@@ -68,7 +83,7 @@ const CustomerRequest = () => {
               <th>ServiceRequest</th>
               <th>EquipmentRequest</th>
               <th>Deposit</th>
-              <th>DateResolve</th>
+              {/* <th>DateResolve</th> */}
               <th className="text-center">Action</th>
               {/* <th></th> */}
               {/* <th>Image</th>
@@ -76,8 +91,8 @@ const CustomerRequest = () => {
             </tr>
           </thead>
           <tbody>
-            {customers.length > 0 ? (
-              customers.map((item, index) => (
+            {displayOrders.length > 0 ? (
+              displayOrders.map((item, index) => (
                 <tr key={index}>
                   <td>{item.requestId}</td>
                   <td>{formatDateSystem(item.dateCreate)}</td>
@@ -86,7 +101,7 @@ const CustomerRequest = () => {
                   <td>{item.serviceRequest}</td>
                   <td>{item.equipmentRequest}</td>
                   <td>${item.deposit ?? 0}</td>
-                  <td>{item.dateResolve ? formatDateSystem(item.dateResolve) : 'Waiting'}</td>
+                  {/* <td>{item.dateResolve ? formatDateSystem(item.dateResolve) : 'Waiting'}</td> */}
                   <td className="d-flex" onClick={() => handleEditCusReq(item)}>
                     <button
                       className={`text-white me-1 btn btn-${item.isResponse ? 'success' : 'danger'}`}
@@ -94,7 +109,11 @@ const CustomerRequest = () => {
                     >
                       <CIcon icon={item.isResponse ? cilCheck : cilWarning} />
                     </button>
-                    <BtnModal name={<CIcon icon={cilUser} />} iform="CusReqDetail" style="outline-primary" />
+                    <BtnModal
+                      name={<CIcon icon={cilUser} />}
+                      iform="CusReqDetail"
+                      style="outline-primary"
+                    />
                     <BtnModal
                       name={<i className="fa fa-edit"></i>}
                       iform="CusReqEditForm"
@@ -116,8 +135,16 @@ const CustomerRequest = () => {
                   {/* <td>{item.image}</td>
         <td>{item.password}</td> */}
                   <td className="d-flex ">
-                    <BtnModal name={<i className="fa fa-edit"></i>} iform="CusReqDetail" style="warning" />
-                    <BtnModal name={<CIcon icon={cilUser} size="sm" />} iform="CusReqEditForm" style="primary" />
+                    <BtnModal
+                      name={<i className="fa fa-edit"></i>}
+                      iform="CusReqDetail"
+                      style="warning"
+                    />
+                    <BtnModal
+                      name={<CIcon icon={cilUser} size="sm" />}
+                      iform="CusReqEditForm"
+                      style="primary"
+                    />
                   </td>
                 </tr>
                 <tr key={'2'}>
@@ -129,6 +156,22 @@ const CustomerRequest = () => {
             )}
           </tbody>
         </table>
+      </div>
+      <div className="d-flex justify-content-center mt-3">
+        <ReactPaginate
+          previousLabel={<i className="fa fa-chevron-left"></i>}
+          nextLabel={<i className="fa fa-chevron-right"></i>}
+          pageCount={pageCount}
+          onPageChange={handlePageChange}
+          containerClassName={'pagination justify-content-center'}
+          activeClassName={'active'}
+          pageClassName={'page-item'}
+          pageLinkClassName={'page-link'}
+          previousClassName={'page-item'}
+          nextClassName={'page-item'}
+          previousLinkClassName={'page-link'}
+          nextLinkClassName={'page-link'}
+        />
       </div>
       <ToastContainer />
     </div>

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState, useEffect, useRef } from "react";
 import "../../components/css/ForgotPassword.css";
 import { useNavigate } from "react-router-dom";

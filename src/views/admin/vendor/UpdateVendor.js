@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getVendorById, updateVendor } from '../../../services/vendorService';
 import { getAllRegions } from '../../../services/regionService';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 const vendorValidationSchema = Yup.object().shape({
   vendorName: Yup.string()
@@ -71,14 +72,28 @@ const UpdateVendor = () => {
       console.log('Sending vendor update request with:', updatedValues); // Log request payload
       const response = await updateVendor(id, updatedValues); // Send updated values with vendor ID
       console.log('Vendor updated successfully:', response);
-      alert('Vendor updated successfully!');
+
+      // SweetAlert success
+      Swal.fire({
+        title: 'Success!',
+        text: 'Vendor updated successfully!',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+
       navigate('/admin/VendorList');
     } catch (error) {
       console.error('Error updating vendor:', error);
-      alert('Failed to update vendor. Please try again.');
+
+      // SweetAlert error
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to update vendor. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
     }
   };
-  
 
   if (!vendor) {
     return <div>Loading...</div>; // Show loading state if vendor data is not yet fetched
