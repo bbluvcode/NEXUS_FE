@@ -10,6 +10,7 @@ import {
 } from '../../../../services/employeeService'
 import styles from '../../../../style/ManStyle.module.css' // Import CSS module
 import { apiImage } from '../../../../constant/apiConstant'
+import Swal from 'sweetalert2'; // Import SweetAlert
 
 const RetailShopDetail = () => {
     const { id } = useParams()
@@ -85,7 +86,7 @@ const RetailShopDetail = () => {
             }
             return a.status ? -1 : 1;  // Active first
         }
-    
+
         if (a[sortConfig.key] < b[sortConfig.key]) {
             return sortConfig.direction === 'asc' ? -1 : 1;
         }
@@ -94,7 +95,7 @@ const RetailShopDetail = () => {
         }
         return 0;
     });
-    
+
 
     const handleBack = () => {
         navigate(-1)
@@ -102,26 +103,51 @@ const RetailShopDetail = () => {
 
     const handleActivateDeactivate = async (employeeId, currentStatus) => {
         try {
+            if (roleName === 'Admin') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: 'You cannot deactivate an Admin.',
+                });
+                return;
+            }
             await toggleEmployeeStatus(employeeId)
             const updatedEmployees = employees.map((employee) =>
                 employee.employeeId === employeeId ? { ...employee, status: !currentStatus } : employee,
             )
             setEmployees(updatedEmployees)
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: `Employee status updated successfully!`,
+            });
         } catch (error) {
             console.error('Error toggling employee status:', error)
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'Something went wrong while updating status.',
+            });
         }
     }
 
     const handleRoleChange = async (employeeId, newRoleId) => {
         if (newRoleId === '1') {
-            alert('You cannot change the role to Admin.')
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops!',
+                text: 'You cannot change the role to Admin.',
+            });
             return
         }
 
         try {
             const selectedRole = employeeRoles.find((role) => role.roleId === Number(newRoleId))
             if (!selectedRole) {
-                alert('Invalid role selected.')
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid role selected.',
+                });
                 return
             }
 
@@ -135,9 +161,17 @@ const RetailShopDetail = () => {
             setEmployees(updatedEmployees)
             setIsEditingRole(null)
             setNewRole(null)
-            alert('Role changed successfully!')
+            Swal.fire({
+                icon: 'success',
+                title: 'Role changed successfully!',
+            });
         } catch (error) {
             console.error('Error updating employee role:', error)
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'There was an issue updating the role.',
+            });
         }
     }
 
@@ -171,10 +205,10 @@ const RetailShopDetail = () => {
                 <div className="col-md-3">
                     <h2>Retail Shop Details</h2>
                     <img
-                                  src={`${apiImage}${shop.image.split('/').pop()}`}
-                                  alt={shop.retailShopName}
-                                  style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
-                                />
+                        src={`${apiImage}${shop.image.split('/').pop()}`}
+                        alt={shop.retailShopName}
+                        style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+                    />
                     <span>
                         <strong>Name:</strong> {shop.retailShopName}
                     </span>
@@ -296,6 +330,7 @@ const RetailShopDetail = () => {
                                                                         handleActivateDeactivate(employee.employeeId, employee.status)
                                                                     }
                                                                     className="btn btn-outline-warning btn-sm me-2 mb-2"
+                                                                    disabled={employee.roleName === 'Admin'}
                                                                 >
                                                                     Deactivate
                                                                 </button>
@@ -349,4 +384,4 @@ const RetailShopDetail = () => {
     )
 }
 
-export default RetailShopDetail
+export default RetailShopDetail;

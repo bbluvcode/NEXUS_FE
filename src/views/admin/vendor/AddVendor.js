@@ -4,6 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { addVendor } from '../../../services/vendorService';
 import { getAllRegions } from '../../../services/regionService';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 const vendorValidationSchema = Yup.object().shape({
   vendorName: Yup.string()
@@ -52,11 +53,26 @@ const AddVendor = () => {
     try {
       const response = await addVendor(values);
       console.log('Vendor added successfully:', response);
-      alert('Vendor added successfully!');
+      
+      // SweetAlert success
+      Swal.fire({
+        title: 'Success!',
+        text: 'Vendor added successfully!',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+
       resetForm();
     } catch (error) {
       console.error('Error adding vendor:', error);
-      alert('Failed to add vendor. Please try again.');
+      
+      // SweetAlert error
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to add vendor. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
     }
   };
 

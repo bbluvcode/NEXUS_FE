@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getAllRegions } from '../../../services/regionService'
 import { getRetailShopById, updateRetailShop } from '../../../services/retailShopSerivce'
 import { apiImage } from '../../../constant/apiConstant'
+import Swal from 'sweetalert2'
 import styles from '../../../style/ManStyle.module.css'
 
 const retailShopValidationSchema = Yup.object().shape({
@@ -81,11 +82,26 @@ const UpdateRetailShop = () => {
       }
 
       const response = await updateRetailShop(id, formData)
-      alert('Retail Shop updated successfully!')
+
+      // Success alert with SweetAlert
+      Swal.fire({
+        title: 'Success!',
+        text: 'Retail Shop updated successfully!',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      })
+
       navigate('/admin/retailshoplist')
     } catch (error) {
       console.error('Failed to update Retail Shop:', error)
-      alert('Failed to update Retail Shop. Please try again.')
+
+      // Error alert with SweetAlert
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to update Retail Shop. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      })
     } finally {
       setSubmitting(false)
     }
