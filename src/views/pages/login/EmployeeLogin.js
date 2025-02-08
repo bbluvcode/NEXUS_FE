@@ -19,6 +19,7 @@ import CIcon from "@coreui/icons-react";
 import { cilLockLocked, cilUser } from "@coreui/icons";
 import 'react-toastify/dist/ReactToastify.css';
 import showToast from "../../../components/customerLogin/ShowToast";
+import { ToastContainer } from 'react-toastify';
 
 const EmployeeLogin = () => {
   const { loginEmployee } = useAuth() || {};
@@ -125,6 +126,7 @@ const EmployeeLogin = () => {
           </CCol>
         </CRow>
       </CContainer>
+      <ToastContainer/>
     </div>
   );
 };

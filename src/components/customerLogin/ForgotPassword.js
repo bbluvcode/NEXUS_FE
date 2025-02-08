@@ -97,7 +97,7 @@ function ForgotPassword() {
                     return;
                 }
                 const userId = localStorage.getItem("userIdForgot");
-                const response = await axios.post("http://localhost:5185/api/Auth/update-password", { userId, password: newPassword });
+                const response = await axios.post("http://localhost:5185/api/Auth/update-password", { email: userId, password: newPassword });
                 setStep(4);
                 showToast(
                     [
