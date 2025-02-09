@@ -8,7 +8,6 @@ import ChangePasswordTab from "./ChangePasswordTab";
 import AccountAndConnectionTab from "./AccountAndConnectionTab";
 import RequestHistoryTab from "./RequestHistoryTab";
 import SupportHistoryTab from "./SupportHistoryTab";
-import FeedbackHistoryTab from "./FeedbackHistoryTab";
 import { useSearchParams } from 'react-router-dom';
 
 
@@ -39,9 +38,6 @@ function SettingProfileCard({ user, updateUser }) {
             case 'support-history':
                 setValueTab("5");
                 break;
-            case 'feedback-history':
-                setValueTab("6");
-                break;
             default:
                 setValueTab("1");
                 break;
@@ -60,8 +56,6 @@ function SettingProfileCard({ user, updateUser }) {
                 return <RequestHistoryTab requests={user.customerRequests} />;
             case "5":
                 return <SupportHistoryTab requests={user.supportRequests} />;
-            case "6":
-                return <FeedbackHistoryTab requests={user.feedBacks} />;
             default:
                 return null;
         }
@@ -88,9 +82,8 @@ function SettingProfileCard({ user, updateUser }) {
                 <Tab value="1" label="Profile" />
                 <Tab value="2" label="Change Password" />
                 <Tab value="3" label="Account and Connection" />
-                <Tab value="4" label="Request History" />
+                <Tab value="4" label="Registered Plans" />
                 <Tab value="5" label="Support History" />
-                <Tab value="6" label="Feedback History" />
             </Tabs>
             <Divider />
             <div style={{ padding: "16px" }}>{renderTabContent()}</div>

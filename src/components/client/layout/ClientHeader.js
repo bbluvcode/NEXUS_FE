@@ -114,7 +114,7 @@ const ClientHeader = () => {
                       Support
                     </a>
                   </li>
-                  {customer && customer.name && customer.email ? (
+                  {customer && customer.email ? (
                     <div className="scroll-to-section">
                       <CDropdown variant="nav-item">
                         <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>

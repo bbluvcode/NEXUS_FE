@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('customerToken')
     localStorage.removeItem('customerRefreshToken')
     localStorage.removeItem('customerInfo')
-    dispatch(getCustomerInfo(null)) 
+    //dispatch(getCustomerInfo(null)) 
   }
 
   // Decode Token
