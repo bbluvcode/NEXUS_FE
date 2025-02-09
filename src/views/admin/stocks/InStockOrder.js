@@ -52,7 +52,7 @@ const InStockOrder = () => {
               inStockOrders.map((order, index) => (
                 <tr key={index}>
                   {/* <td>{order.inStockOrderId}</td> */}
-                  <td>{order.vendorName}</td>
+                  <td>{order.vendorId}</td>
                   <td>{formatDateSystem(order.instockDate)}</td>
                   <td>{formatDateSystem(order.payDate)}</td>
                   <td>{formatCurrency(order.total)}</td>

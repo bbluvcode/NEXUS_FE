@@ -206,6 +206,7 @@ const routes = [
   { path: '/InStockOrder', exact: true, name: 'InStockOrder', element: InStockOrder },
   { path: '/OutStockOrder', exact: true, name: 'OutStockOrder', element: OutStockOrder },
   { path: '/StockRequest', exact: true, name: 'StockRequest', element: StockRequest },
+  { path: '/StockList', exact: true, name: 'StockList', element: StockList },
 
   //vendor
   { path: '/AddVendor', exact: true, name: 'AddVendor', element: AddVendor },
