@@ -16,6 +16,7 @@ const Login = React.lazy(() => import('../views/client/Login'))
 const ForgotPassword = React.lazy(() => import('../components/customerLogin/ForgotPassword'))
 const ProfileUser = React.lazy(() => import('../components/userProfile/ProfileUser'))
 const TestPage = React.lazy(() => import('../views/admin/employees/TestPage'))
+const Page404 = React.lazy(() => import('../views/pages/page404/Page404'))
 
 const routesClient = [
   { path: '/', exact: true, name: 'Home', element: Home },
@@ -31,6 +32,7 @@ const routesClient = [
   { path: '/forgotpassword', exact: true, name: 'ForgotPassword', element: ForgotPassword },
   { path: '/profile', exact: true, name: 'ProfileUser', element: () => <PrivateRoute element={ProfileUser} />, },
   { path: '/TestPage', exact: true, name: 'TestPage', element: TestPage },
+  { path: '*', name: 'Page 404', element: Page404 },
 ]
 
 export default routesClient

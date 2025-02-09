@@ -117,26 +117,26 @@ const ServiceOrder = () => {
 
   const handleShowCompleteInstallationModal = (installationOrderId, orderId) => {
     setSelectedInstallationId(installationOrderId);
-    setSelectedOrderId(orderId);  
+    setSelectedOrderId(orderId);
     setShowCompleteModal(true);
   };
-  
+
   const handleCompleteInstallation = (orderId, installationId) => {
     setServiceOrders((prevOrders) =>
-        prevOrders.map((order) =>
-            order.orderId === orderId
-                ? { ...order, surveyStatus: "Installation Completed" }
-                : order
-        )
+      prevOrders.map((order) =>
+        order.orderId === orderId
+          ? { ...order, surveyStatus: "Installation Completed" }
+          : order
+      )
     );
     setFilteredOrders((prevOrders) =>
-        prevOrders.map((order) =>
-            order.orderId === orderId
-                ? { ...order, surveyStatus: "Installation Completed" }
-                : order
-        )
+      prevOrders.map((order) =>
+        order.orderId === orderId
+          ? { ...order, surveyStatus: "Installation Completed" }
+          : order
+      )
     );
-};
+  };
 
 
   const handleShowActivateModal = (orderId) => {
@@ -224,7 +224,7 @@ const ServiceOrder = () => {
         </select>
       </div>
       <div className="row">
-        <table className="table table-hover text-center align-middle">
+        <table className="table table-hover table-striped table-bordered text-center align-middle">
           <thead>
             <tr>
               <th>Order ID</th>
@@ -302,7 +302,7 @@ const ServiceOrder = () => {
         <CompleteInstallationModal
           show={showCompleteModal}
           handleClose={() => setShowCompleteModal(false)}
-          orderId = {selectedOrderId}
+          orderId={selectedOrderId}
           installationId={selectedInstallationId}
           onComplete={handleCompleteInstallation}
         />

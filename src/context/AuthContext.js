@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
 
         localStorage.setItem('customerToken', token)
         localStorage.setItem('customerRefreshToken', refreshToken)
-        dispatch(getCustomerInfo(email)) // Cập nhật Redux store
+        dispatch(getCustomerInfo(email)) // Update Redux store
       }
     } catch (error) {
       throw new Error(error.response?.data?.message || 'Login failed')
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('customerToken')
     localStorage.removeItem('customerRefreshToken')
     localStorage.removeItem('customerInfo')
-    // dispatch(getCustomerInfo(null)) // Xóa thông tin trong Redux
+    //dispatch(getCustomerInfo(null)) 
   }
 
   // Decode Token

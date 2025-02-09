@@ -89,7 +89,7 @@ const ConnectionList = () => {
           </select>
         </div>
       </div>
-      <table className="table table-hover text-center align-middle">
+      <table className="table table-hover table-striped table-bordered text-center align-middle">
         <thead>
           <tr>
             <th>Connection ID</th>
