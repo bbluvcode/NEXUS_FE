@@ -36,13 +36,13 @@ export const updateStock = createAsyncThunk(
         email: stock.email,
         phone: stock.phone,
         fax: stock.fax,
-        regionId: stock.regionId, // Sử dụng regionId
+        regionId: stock.regionId, 
       })
 
       if (response.status === 200) {
         console.log('Stock updated successfully:', response.data)
         bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
-        return response.data.data // Trả về dữ liệu từ response
+        return response.data.data 
       }
       return rejectWithValue('Unable to update stock. Unknown error.')
     } catch (error) {
