@@ -18,161 +18,147 @@ const CustomerRequest = () => {
   const dispatch = useDispatch()
   const customers = useSelector((state) => state.cusRequests.items)
 
-  //pagination
+  // State cho bộ lọc
+  const [depositFilter, setDepositFilter] = useState("all") // 'all', 'pending', 'paid'
+  const [isResponseFilter, setIsResponseFilter] = useState("all") // 'all', 'responded', 'notResponded'
+
+  // Pagination
   const [filteredOrders, setFilteredOrders] = useState([])
   const [pageNumber, setPageNumber] = useState(0)
   const itemsPerPage = 8
   const pagesVisited = pageNumber * itemsPerPage
   const pageCount = Math.ceil(filteredOrders.length / itemsPerPage)
   const displayOrders = filteredOrders.slice(pagesVisited, pagesVisited + itemsPerPage)
-  const handlePageChange = ({ selected }) => {
-    setPageNumber(selected)
-  }
 
   useEffect(() => {
     dispatch(fetchCusRequests())
   }, [dispatch])
 
   useEffect(() => {
-    setFilteredOrders(customers)
-  }, [customers])
+    let filtered = customers
+
+    // Lọc theo trạng thái đặt cọc (deposit)
+    if (depositFilter === "pending") {
+      filtered = filtered.filter((item) => item.depositStatus === "pending")
+    } else if (depositFilter === "paid") {
+      filtered = filtered.filter((item) => item.depositStatus !== "pending")
+    }
+
+    // Lọc theo phản hồi (isResponse)
+    if (isResponseFilter === "responded") {
+      filtered = filtered.filter((item) => item.isResponse)
+    } else if (isResponseFilter === "notResponded") {
+      filtered = filtered.filter((item) => !item.isResponse)
+    }
+
+    setFilteredOrders(filtered)
+  }, [customers, depositFilter, isResponseFilter])
+
   const formatDateSystem = (dateString) => {
     const date = new Date(dateString)
     return date.toLocaleDateString()
   }
 
-  const handleEditCusReq = (cusReq) => {
-    dispatch(handleSetCusRequest(cusReq))
-  }
-
-  const [showAssignModal, setShowAssignModal] = useState(false)
-  const [selectedRequestId, setSelectedRequestId] = useState(null)
-
-  const handleOpenAssignModal = (requestId) => {
-    setSelectedRequestId(requestId)
-    setShowAssignModal(true)
-  }
-
-  const handleChangeStatus = async (requestId, isResponse) => {
-    if (!isResponse) {
-      handleOpenAssignModal(requestId)
-    } else {
-      await dispatch(changeStatusCusRequest(requestId))
-      await dispatch(fetchCusRequests())
-    }
-  }
-
   return (
     <div>
       <div className="d-flex justify-content-between">
-        <h2>List of Customer Request</h2>
+        <h2>Registered Plan List</h2>
+        <div className="mb-3 d-flex gap-3">
+          {/* Bộ lọc theo trạng thái đặt cọc */}
+          <div>
+            <label className="me-2">Deposit Status:</label>
+            <select
+              className="form-select w-auto d-inline-block"
+              value={depositFilter}
+              onChange={(e) => setDepositFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              <option value="pending">Pending</option>
+              <option value="paid">Paid</option>
+            </select>
+          </div>
+
+          {/* Bộ lọc theo trạng thái phản hồi */}
+          <div>
+            <label className="me-2">Response Status:</label>
+            <select
+              className="form-select w-auto d-inline-block"
+              value={isResponseFilter}
+              onChange={(e) => setIsResponseFilter(e.target.value)}
+            >
+              <option value="all">All</option>
+              <option value="responded">Responded</option>
+              <option value="notResponded">Not Responded</option>
+            </select>
+          </div>
+        </div>
       </div>
-      <AssignSurveyorModal
-        show={showAssignModal}
-        handleClose={() => setShowAssignModal(false)}
-        requestId={selectedRequestId}
-      />
+
       <div className="row">
         <table className="table table-hover">
           <thead>
             <tr>
-              <th>Id</th>
+              <th>No.</th>
               <th>Date Created</th>
               <th>Region Code</th>
               <th>Request Title</th>
               <th>ServiceRequest</th>
               <th>EquipmentRequest</th>
               <th>Deposit</th>
-              {/* <th>DateResolve</th> */}
               <th className="text-center">Action</th>
-              {/* <th></th> */}
-              {/* <th>Image</th>
-              <th>Password</th> */}
             </tr>
           </thead>
           <tbody>
             {displayOrders.length > 0 ? (
               displayOrders.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.requestId}</td>
+                  <td>{index + 1}</td>
                   <td>{formatDateSystem(item.dateCreate)}</td>
                   <td>{item.regionCode}</td>
                   <td>{item.requestTitle}</td>
                   <td>{item.serviceRequest}</td>
                   <td>{item.equipmentRequest}</td>
-                  <td>${item.deposit ?? 0}</td>
-                  {/* <td>{item.dateResolve ? formatDateSystem(item.dateResolve) : 'Waiting'}</td> */}
-                  <td className="d-flex" onClick={() => handleEditCusReq(item)}>
+                  <td className={item.depositStatus === "pending" ? "text-danger" : ""}>
+                    {item.depositStatus !== "pending" ? `$${item.deposit ?? 0}` : `-$${item.deposit ?? 0}`}
+                  </td>
+                  <td className="d-flex">
                     <button
-                      className={`text-white me-1 btn btn-${item.isResponse ? 'success' : 'danger'}`}
+                      className={`text-white me-1 btn btn-${item.isResponse ? "success" : "danger"}`}
                       onClick={() => handleChangeStatus(item.requestId, item.isResponse)}
                     >
                       <CIcon icon={item.isResponse ? cilCheck : cilWarning} />
                     </button>
-                    <BtnModal
-                      name={<CIcon icon={cilUser} />}
-                      iform="CusReqDetail"
-                      style="outline-primary"
-                    />
-                    <BtnModal
-                      name={<i className="fa fa-edit"></i>}
-                      iform="CusReqEditForm"
-                      style="outline-warning"
-                    />
+                    <BtnModal name={<CIcon icon={cilUser} />} iform="CusReqDetail" style="outline-primary" />
+                    <BtnModal name={<i className="fa fa-edit"></i>} iform="CusReqEditForm" style="outline-warning" />
                   </td>
                 </tr>
               ))
             ) : (
-              <>
-                <tr key={'1'}>
-                  <td>TEST</td>
-                  <td>TEST</td>
-                  <td>TEST</td>
-                  <td>{formatDateSystem(Date.now())}</td>
-                  <td>TEST</td>
-                  <td>TEST</td>
-
-                  {/* <td>{item.image}</td>
-        <td>{item.password}</td> */}
-                  <td className="d-flex ">
-                    <BtnModal
-                      name={<i className="fa fa-edit"></i>}
-                      iform="CusReqDetail"
-                      style="warning"
-                    />
-                    <BtnModal
-                      name={<CIcon icon={cilUser} size="sm" />}
-                      iform="CusReqEditForm"
-                      style="primary"
-                    />
-                  </td>
-                </tr>
-                <tr key={'2'}>
-                  <td colSpan="9" style={{ textAlign: 'center', color: 'red' }}>
-                    Không truy cập được dữ liệu
-                  </td>
-                </tr>
-              </>
+              <tr>
+                <td colSpan="8" style={{ textAlign: "center", color: "red" }}>No data available</td>
+              </tr>
             )}
           </tbody>
         </table>
       </div>
+
       <div className="d-flex justify-content-center mt-3">
         <ReactPaginate
           previousLabel={<i className="fa fa-chevron-left"></i>}
           nextLabel={<i className="fa fa-chevron-right"></i>}
           pageCount={pageCount}
-          onPageChange={handlePageChange}
-          containerClassName={'pagination justify-content-center'}
-          activeClassName={'active'}
-          pageClassName={'page-item'}
-          pageLinkClassName={'page-link'}
-          previousClassName={'page-item'}
-          nextClassName={'page-item'}
-          previousLinkClassName={'page-link'}
-          nextLinkClassName={'page-link'}
+          onPageChange={({ selected }) => setPageNumber(selected)}
+          containerClassName={"pagination justify-content-center"}
+          activeClassName={"active"}
+          pageClassName={"page-item"}
+          pageLinkClassName={"page-link"}
+          previousClassName={"page-item"}
+          nextClassName={"page-item"}
+          previousLinkClassName={"page-link"}
+          nextLinkClassName={"page-link"}
         />
       </div>
+
       <ToastContainer />
     </div>
   )

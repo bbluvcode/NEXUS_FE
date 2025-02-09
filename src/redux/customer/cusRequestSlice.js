@@ -108,10 +108,10 @@ const cusRequestSlice = createSlice({
   },
   extraReducers: (builder) => {
     //su ly bat dong bo
-    builder
+    builder      
       .addCase(fetchCusRequests.fulfilled, (state, action) => {
-        state.status = 'succeeded'
-        state.items = action.payload
+        state.status = 'succeeded';
+        state.items = action.payload.sort((a, b) => new Date(b.dateCreate) - new Date(a.dateCreate));
       })
       .addCase(createCusRequest.fulfilled, (state, action) => {
         console.log('action: ', action)
@@ -131,13 +131,6 @@ const cusRequestSlice = createSlice({
       })
       .addCase(changeStatusCusRequest.fulfilled, (state, action) => {
         console.log('addcase: Change status customer request: ', action.payload)
-        // if (action.payload != false) {
-        //   state.status = 'succeeded'
-        //   const index = state.items.findIndex((item) => item.requestId === action.payload.requestId)
-        //   if (index !== -1) {
-        //     state.items[index] = action.payload
-        //   }
-        // }
         if (action.payload && action.payload.requestId) {
           state.status = 'succeeded';
           const index = state.items.findIndex(item => item.requestId === action.payload.requestId);

@@ -5,17 +5,18 @@ import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
 const BtnReq = (props) => {
-  const { setIform,serviceSelected, setServiceSelected } = useContext(DataContext)
+  const { setIform, setServiceSelected } = useContext(DataContext)
   const navigate = useNavigate()
   
   // handleRegisterClick.js
   const handleRegisterClick = () => {
-    setServiceSelected(props.serviceSelected)
-    console.log("🚀 ~ BtnReq ~ serviceSelected:", serviceSelected)
-    
+    setServiceSelected(props.serviceSelected)    
     const customerInfo = localStorage.getItem('customerInfo')
+    console.log("🚀 ~ handleRegisterClick ~ customerInfo:", customerInfo)
     const parsedCustomerInfo = customerInfo ? JSON.parse(customerInfo) : null
+    console.log("🚀 ~ handleRegisterClick ~ parsedCustomerInfo:", parsedCustomerInfo)
     const cusId = parsedCustomerInfo?.customerId
+    console.log("🚀 ~ handleRegisterClick ~ cusId:", cusId)
 
     const modalInstance = bootstrap.Modal.getInstance(document.getElementById('myModal'))
 
@@ -43,7 +44,6 @@ const BtnReq = (props) => {
       })
     }
   }
-    console.log("🚀 ~ handleRegisterClick ~ props.serviceSelected:", props.serviceSelected)
 
   return (
     <div>
@@ -53,7 +53,7 @@ const BtnReq = (props) => {
         data-bs-target="#myModal"
         onClick={handleRegisterClick}
       >
-        Register
+        Register NOW
       </button>
     </div>
   )

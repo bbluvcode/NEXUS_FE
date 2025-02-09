@@ -186,19 +186,6 @@ function CusReqCreateForm() {
           {errors.deposit && <p className="text-danger">{errors.deposit.message}</p>}
         </div>
 
-        {/* <div className="col-md-6">
-          <label htmlFor="customerId" className="form-label">
-            Customer ID
-          </label>
-          <input
-            type="number"
-            id="customerId"
-            name="customerId"
-            className="form-control"
-            value={customerId}
-            disabled
-          />
-        </div> */}
         <div className="col-md-6">
           <label htmlFor="customerName" className="form-label">
             Customer Name
@@ -227,13 +214,13 @@ function CusReqCreateForm() {
           />
         </div>
 
-        <div className="col-md-12">
+        <div className="col-md-12 text-center">
           {loading ? (
-            <div className="spinner-border text-primary" role="status">
+            <div className="spinner-border" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
           ) : (
-            <BtnModalCloseSubmit />
+            <BtnModalCloseSubmit />        
           )}
         </div>
       </form>

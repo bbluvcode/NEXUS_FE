@@ -9,7 +9,7 @@ const ClientFooter = () => {
       <div className="container text-center text-white">
         <div className="row">
           <div className="col-lg-4">
-            <a href="index.html" className="logo">
+            <a href="/" className="logo">
               <img src="logo_textwhite_trans.png" alt="Company Logo" style={{ width: 160 }} />
             </a>
             <p>
@@ -35,7 +35,7 @@ const ClientFooter = () => {
               </li>
               <li>
                 <a href="#">
-                  <CIcon icon={cilEnvelopeLetter} /> nexus@company.com
+                  <CIcon icon={cilEnvelopeLetter} /> mnhbgr@gmail.com
                 </a>
               </li>
               <li>

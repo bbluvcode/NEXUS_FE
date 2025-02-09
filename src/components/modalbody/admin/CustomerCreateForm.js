@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types *//* eslint-disable prettier/prettier */
+/* eslint-disable react/prop-types */ /* eslint-disable prettier/prettier */
 import React, { useContext, useState } from 'react'
 import BtnModalCloseSubmit from '../../button/BtnModalCloseSubmit'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,6 +11,8 @@ import { DataContext } from '../../../context/DataContext'
 function CustomerCreateForm(props) {
   const dispatch = useDispatch()
   const { setIform } = useContext(DataContext)
+    const [loading, setLoading] = useState(false)
+  
   const customer = useSelector((state) => state.customers.customer)
   const [formData, setFormData] = useState({
     fullName: '',
@@ -33,14 +35,11 @@ function CustomerCreateForm(props) {
     phoneNumber: yup
       .string()
       .matches(/^[0-9]+$/, 'Phone number must be numeric')
-      .min(8).max(12)
+      .min(8)
+      .max(12)
       .optional(),
     identificationNo: yup.string().optional(),
     image: yup.string().optional(), // Add validation if needed for images (e.g., file type)
-    password: yup
-      .string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
   })
 
   const {
@@ -62,19 +61,23 @@ function CustomerCreateForm(props) {
   }
 
   const onSubmit = async () => {
-    // e.preventDefault()    
-    const resultAction = await dispatch(createCustomer(customer))
-    if (createCustomer.fulfilled.match(resultAction)) {
-      const customerInfo = resultAction.payload
-      localStorage.setItem('customerInfo',  JSON.stringify(customerInfo));
-    } 
-    if (props.client) {
-      console.log('client')
-      console.log('props:', props.client)
-      setIform('CusReqCreateForm')
-      bootstrap.Modal.getInstance(document.getElementById('myModal')).show()
+    setLoading(true) // Bật loading khi nhấn nút thanh toán
+    try {
+      const resultAction = await dispatch(createCustomer(customer))
+      if (createCustomer.fulfilled.match(resultAction)) {
+        const res = resultAction.payload
+        console.log('🚀 ~ onSubmit ~ res:', res)
+        if (res) {
+          setIform('CusReqCreateForm')
+          bootstrap.Modal.getInstance(document.getElementById('myModal')).show()
+        }
+      }
+    } catch (error) {
+      console.log('🚀 ~ onSubmit ~ error:', error)
+    } finally {
+      setLoading(false) // Bật loading khi nhấn nút thanh toán
     }
- 
+
   }
 
   const handleFileChange = (e) => {
@@ -87,7 +90,7 @@ function CustomerCreateForm(props) {
 
   return (
     <div className="customer-create-form">
-      <h2 className="text-center">Register Customer Info</h2>
+      <h2 className="text-center">Register Customer Infomation</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
         <div className="col-md-6">
           <label htmlFor="fullName" className="form-label">
@@ -139,21 +142,6 @@ function CustomerCreateForm(props) {
         </div>
 
         <div className="col-md-6">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <input
-            {...register('password')}
-            type="password"
-            id="password"
-            name="password"
-            className="form-control"
-            onChange={handleChange}
-          />
-          {errors.password && <p className="text-danger">{errors.password.message}</p>}
-        </div>
-
-        <div className="col-md-6">
           <label htmlFor="email" className="form-label">
             Email
           </label>
@@ -200,22 +188,7 @@ function CustomerCreateForm(props) {
           )}
         </div>
 
-        {/* <div className="col-md-6">
-          <label htmlFor="image" className="form-label">
-            Image
-          </label>
-          <input
-            {...register('image')}
-            type="file"
-            id="image"
-            name="image"
-            className="form-control"
-            onChange={handleChange}
-          />
-          {errors.image && <p className="text-danger">{errors.image.message}</p>}
-        </div> */}
-
-        <div className="col-md-6">
+        <div className="col-md-12">
           <label htmlFor="address" className="form-label">
             Address
           </label>
@@ -230,8 +203,14 @@ function CustomerCreateForm(props) {
           {errors.address && <p className="text-danger">{errors.address.message}</p>}
         </div>
 
-        <div className="col-md-12">
-          <BtnModalCloseSubmit />
+        <div className="col-md-12 text-center">
+          {loading ? (
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          ) : (
+            <BtnModalCloseSubmit />
+          )}
         </div>
       </form>
     </div>
