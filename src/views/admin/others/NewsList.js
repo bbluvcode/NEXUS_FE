@@ -16,7 +16,6 @@ const NewsList = () => {
       try {
         const newsResponse = await axios.get(API_BASE_URL)
         const employeeResponse = await getAllEmployees()
-        console.log(newsResponse.data)
         setNewsList(newsResponse.data)
         setEmployees(employeeResponse.data)
       } catch (error) {
