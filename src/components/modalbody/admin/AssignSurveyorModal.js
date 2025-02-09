@@ -77,10 +77,6 @@ const AssignSurveyorModal = ({ show, handleClose, requestId }) => {
             <Modal.Body>
                 <Form>
                     <Form.Group className="mt-3">
-                        <Form.Label>Created by (EmpID)</Form.Label>
-                        <Form.Control type="text" value={empIdCreater} readOnly />
-                    </Form.Group>
-                    <Form.Group className="mt-3">
                         <Form.Label>Surveyor</Form.Label>
                         <Form.Control
                             as="select"
