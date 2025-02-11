@@ -31,7 +31,7 @@ const EquipmentList = () => {
         <table className="table table-bordered table-hover">
           <thead className="thead-dark">
             <tr>
-              <th>ID</th>
+              {/* <th>ID</th> */}
               <th>Name</th>
               <th>Price</th>
               <th>Stock</th>
@@ -40,7 +40,7 @@ const EquipmentList = () => {
               <th>Vendor</th>
               <th>Status</th>
               <th>Discount</th>
-              <th>Actions</th>
+              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
@@ -61,7 +61,7 @@ const EquipmentList = () => {
             {status === 'succeeded' && equipments?.length > 0
               ? equipments.map((item) => (
                   <tr key={item.equipmentId}>
-                    <td>{item.equipmentId}</td>
+                    {/* <td>{item.equipmentId}</td> */}
                     <td>{item.equipmentName}</td>
                     <td>${item.price.toFixed(2)}</td>
                     <td>{item.stockQuantity}</td>
@@ -70,13 +70,13 @@ const EquipmentList = () => {
                     <td>{item.vendor?.vendorName || 'Unknown'}</td>
                     <td>{item.status ? 'Active' : 'Inactive'}</td>
                     <td>{item.discount?.discountName || 'No Discount'}</td>
-                    <td onClick={() => handleEditEquipment(item)}>
-                      {/* <BtnModal
+                    {/* <td onClick={() => handleEditEquipment(item)}>
+                      <BtnModal
                         name={<i className="fa fa-edit"></i>}
                         iform="EquipmentEditForm"
                         style="warning"
-                      /> */}
-                    </td>
+                      />
+                    </td> */}
                   </tr>
                 ))
               : status === 'succeeded' && (

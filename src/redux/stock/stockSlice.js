@@ -62,7 +62,7 @@ const stockSlice = createSlice({
       email: '',
       phone: '',
       fax: '',
-      regionId: '', // Sử dụng regionId thay vì region
+      regionId: '', 
     },
     status: 'idle',
     error: null,
