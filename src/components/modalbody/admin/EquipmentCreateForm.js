@@ -7,33 +7,49 @@ import { fetchEquipments } from '../../../redux/equipment/equipmentSlice'
 
 function AddEquipment({ onSuccess }) {
   const dispatch = useDispatch()
-  const [equipmentName, setEquipmentName] = useState('')
-  const [price, setPrice] = useState('')
-  const [stockQuantity, setStockQuantity] = useState('')
-  const [description, setDescription] = useState('')
-  const [status, setStatus] = useState(true)
-  const [discountId, setDiscountId] = useState('')
-  const [equipmentTypeId, setEquipmentTypeId] = useState('')
-  const [vendorId, setVendorId] = useState('')
-  const [stockId, setStockId] = useState('')
+  const [formData, setFormData] = useState({
+    equipmentName: '',
+    price: '',
+    stockQuantity: '',
+    description: '',
+    status: true,
+    discountId: '',
+    equipmentTypeId: '',
+    vendorId: '',
+    stockId: '',
+  })
+
+  const [image, setImage] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value,
+    })
+  }
+
+  const handleFileChange = (e) => {
+    setImage(e.target.files[0])
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
 
-    const equipmentData = {
-      EquipmentName: equipmentName,
-      Price: parseFloat(price),
-      StockQuantity: parseInt(stockQuantity),
-      Description: description,
-      Status: status,
-      DiscountId: discountId,
-      EquipmentTypeId: parseInt(equipmentTypeId),
-      VendorId: parseInt(vendorId),
-      StockId: parseInt(stockId),
+    const data = new FormData()
+    Object.keys(formData).forEach((key) => {
+      data.append(key, formData[key])
+    })
+    if (image) {
+      data.append('imageFile', image)
     }
 
     try {
-      await axios.post(apiEquipment, equipmentData)
+      await axios.post(apiEquipment, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       alert('Equipment added successfully!')
       if (onSuccess) {
         onSuccess()
@@ -42,7 +58,9 @@ function AddEquipment({ onSuccess }) {
       }
     } catch (error) {
       console.error('Error adding equipment:', error)
-      alert('Failed to add equipment')
+      alert(error.response?.data?.message || 'Failed to add equipment')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -50,48 +68,29 @@ function AddEquipment({ onSuccess }) {
     <div className="add-equipment-form">
       <h2 className="text-center">Add New Equipment</h2>
       <form onSubmit={handleSubmit} className="row g-3">
-        <div className="col-md-6">
-          <label htmlFor="equipmentName" className="form-label">
-            Equipment Name
-          </label>
-          <input
-            type="text"
-            id="equipmentName"
-            value={equipmentName}
-            onChange={(e) => setEquipmentName(e.target.value)}
-            className="form-control"
-            required
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="price" className="form-label">
-            Price
-          </label>
-          <input
-            type="number"
-            step="0.01"
-            id="price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className="form-control"
-            required
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="stockQuantity" className="form-label">
-            Stock Quantity
-          </label>
-          <input
-            type="number"
-            id="stockQuantity"
-            value={stockQuantity}
-            onChange={(e) => setStockQuantity(e.target.value)}
-            className="form-control"
-            required
-          />
-        </div>
+        {[
+          { label: 'Equipment Name', name: 'equipmentName', type: 'text', required: true },
+          { label: 'Price', name: 'price', type: 'number', step: '0.01', required: true },
+          { label: 'Stock Quantity', name: 'stockQuantity', type: 'number', required: true },
+          { label: 'Discount ID', name: 'discountId', type: 'text' },
+          { label: 'Equipment Type ID', name: 'equipmentTypeId', type: 'number', required: true },
+          { label: 'Vendor ID', name: 'vendorId', type: 'number', required: true },
+          { label: 'Stock ID', name: 'stockId', type: 'number', required: true },
+        ].map(({ label, name, ...rest }) => (
+          <div className="col-md-6" key={name}>
+            <label htmlFor={name} className="form-label">
+              {label}
+            </label>
+            <input
+              id={name}
+              name={name}
+              value={formData[name]}
+              onChange={handleChange}
+              className="form-control"
+              {...rest}
+            />
+          </div>
+        ))}
 
         <div className="col-md-6">
           <label htmlFor="description" className="form-label">
@@ -99,8 +98,9 @@ function AddEquipment({ onSuccess }) {
           </label>
           <textarea
             id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
             className="form-control"
           />
         </div>
@@ -113,8 +113,9 @@ function AddEquipment({ onSuccess }) {
             <input
               type="checkbox"
               id="status"
-              checked={status}
-              onChange={(e) => setStatus(e.target.checked)}
+              name="status"
+              checked={formData.status}
+              onChange={handleChange}
               className="form-check-input"
             />
             <label htmlFor="status" className="form-check-label">
@@ -124,63 +125,21 @@ function AddEquipment({ onSuccess }) {
         </div>
 
         <div className="col-md-6">
-          <label htmlFor="discountId" className="form-label">
-            Discount ID
+          <label htmlFor="image" className="form-label">
+            Upload Image
           </label>
           <input
-            type="text"
-            id="discountId"
-            value={discountId}
-            onChange={(e) => setDiscountId(e.target.value)}
+            type="file"
+            id="image"
+            onChange={handleFileChange}
             className="form-control"
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="equipmentTypeId" className="form-label">
-            Equipment Type ID
-          </label>
-          <input
-            type="number"
-            id="equipmentTypeId"
-            value={equipmentTypeId}
-            onChange={(e) => setEquipmentTypeId(e.target.value)}
-            className="form-control"
-            required
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="vendorId" className="form-label">
-            Vendor ID
-          </label>
-          <input
-            type="number"
-            id="vendorId"
-            value={vendorId}
-            onChange={(e) => setVendorId(e.target.value)}
-            className="form-control"
-            required
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="stockId" className="form-label">
-            Stock ID
-          </label>
-          <input
-            type="number"
-            id="stockId"
-            value={stockId}
-            onChange={(e) => setStockId(e.target.value)}
-            className="form-control"
-            required
+            accept="image/*"
           />
         </div>
 
         <div className="col-md-12 text-center">
-          <button type="submit" className="btn btn-primary">
-            Add Equipment
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? 'Adding...' : 'Add Equipment'}
           </button>
         </div>
       </form>
