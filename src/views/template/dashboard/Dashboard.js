@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Statistic, Row, Col, Table, Tag } from 'antd'
 import axios from 'axios'
-import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts'
+import { PieChart, Pie, Cell, Tooltip, Legend, XAxis, YAxis, BarChart, Bar, ResponsiveContainer } from 'recharts'
 
 const Dashboard = () => {
   const [inStockOrders, setInStockOrders] = useState([])
@@ -14,6 +14,23 @@ const Dashboard = () => {
     totalPaidInStock: 0,
     totalPaidOutStock: 0,
   })
+  const [serviceBills, setServiceBills] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const fetchServiceBills = async () => {
+      try {
+        const { data } = await axios.get('http://localhost:5185/api/ServiceBill')
+        setServiceBills(data.data)
+      } catch (err) {
+        setError(err.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchServiceBills()
+  }, [])
 
   useEffect(() => {
     axios.get('http://localhost:5185/api/InStockOrder').then((res) => {
@@ -49,6 +66,11 @@ const Dashboard = () => {
     })
   }, [])
 
+  const chartData = serviceBills.map((bill) => ({
+    payer: bill.payer,
+    total: bill.total || 0,
+  }))
+
   const pieData = [
     { name: 'Paid InStock', value: summary.paidInStock },
     { name: 'Unpaid InStock', value: summary.totalInStock - summary.paidInStock },
@@ -82,9 +104,18 @@ const Dashboard = () => {
     },
   ]
 
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>
+  }
+
   return (
-    <div style={{ padding: 20 }}>
-      <Row gutter={16}>
+    <div>
+
+      <Row gutter={16} style={{ marginTop: 20 }}>
         <Col span={8}>
           <Card>
             <Statistic title="Total InStock Orders" value={summary.totalInStock} />
@@ -141,6 +172,19 @@ const Dashboard = () => {
           </Card>
         </Col>
       </Row>
+      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="bg-white shadow-md rounded-lg p-4">
+          <h2 className="text-xl font-semibold mb-4">Service Bill</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={chartData}>
+              <XAxis dataKey="payer" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="total" fill="#4F46E5" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
     </div>
   )
 }
