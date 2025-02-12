@@ -464,4 +464,4 @@ const _nav = [
   },
 ]
 
-export default _nav
+export default React.meno(_nav)

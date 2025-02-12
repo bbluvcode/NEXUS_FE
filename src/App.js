@@ -18,7 +18,7 @@ import { DataProvider } from './context/DataContext'
 import { AuthProvider } from './context/AuthContext'
 import ErrorBoundary from './Error Boundary'
 import SuccessDeposit from './views/pages/payment/SuccessDeposit'
-import EmployeePrivateRoute from "./config/employeePrivateRoute"
+import EmployeePrivateRoute from './config/employeePrivateRoute'
 
 // Containers
 const AdminLayout = React.lazy(() => import('./layout/AdminLayout'))
@@ -70,8 +70,16 @@ const App = () => {
                   name="Success Deposit"
                   element={<SuccessDeposit />}
                 />
-                <Route path="/admin/*" element={<EmployeePrivateRoute element={<AdminLayout />} />} />
-                <Route path="/admin" element={<EmployeePrivateRoute element={<Navigate to="/admin/dashboard" replace />} />} />
+                <Route
+                  path="/admin/*"
+                  element={<EmployeePrivateRoute element={<AdminLayout />} />}
+                />
+                <Route
+                  path="/admin"
+                  element={
+                    <EmployeePrivateRoute element={<Navigate to="/admin/dashboard" replace />} />
+                  }
+                />
                 <Route path="/*" name="Home" element={<ClientLayout />} />
               </Routes>
             </Suspense>
