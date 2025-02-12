@@ -50,8 +50,8 @@ const StockRequestList = () => {
               <th>Employee</th>
               <th>Create Date</th>
               <th>Total Number</th>
+              <th>In-Stock Orders</th>
               <th>Details</th>
-              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
@@ -72,20 +72,31 @@ const StockRequestList = () => {
             )}
 
             {status === 'succeeded' && stockRequests.length > 0 ? (
-              stockRequests.map((items) => (
-                <tr key={items.inStockRequestId}>
-                  <td>{items.inStockRequestId}</td>
+              stockRequests.map((request) => (
+                <tr key={request.inStockRequestId}>
+                  <td>{request.inStockRequestId}</td>
                   <td>
-                    {items.employee
-                      ? `${items.employee.firstName} ${items.employee.lastName}`
-                      : `ID: ${items.employeeId}`}
+                    {request.employee
+                      ? `${request.employee.firstName} ${request.employee.lastName}`
+                      : `ID: ${request.employeeId}`}
                   </td>
-                  <td>{new Date(items.createDate).toLocaleDateString()}</td>
-                  <td>{items.totalNumber}</td>
+                  <td>{new Date(request.createDate).toLocaleDateString()}</td>
+                  <td>{request.totalNumber}</td>
                   <td>
-                    {items.inStockRequestDetails?.length > 0 ? (
+                    {request.inStockOrders?.length > 0 ? (
                       <ul>
-                        {items.inStockRequestDetails.map((detail) => (
+                        {request.inStockOrders.map((order) => (
+                          <li key={order.inStockOrderId}>Order ID: {order.inStockOrderId}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      'No orders'
+                    )}
+                  </td>
+                  <td>
+                    {request.inStockRequestDetails?.length > 0 ? (
+                      <ul>
+                        {request.inStockRequestDetails.map((detail) => (
                           <li key={detail.inStockRequestDetailId}>
                             {detail.equipment
                               ? detail.equipment.equipmentName
@@ -97,14 +108,6 @@ const StockRequestList = () => {
                     ) : (
                       'No details'
                     )}
-                  </td>
-                  <td>
-                    {/* <BtnModal
-                      name={<i className="fa fa-edit"></i>}
-                      iform="StockRequestEditForm"
-                      style="warning"
-                      onClick={() => toggleModal(items)}
-                    /> */}
                   </td>
                 </tr>
               ))

@@ -55,7 +55,7 @@ const initialState = {
     StockQuantity: 0,
     Description: '',
     Status: false,
-    DiscountId: null,
+    // DiscountId: null,
     EquipmentTypeId: 0,
     VendorId: 0,
     StockId: 0,

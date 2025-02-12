@@ -1,68 +1,69 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react/prop-types */
-import React, { useState } from 'react'
-import axios from 'axios'
-import { apiEquipment } from '../../../constant/apiConstant'
-import { useDispatch } from 'react-redux'
-import { fetchEquipments } from '../../../redux/equipment/equipmentSlice'
+import React, { useState } from 'react';
+import axios from 'axios';
+import { apiEquipment } from '../../../constant/apiConstant';
+import { useDispatch } from 'react-redux';
+import { fetchEquipments } from '../../../redux/equipment/equipmentSlice';
 
 function AddEquipment({ onSuccess }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     equipmentName: '',
     price: '',
     stockQuantity: '',
     description: '',
     status: true,
-    discountId: '',
     equipmentTypeId: '',
     vendorId: '',
     stockId: '',
-  })
-
-  const [image, setImage] = useState(null)
-  const [loading, setLoading] = useState(false)
+  });
+  
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
       [name]: type === 'checkbox' ? checked : value,
-    })
-  }
+    });
+  };
 
   const handleFileChange = (e) => {
-    setImage(e.target.files[0])
-  }
+    setImage(e.target.files[0]);
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-
-    const data = new FormData()
+    e.preventDefault();
+    setLoading(true);
+    console.log(formData);
+    console.log("Image:", image);
+    const data = new FormData();
     Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key])
-    })
+      data.append(key, formData[key]);
+    });
     if (image) {
-      data.append('imageFile', image)
+      data.append('imageFile', image);
     }
 
     try {
       await axios.post(apiEquipment, data, {
         headers: { 'Content-Type': 'multipart/form-data' },
-      })
-      alert('Equipment added successfully!')
+      });
+      alert('Equipment added successfully!');
       if (onSuccess) {
-        onSuccess()
+        onSuccess();
       } else {
-        dispatch(fetchEquipments())
+        dispatch(fetchEquipments());
       }
     } catch (error) {
-      console.error('Error adding equipment:', error)
-      alert(error.response?.data?.message || 'Failed to add equipment')
+      console.error('Error adding equipment:', error);
+      alert(error.response?.data?.message || 'Failed to add equipment');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="add-equipment-form">
@@ -72,7 +73,6 @@ function AddEquipment({ onSuccess }) {
           { label: 'Equipment Name', name: 'equipmentName', type: 'text', required: true },
           { label: 'Price', name: 'price', type: 'number', step: '0.01', required: true },
           { label: 'Stock Quantity', name: 'stockQuantity', type: 'number', required: true },
-          { label: 'Discount ID', name: 'discountId', type: 'text' },
           { label: 'Equipment Type ID', name: 'equipmentTypeId', type: 'number', required: true },
           { label: 'Vendor ID', name: 'vendorId', type: 'number', required: true },
           { label: 'Stock ID', name: 'stockId', type: 'number', required: true },
@@ -144,7 +144,7 @@ function AddEquipment({ onSuccess }) {
         </div>
       </form>
     </div>
-  )
+  );
 }
 
-export default AddEquipment
+export default AddEquipment;
