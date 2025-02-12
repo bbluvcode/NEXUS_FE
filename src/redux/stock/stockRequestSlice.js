@@ -55,6 +55,19 @@ export const updateStockRequest = createAsyncThunk(
   },
 )
 
+// Delete a stock request
+export const deleteStockRequest = createAsyncThunk(
+  'stockRequests/deleteStockRequest',
+  async (id, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${apiInStockRequest}/${id}`)
+      return id
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to delete stock request.')
+    }
+  },
+)
+
 const stockRequestSlice = createSlice({
   name: 'stockRequests',
   initialState: {
@@ -116,6 +129,17 @@ const stockRequestSlice = createSlice({
         }
       })
       .addCase(updateStockRequest.rejected, (state, action) => {
+        state.status = 'failed'
+        state.error = action.payload
+      })
+      .addCase(deleteStockRequest.pending, (state) => {
+        state.status = 'loading'
+      })
+      .addCase(deleteStockRequest.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.items = state.items.filter((item) => item.inStockRequestId !== action.payload)
+      })
+      .addCase(deleteStockRequest.rejected, (state, action) => {
         state.status = 'failed'
         state.error = action.payload
       })
