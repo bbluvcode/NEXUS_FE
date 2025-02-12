@@ -24,7 +24,21 @@ const employeeSchema = yup.object().shape({
     .transform((value, originalValue) => (originalValue === "" ? null : value)) // Convert empty string to null
     .nullable() // Allow null values to avoid "Invalid Date"
     .required('Birthdate is required.')
-    .max(new Date(), 'Date of birth cannot be in the future.'),
+    .max(new Date(), 'Date of birth cannot be in the future.')
+    .test(
+      'is-18-or-older',
+      'You must be at least 18 years old.',
+      (value) => {
+        if (!value) return false; // Nếu null hoặc undefined, validation sẽ fail
+        const today = new Date();
+        const birthDate = new Date(value);
+        const ageDiff = today.getFullYear() - birthDate.getFullYear();
+        const isBirthdayPassed =
+          today.getMonth() > birthDate.getMonth() ||
+          (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
+        return ageDiff > 18 || (ageDiff === 18 && isBirthdayPassed);
+      }
+    ),
   address: yup
     .string()
     .required('Address is required.')
@@ -49,15 +63,15 @@ const employeeSchema = yup.object().shape({
     .max(20, 'Password cannot exceed 20 characters.'),
   status: yup.boolean().required('Status is required.'),
   employeeRoleId: yup
-  .string()
-  .nullable() // Allow null
-  .notOneOf([""], "Role is required.") // Prevent empty value
-  .required("Role is required."), // Ensures a role is selected
+    .string()
+    .nullable() // Allow null
+    .notOneOf([""], "Role is required.") // Prevent empty value
+    .required("Role is required."), // Ensures a role is selected
   retailShopId: yup
-  .number()
-  .typeError("Retail shop is required.") // Handles cases where no number is selected
-  .required("Retail shop is required.") // Ensures the field is not empty
-  .min(1, "Retail shop is required."), // Ensures a valid retail shop ID (e.g., assuming IDs start from 1)
+    .number()
+    .typeError("Retail shop is required.") // Handles cases where no number is selected
+    .required("Retail shop is required.") // Ensures the field is not empty
+    .min(1, "Retail shop is required."), // Ensures a valid retail shop ID (e.g., assuming IDs start from 1)
 });
 
 const EmployeeForm = ({ onSubmit, retailShops, roles }) => {

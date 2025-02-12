@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchEquipments } from '../../../redux/equipment/equipmentSlice'
 import BtnModal from '../../../components/button/BtnModal'
-import { API_BASE_URL } from '../../../constant/apiConstant'
+import { apiImageEquipment } from '../../../constant/apiConstant'
 
 const EquipmentList = () => {
   const dispatch = useDispatch()
@@ -71,7 +71,7 @@ const EquipmentList = () => {
                   <td>{item.stock?.location || 'Unknown'}</td>
                   <td>
                     <img
-                      src={`${API_BASE_URL}${item.image}`}
+                      src={`${item.image}`}
                       alt={item.equipmentName}
                       style={{
                         width: '100px',

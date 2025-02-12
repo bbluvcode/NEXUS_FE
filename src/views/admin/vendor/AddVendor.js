@@ -5,36 +5,37 @@ import * as Yup from 'yup';
 import { addVendor } from '../../../services/vendorService';
 import { getAllRegions } from '../../../services/regionService';
 import Swal from 'sweetalert2'; // Import SweetAlert2
-
+import { useNavigate } from 'react-router-dom';
 const vendorValidationSchema = Yup.object().shape({
   vendorName: Yup.string()
-    .max(15, 'Name must be at most 15 characters')
-    .required('Name is required'),
+  .max(15, 'Name must be at most 15 characters')
+  .required('Name is required'),
   address: Yup.string()
-    .max(50, 'Address must be at most 50 characters')
-    .required('Address is required'),
+  .max(50, 'Address must be at most 50 characters')
+  .required('Address is required'),
   email: Yup.string()
-    .email('Invalid email format')
-    .required('Email is required'),
+  .email('Invalid email format')
+  .required('Email is required'),
   phone: Yup.string()
-    .length(10, 'Phone must be exactly 10 digits')
-    .matches(/^\d+$/, 'Phone must contain only digits')
-    .required('Phone is required'),
+  .length(10, 'Phone must be exactly 10 digits')
+  .matches(/^\d+$/, 'Phone must contain only digits')
+  .required('Phone is required'),
   fax: Yup.string()
-    .max(15, 'Fax must be at most 15 characters')
-    .required('Fax is required'),
+  .max(15, 'Fax must be at most 15 characters')
+  .required('Fax is required'),
   description: Yup.string()
-    .max(1000, 'Description must be at most 1000 characters')
-    .required('Description is required'),
+  .max(1000, 'Description must be at most 1000 characters')
+  .required('Description is required'),
   status: Yup.boolean().required('Status is required'),
   regionId: Yup.number()
-    .nullable()
-    .typeError('Region ID must be a number'),
+  .nullable()
+  .typeError('Region ID must be a number'),
 });
 
 const AddVendor = () => {
+  const navigate = useNavigate();
   const [regions, setRegions] = useState([]);
-
+  
   // Fetch danh sách regions từ backend
   useEffect(() => {
     const fetchRegions = async () => {
@@ -53,7 +54,7 @@ const AddVendor = () => {
     try {
       const response = await addVendor(values);
       console.log('Vendor added successfully:', response);
-      
+
       // SweetAlert success
       Swal.fire({
         title: 'Success!',
@@ -65,7 +66,7 @@ const AddVendor = () => {
       resetForm();
     } catch (error) {
       console.error('Error adding vendor:', error);
-      
+
       // SweetAlert error
       Swal.fire({
         title: 'Error!',
@@ -75,9 +76,15 @@ const AddVendor = () => {
       });
     }
   };
+  const handleBack = () => {
+    navigate(-1)
+}
 
   return (
     <div className="container">
+      <button onClick={handleBack} className="btn btn-outline-dark mb-4">
+        Back
+      </button>
       <h2>Add Vendor</h2>
       <Formik
         initialValues={{
@@ -157,7 +164,7 @@ const AddVendor = () => {
               <ErrorMessage name="status" component="div" className="text-danger" />
             </div>
 
-            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+            <button type="submit" className="btn btn-primary mb-3" disabled={isSubmitting}>
               Submit
             </button>
           </Form>

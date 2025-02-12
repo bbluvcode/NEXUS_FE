@@ -126,14 +126,6 @@ const Dashboard = () => {
             <Statistic title="Total OutStock Orders" value={summary.totalOutStock} />
           </Card>
         </Col>
-        <Col span={8}>
-          <Card>
-            <Statistic
-              title="Total Paid Revenue"
-              value={`$${summary.totalPaidInStock - summary.totalPaidOutStock}`}
-            />
-          </Card>
-        </Col>
       </Row>
 
       <Row gutter={16} style={{ marginTop: 20 }}>

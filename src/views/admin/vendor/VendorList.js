@@ -69,10 +69,10 @@ const VendorList = () => {
             value={searchField}
             onChange={(e) => setSearchField(e.target.value)}
           >
-            <option value="VendorName">Search by Name</option>
-            <option value="Address">Search by Address</option>
-            <option value="Email">Search by Email</option>
-            <option value="Phone">Search by Phone</option>
+            <option value="vendorName">Search by Name</option>
+            <option value="address">Search by Address</option>
+            <option value="email">Search by Email</option>
+            <option value="phone">Search by Phone</option>
           </select>
           <input
             type="text"

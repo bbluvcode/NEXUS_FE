@@ -19,4 +19,4 @@ export const apiVendor = `http://localhost:${API_PORT}/api/Vendor/`;
 export const apiAuth = `http://localhost:${API_PORT}/api/Auth/`;
 
 export const apiImage = `${API_BASE_URL}/Images/imageRetail/`;
-export const apiImageEquipment = `${API_BASE_URL}/Images/imageEquipment`;
+export const apiImageEquipment = `/Images/imageEquipment`;
