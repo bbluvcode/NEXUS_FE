@@ -30,6 +30,8 @@ function ProfileUser() {
   const fetchCustomerData = async (email) => {
     try {
       const response = await axios.get(`http://localhost:5185/api/Customer/customer-by-email/${email}`);
+      console.log("Customer data:", response.data.data);
+
       setUser(response.data.data);
     } catch (error) {
       console.error("Error fetching customer data:", error);
@@ -37,13 +39,19 @@ function ProfileUser() {
   };
 
   const updateUser = (updatedFields) => {
-    setUser((prev) => ({ 
-      ...prev, 
+    setUser((prev) => ({
+      ...prev,
       ...updatedFields,
       accounts: updatedFields.accounts || prev.accounts,
-      customerRequests: updatedFields.customerRequests || prev.customerRequests }));
+      customerRequests: updatedFields.customerRequests || prev.customerRequests,
+      avatar: updatedFields.imageUrl || prev.avatar,
+    }));
   };
-
+  useEffect(() => {
+    if (!customer) {
+      setUser(null); 
+    }
+  }, [customer]);
   if (!user) {
     return <Loading message="Loading customer data..." />;
   }
@@ -69,9 +77,10 @@ function ProfileUser() {
                 sub={user.email}
                 dt1={Array.isArray(user.accounts) ? user.accounts.length : 0}
                 dt2={Array.isArray(user.accounts) ? user.accounts.length * 10 : 0}
-                dt3={(Array.isArray(user?.customerRequests) && user.customerRequests.length > 0 && user.customerRequests[0]?.dateCreate)
+                dt3={(Array.isArray(user.customerRequests) && user.customerRequests.length > 0 && user.customerRequests[0]?.dateCreate)
                   ? new Date(user.customerRequests[0].dateCreate).toISOString().split("T")[0]
-                  : "N/A"}              
+                  : "N/A"}
+                avatar={user.image || "~/default-avatar.png"} // Truyền avatar từ API hoặc ảnh mặc định
               />
             </Grid>
 

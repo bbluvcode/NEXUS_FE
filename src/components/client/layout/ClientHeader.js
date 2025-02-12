@@ -118,7 +118,7 @@ const ClientHeader = () => {
                     <div className="scroll-to-section">
                       <CDropdown variant="nav-item">
                         <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
-                          <CAvatar src={customer?.avatar || avatar10} size="md" />
+                          <CAvatar src={customer?.image || avatar10} size="md" />
                         </CDropdownToggle>
                         <CDropdownMenu className="pt-0" placement="bottom-end">
                           <CDropdownHeader className="bg-body-secondary fw-semibold my-2 text-center">

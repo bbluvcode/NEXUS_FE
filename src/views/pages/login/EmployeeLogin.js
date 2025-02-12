@@ -51,7 +51,7 @@ const EmployeeLogin = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(""); 
+    setError("");
 
     if (!validateForm()) {
       showToast(error, "error");
@@ -60,10 +60,12 @@ const EmployeeLogin = () => {
 
     try {
       await loginEmployee(email, password);
-      showToast("Login successful!", "success");
+      showToast("Login successful!", "success", 3000);
       navigate("/admin/dashboard");
     } catch (err) {
       setError(err.message);
+      console.log("Login failed!", err.message);
+
       showToast(err.message, "error");
     }
   };
@@ -126,7 +128,7 @@ const EmployeeLogin = () => {
           </CCol>
         </CRow>
       </CContainer>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 };

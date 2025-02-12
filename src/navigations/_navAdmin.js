@@ -88,7 +88,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'CustomerRequest',
-        to: '/admin/Registered Plans',
+        to: '/admin/CustomerRequest',
       },
       {
         component: CNavItem,

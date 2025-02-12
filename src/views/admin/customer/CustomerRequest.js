@@ -18,6 +18,22 @@ const CustomerRequest = () => {
   const dispatch = useDispatch()
   const customers = useSelector((state) => state.cusRequests.items)
 
+  const [showAssignModal, setShowAssignModal] = useState(false)
+  const [selectedRequestId, setSelectedRequestId] = useState(null)
+  
+  const handleOpenAssignModal = (requestId) => {
+    setSelectedRequestId(requestId)
+    setShowAssignModal(true)
+  }
+  const handleChangeStatus = async (requestId, isResponse) => {
+    if (!isResponse) {
+      handleOpenAssignModal(requestId)
+    } else {
+      await dispatch(changeStatusCusRequest(requestId))
+      await dispatch(fetchCusRequests())
+    }
+  }
+
   // State cho bộ lọc
   const [depositFilter, setDepositFilter] = useState("all") // 'all', 'pending', 'paid'
   const [isResponseFilter, setIsResponseFilter] = useState("all") // 'all', 'responded', 'notResponded'
@@ -63,6 +79,11 @@ const CustomerRequest = () => {
     <div>
       <div className="d-flex justify-content-between">
         <h2>Registered Plan List</h2>
+        <AssignSurveyorModal
+          show={showAssignModal}
+          handleClose={() => setShowAssignModal(false)}
+          requestId={selectedRequestId}
+        />
         <div className="mb-3 d-flex gap-3">
           {/* Bộ lọc theo trạng thái đặt cọc */}
           <div>
