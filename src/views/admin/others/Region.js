@@ -15,7 +15,7 @@ import {
 const Region = () => {
   const dispatch = useDispatch()
   const regions = useSelector((state) => state.regions.items)
-  
+
   // State to store selected location for map
   const [selectedLocation, setSelectedLocation] = useState(null)
 
@@ -35,36 +35,42 @@ const Region = () => {
         <BtnModal name="Add New Region" iform="0" style="primary" />
       </div>
       <div className="row">
-        <div className="col-lg-6">
+        <div className="col-lg-12">
           <table className="table table-hover table-border">
             <thead>
               <tr>
                 {/* <th>Region Id</th> */}
-                <th>Region Code</th>
-                <th>Region Name</th>
-                <th>Retails</th>
-                <th>Vendor</th>
+                <th>
+                  <b>Region Code</b>
+                </th>
+                <th> <b>Region Name</b></th>
+                {/* <th>Retails</th>
+                <th>Vendor</th> */}
               </tr>
             </thead>
             <tbody>
-              {regions.length > 0 ? regions.map((item) => (
-                <tr key={item.regionId} onClick={() => handleRegionClick(21.0285, 105.8542)}>
-                {/* <tr key={item.regionId} onClick={() => handleRegionClick(item.latitude, item.longitude)}> */}
-                  {/* <td>{item.regionId}</td> */}
-                  <td>{item.regionCode}</td>
-                  <td>{item.regionName}</td>
-                  <td>
+              {regions.length > 0 ? (
+                regions.map((item) => (
+                  <tr key={item.regionId} onClick={() => handleRegionClick(21.0285, 105.8542)}>
+                    {/* <tr key={item.regionId} onClick={() => handleRegionClick(item.latitude, item.longitude)}> */}
+                    {/* <td>{item.regionId}</td> */}
+                    <td>{item.regionCode}</td>
+                    <td>{item.regionName}</td>
+                    {/* <td>
                     <button className='btn btn-outline-info'>View</button>
                   </td>
                   <td>
                     <button className='btn btn-outline-info'>View</button>
-                  </td>
-                </tr>
-              )) : <></>}
+                  </td> */}
+                  </tr>
+                ))
+              ) : (
+                <></>
+              )}
             </tbody>
           </table>
         </div>
-        <div className="col-lg-6">
+        {/* <div className="col-lg-6">
           {selectedLocation ? (
             <iframe
               title="Google Map"
@@ -77,7 +83,7 @@ const Region = () => {
           ) : (
             <p>Click a region to view on the map</p>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   )

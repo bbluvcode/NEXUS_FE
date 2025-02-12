@@ -94,11 +94,11 @@ const ClientHeader = () => {
                       Services
                     </a>
                   </li>
-                  <li className="scroll-to-section">
+                  {/* <li className="scroll-to-section">
                     <a onClick={() => navigate('/equipment')} className={isActive('/equipment')}>
                       Equipment
                     </a>
-                  </li>
+                  </li> */}
                   <li className="scroll-to-section">
                     <a onClick={() => navigate('/news')} className={isActive('/news')}>
                       News
@@ -111,7 +111,7 @@ const ClientHeader = () => {
                   </li>
                   <li className="scroll-to-section">
                     <a onClick={() => navigate('/support')} className={isActive('/support')}>
-                      Support
+                      Contact
                     </a>
                   </li>
                   {customer && customer.email ? (

@@ -21,12 +21,14 @@ export const fetchSuppportRequests = createAsyncThunk(
 export const createSuppportRequest = createAsyncThunk(
   'SuppportRequests/createSuppportRequest',
   async (supReq) => {
+    console.log('🚀 ~ supReq:', supReq)
     try {
-     const formData = new FormData()
+      const formData = new FormData()
       formData.append('title', supReq.title)
       formData.append('detailContent', supReq.detailContent)
       formData.append('isResolved', false)
       formData.append('email', supReq.email)
+      formData.append('customerName', supReq.customerName)
       const response = await axios.post(apiCustomer + 'create-support-request', formData)
       console.log('response: ', response)
       bootstrap.Modal.getInstance(document.getElementById('myModal')).hide()
@@ -48,7 +50,7 @@ export const changeStatusSupportRequest = createAsyncThunk(
       formData.append('empIdResolver', empIdResolver)
       const endpoint = `${apiCustomer}resolve-support-request/${supId}`
       const response = await axios.put(endpoint, formData)
-      // const response = await axios.put(endpoint, empIdResolver);
+      console.log("🚀 ~ formData:", formData)
       return response.data.data
     } catch (error) {
       console.error('🚀 ~ Error changing support request status:', error)
@@ -77,6 +79,7 @@ const supportRequestSlice = createSlice({
       dateOfBirth: '',
       address: '',
       phoneNumber: '',
+      customerName: '',
     },
     status: 'idle',
     error: null,
@@ -84,7 +87,6 @@ const supportRequestSlice = createSlice({
   reducers: {
     //su ly dong bo
     handleSetSuppportRequest: (state, action) => {
-      console.log('action: ', action)
       state.supportRequest = action.payload
     },
   },

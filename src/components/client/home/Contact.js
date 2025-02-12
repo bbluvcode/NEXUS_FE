@@ -156,12 +156,14 @@ const Contact = () => {
     detailContent: '',
     dateResolved: null,
     email: '',
+    customerName: '',
   })
 
   const schema = yup.object().shape({
     title: yup.string().min(3).max(50).required('Title is required'),
     detailContent: yup.string().min(5).required('Detail Content is required'),
     email: yup.string().email().required('Email is required'),
+    customerName: yup.string().min(3).max(50).required('Email is required'),
   })
 
   const {
@@ -183,16 +185,17 @@ const Contact = () => {
   }
 
   const onSubmit = async () => {
-    const action = await dispatch(createSuppportRequest(supportRequest)); // Gửi yêu cầu
+    const action = await dispatch(createSuppportRequest(supportRequest)) // Gửi yêu cầu
     if (createSuppportRequest.fulfilled.match(action)) {
-      console.log("Gửi thành công");
-      
+      console.log('Gửi thành công')
+
       // Clear input fields
       setFormData({
         title: '',
         detailContent: '',
         email: '',
-      });
+        customerName: '',
+      })
 
       Swal.fire({
         title: 'Request Submitted!',
@@ -200,18 +203,18 @@ const Contact = () => {
         icon: 'success',
         confirmButtonText: 'OK',
         draggable: true,
-      });
+      })
     } else if (createSuppportRequest.rejected.match(action)) {
-      console.error("Gửi thất bại:", action.error.message);
+      console.error('Gửi thất bại:', action.error.message)
 
       Swal.fire({
         title: 'Submission Failed',
         text: action.error.message || 'Something went wrong. Please try again later.',
         icon: 'error',
         confirmButtonText: 'OK',
-      });
+      })
     }
-  };
+  }
 
   return (
     <StyledContact>
@@ -271,8 +274,8 @@ const Contact = () => {
                   <div className="col-md-6">
                     <input
                       type="text"
-                      {...register('name')}
-                      name="name"
+                      {...register('customerName')}
+                      name="customerName"
                       className="form-control"
                       placeholder="Your Name"
                       required
