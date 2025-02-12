@@ -14,6 +14,40 @@ const UpdateSurveyModal = ({ show, handleClose, orderId, onSurveyUpdate }) => {
   const [cancellationReason, setCancellationReason] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [equipments, setEquipments] = useState([]);
+  const [customerInfo, setCustomerInfo] = useState(null);
+
+  useEffect(() => {
+    if (show) {
+      const fetchServiceOrderDetails = async () => {
+        try {
+          const response = await axios.get(`http://localhost:5185/api/ServiceOrder/details/${orderId}`);
+          if (response.status === 200) {
+            setCustomerInfo(response.data.customer);
+          }
+        } catch (error) {
+          setError('Failed to fetch customer details');
+        }
+      };
+      fetchServiceOrderDetails();
+    }
+  }, [show, orderId]);
+
+  useEffect(() => {
+    if (show) {
+      const fetchEquipments = async () => {
+        try {
+          const response = await axios.get('http://localhost:5185/api/ServiceOrder/get-equipment');
+          if (response.status === 200) {
+            setEquipments(response.data.data);
+          }
+        } catch (error) {
+          setError('Failed to fetch Equipments');
+        }
+      };
+      fetchEquipments();
+    }
+  }, [show]);
 
   useEffect(() => {
     if (show) {
@@ -46,10 +80,10 @@ const UpdateSurveyModal = ({ show, handleClose, orderId, onSurveyUpdate }) => {
         return false;
       }
       if (!equipmentId) {
-        toast.error('Please enter an equipment ID');
+        toast.error('Please select an equipment');
         return false;
       }
-      if (isNaN(numberOfConnections) || numberOfConnections <= 0) {
+      if (!numberOfConnections || isNaN(numberOfConnections) || numberOfConnections <= 0) {
         toast.error('Number of connections must be a valid number greater than 0');
         return false;
       }
@@ -92,6 +126,14 @@ const UpdateSurveyModal = ({ show, handleClose, orderId, onSurveyUpdate }) => {
       </Modal.Header>
       <Modal.Body>
         {error && <div className="alert alert-danger">{error}</div>}
+        {customerInfo && (
+          <div className="mb-3 p-3 border rounded bg-light">
+            <h5 className='text-center'>Customer Information</h5>
+            <p><strong>FullName:</strong> {customerInfo.fullName}</p>
+            <p><strong>PhoneNumber:</strong> {customerInfo.phoneNumber}</p>
+            <p><strong>InstallationAddress:</strong> {customerInfo.installationAddress}</p>
+          </div>
+        )}
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formSurveyStatus" className='mb-2'>
             <Form.Label>Survey Status</Form.Label>
@@ -149,8 +191,15 @@ const UpdateSurveyModal = ({ show, handleClose, orderId, onSurveyUpdate }) => {
                 </Form.Control>
               </Form.Group>
               <Form.Group controlId="formEquipmentId">
-                <Form.Label>Equipment ID</Form.Label>
-                <Form.Control type="text" value={equipmentId} onChange={(e) => setEquipmentId(e.target.value)} />
+                <Form.Label>Equipment</Form.Label>
+                <Form.Control as="select" value={equipmentId} onChange={(e) => setEquipmentId(e.target.value)}>
+                  <option value="">Select Equipment</option>
+                  {equipments.map((equipment) => (
+                    <option key={equipment.equipmentId} value={equipment.equipmentId}>
+                      {equipment.equipmentName}
+                    </option>
+                  ))}
+                </Form.Control>
               </Form.Group>
               <Form.Group controlId="formNumberOfConnections">
                 <Form.Label>Number of Connections</Form.Label>
@@ -158,7 +207,6 @@ const UpdateSurveyModal = ({ show, handleClose, orderId, onSurveyUpdate }) => {
               </Form.Group>
             </>
           )}
-
           <Button variant="primary" type="submit" disabled={loading} className='mt-2'>
             {loading ? 'Updating...' : 'Update'}
           </Button>

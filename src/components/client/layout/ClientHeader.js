@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { cilEnvelopeLetter, cilPhone, cilStar, cilUserPlus, cilEnvelopeOpen, cilUser, cilBasket, cilCart, cilHttps, cilPenNib, cilNewspaper, cilPaperPlane } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import React from 'react';
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { CDropdown, CDropdownToggle, CDropdownMenu, CDropdownHeader, CDropdownItem, CDropdownDivider, CBadge, CAvatar } from '@coreui/react';
@@ -19,9 +19,15 @@ const ClientHeader = () => {
   const location = useLocation();
   const { customer, logoutCustomer } = useAuth();
 
+  useEffect(() => {
+    if (!customer) {
+      navigate('/') 
+    }
+  }, [customer])
+
   const handleLogout = () => {
     logoutCustomer();
-    navigate('/'); // Redirect after logout
+    navigate('/'); 
   };
 
   const isActive = (path) => (location.pathname === path ? 'active' : '');
@@ -108,7 +114,7 @@ const ClientHeader = () => {
                       Support
                     </a>
                   </li>
-                  {customer ? (
+                  {customer && customer.email ? (
                     <div className="scroll-to-section">
                       <CDropdown variant="nav-item">
                         <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>

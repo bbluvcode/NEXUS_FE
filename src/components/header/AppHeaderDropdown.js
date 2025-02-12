@@ -32,6 +32,17 @@ const AppHeaderDropdown = () => {
     navigate("/employeeLogin"); 
   };
 
+  const roleNames = [
+    "Admin",
+    "ManagerShop",
+    "Accountant",
+    "ITSupport",
+    "Technical",
+    "Surveyor",
+    "CustomerSupport",
+    "SaleShop"
+  ];
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
@@ -40,23 +51,20 @@ const AppHeaderDropdown = () => {
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Working</CDropdownHeader>
         <CDropdownItem href="#">
-          <CIcon icon={cilEnvelopeOpen} className="me-2" />
-          Messages
-          <CBadge color="success" className="ms-2">
-            42
-          </CBadge>
-        </CDropdownItem>
-        <CDropdownItem href="#">
           <CIcon icon={cilTask} className="me-2" />
           Tasks
           <CBadge color="danger" className="ms-2">
-            42
+            0
           </CBadge>
         </CDropdownItem>
         <CDropdownHeader className="bg-body-secondary fw-semibold my-2">Account</CDropdownHeader>
         <CDropdownItem href="#">
           <CIcon icon={cilUser} className="me-2" />
-          {employee?.email || 'Profile'}
+          {employee?.email}
+        </CDropdownItem>
+        <CDropdownItem href="#">
+          <CIcon icon={cilUser} className="me-2" />
+          {employee?.role ? roleNames[employee.role - 1] : "No Role"}
         </CDropdownItem>
         <CDropdownItem href="#">
           <CIcon icon={cilUser} className="me-2" />

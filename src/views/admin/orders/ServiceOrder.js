@@ -103,26 +103,41 @@ const ServiceOrder = () => {
   };
 
   const handleTechnicianAssigned = (orderId, newStatus, installationId) => {
-    fetchServiceOrders();
-  };
-
-  const handleShowCompleteInstallationModal = (installationOrderId) => {
-    setSelectedInstallationId(installationOrderId);
-    setShowCompleteModal(true);
-  };
-
-  const handleCompleteInstallation = (installationId) => {
     setServiceOrders((prevOrders) =>
       prevOrders.map((order) =>
-        order.installationOrderId === installationId ? { ...order, surveyStatus: "Installation Completed" } : order
+        order.orderId === orderId ? { ...order, surveyStatus: newStatus, installationOrderId: installationId } : order
       )
     );
     setFilteredOrders((prevOrders) =>
       prevOrders.map((order) =>
-        order.installationOrderId === installationId ? { ...order, surveyStatus: "Installation Completed" } : order
+        order.orderId === orderId ? { ...order, surveyStatus: newStatus, installationOrderId: installationId } : order
       )
     );
   };
+
+  const handleShowCompleteInstallationModal = (installationOrderId, orderId) => {
+    setSelectedInstallationId(installationOrderId);
+    setSelectedOrderId(orderId);
+    setShowCompleteModal(true);
+  };
+
+  const handleCompleteInstallation = (orderId, installationId) => {
+    setServiceOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.orderId === orderId
+          ? { ...order, surveyStatus: "Installation Completed" }
+          : order
+      )
+    );
+    setFilteredOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.orderId === orderId
+          ? { ...order, surveyStatus: "Installation Completed" }
+          : order
+      )
+    );
+  };
+
 
   const handleShowActivateModal = (orderId) => {
     setSelectedOrderId(orderId);
@@ -209,7 +224,7 @@ const ServiceOrder = () => {
         </select>
       </div>
       <div className="row">
-        <table className="table table-hover text-center align-middle">
+        <table className="table table-hover table-striped table-bordered text-center align-middle">
           <thead>
             <tr>
               <th>Order ID</th>
@@ -248,7 +263,7 @@ const ServiceOrder = () => {
                     </button>
                     <button
                       className="btn btn-primary me-2"
-                      onClick={() => handleShowCompleteInstallationModal(order.installationOrderId)}
+                      onClick={() => handleShowCompleteInstallationModal(order.installationOrderId, order.orderId)}
                       disabled={order.surveyStatus === "Cancelled" || order.surveyStatus === "Surveyor Assigned" || order.surveyStatus === "Installation" || order.surveyStatus === "Installation Completed" || order.surveyStatus === "Activated Connection"}
                     >
                       Installated
@@ -287,6 +302,7 @@ const ServiceOrder = () => {
         <CompleteInstallationModal
           show={showCompleteModal}
           handleClose={() => setShowCompleteModal(false)}
+          orderId={selectedOrderId}
           installationId={selectedInstallationId}
           onComplete={handleCompleteInstallation}
         />

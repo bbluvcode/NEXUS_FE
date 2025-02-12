@@ -26,7 +26,7 @@ const StockList = () => {
         <table className="table table-hover">
           <thead>
             <tr>
-              <th>Id</th>
+              {/* <th>Id</th> */}
               <th>Stock Name</th>
               <th>Address</th>
               <th>Email</th>
@@ -40,13 +40,13 @@ const StockList = () => {
             {stocks.length > 0 ? (
               stocks.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.stockId}</td>
+                  {/* <td>{item.stockId}</td> */}
                   <td>{item.stockName}</td>
                   <td>{item.address}</td>
                   <td>{item.email}</td>
                   <td>{item.phone}</td>
                   <td>{item.fax}</td>
-                  <td>{item.region?.name || 'N/A'}</td>
+                  <td>{item.regionId }</td>
                   <td onClick={() => handleEditStock(item)}>
                     {/* <BtnModal
                       name={<i className="fa fa-edit"></i>}

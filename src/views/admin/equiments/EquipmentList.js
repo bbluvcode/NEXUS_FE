@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchEquipments, handleSetEquipment } from '../../../redux/equipment/equipmentSlice'
+import { fetchEquipments } from '../../../redux/equipment/equipmentSlice'
 import BtnModal from '../../../components/button/BtnModal'
 
 const EquipmentList = () => {
@@ -9,17 +9,15 @@ const EquipmentList = () => {
   const status = useSelector((state) => state.equipments.status)
   const error = useSelector((state) => state.equipments.error)
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchEquipments())
     }
   }, [dispatch, status])
 
-  const handleEditEquipment = (equipment) => {
-    dispatch(handleSetEquipment(equipment))
-  }
+  useEffect(() => {
+    console.log(equipments)
+  }, [equipments])
 
   return (
     <div>
@@ -31,7 +29,6 @@ const EquipmentList = () => {
         <table className="table table-bordered table-hover">
           <thead className="thead-dark">
             <tr>
-              {/* <th>ID</th> */}
               <th>Name</th>
               <th>Price</th>
               <th>Stock</th>
@@ -40,7 +37,8 @@ const EquipmentList = () => {
               <th>Vendor</th>
               <th>Status</th>
               <th>Discount</th>
-              {/* <th>Actions</th> */}
+              <th>Stock Location</th>
+              <th>Image</th>
             </tr>
           </thead>
           <tbody>
@@ -58,34 +56,34 @@ const EquipmentList = () => {
                 </td>
               </tr>
             )}
-            {status === 'succeeded' && equipments?.length > 0
-              ? equipments.map((item) => (
-                  <tr key={item.equipmentId}>
-                    {/* <td>{item.equipmentId}</td> */}
-                    <td>{item.equipmentName}</td>
-                    <td>${item.price.toFixed(2)}</td>
-                    <td>{item.stockQuantity}</td>
-                    <td>{item.description || 'N/A'}</td>
-                    <td>{item.equipmentType?.typeName || 'Unknown'}</td>
-                    <td>{item.vendor?.vendorName || 'Unknown'}</td>
-                    <td>{item.status ? 'Active' : 'Inactive'}</td>
-                    <td>{item.discount?.discountName || 'No Discount'}</td>
-                    {/* <td onClick={() => handleEditEquipment(item)}>
-                      <BtnModal
-                        name={<i className="fa fa-edit"></i>}
-                        iform="EquipmentEditForm"
-                        style="warning"
-                      />
-                    </td> */}
-                  </tr>
-                ))
-              : status === 'succeeded' && (
-                  <tr>
-                    <td colSpan="10" style={{ textAlign: 'center', color: 'red' }}>
-                      No data available
-                    </td>
-                  </tr>
-                )}
+            {status === 'succeeded' && equipments?.length > 0 ? (
+              equipments.map((item) => (
+                <tr key={item.equipmentId}>
+                  <td>{item.equipmentName}</td>
+                  <td>${item.price.toFixed(2)}</td>
+                  <td>{item.stockQuantity}</td>
+                  <td>{item.description || 'N/A'}</td>
+                  <td>{item.equipmentType?.typeName || 'Unknown'}</td>
+                  <td>{item.vendor?.vendorName || 'Unknown'}</td>
+                  <td>{item.status ? 'Active' : 'Inactive'}</td>
+                  <td>{item.discount?.discountName || 'No Discount'}</td>
+                  <td>{item.stock?.location || 'Unknown'}</td>
+                  <td>
+                    {item.image ? (
+                      <img src={item.image} alt={item.equipmentName} width="50" height="50" />
+                    ) : (
+                      'No Image'
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="10" style={{ textAlign: 'center', color: 'red' }}>
+                  No data available
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

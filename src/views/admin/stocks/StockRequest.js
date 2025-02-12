@@ -51,7 +51,7 @@ const StockRequestList = () => {
               <th>Create Date</th>
               <th>Total Number</th>
               <th>Details</th>
-              <th>Actions</th>
+              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
@@ -72,20 +72,20 @@ const StockRequestList = () => {
             )}
 
             {status === 'succeeded' && stockRequests.length > 0 ? (
-              stockRequests.map((item) => (
-                <tr key={item.inStockRequestId}>
-                  <td>{item.inStockRequestId}</td>
+              stockRequests.map((items) => (
+                <tr key={items.inStockRequestId}>
+                  <td>{items.inStockRequestId}</td>
                   <td>
-                    {item.employee
-                      ? `${item.employee.firstName} ${item.employee.lastName}`
-                      : `ID: ${item.employeeId}`}
+                    {items.employee
+                      ? `${items.employee.firstName} ${items.employee.lastName}`
+                      : `ID: ${items.employeeId}`}
                   </td>
-                  <td>{new Date(item.createDate).toLocaleDateString()}</td>
-                  <td>{item.totalNumber}</td>
+                  <td>{new Date(items.createDate).toLocaleDateString()}</td>
+                  <td>{items.totalNumber}</td>
                   <td>
-                    {item.inStockRequestDetails?.length > 0 ? (
+                    {items.inStockRequestDetails?.length > 0 ? (
                       <ul>
-                        {item.inStockRequestDetails.map((detail) => (
+                        {items.inStockRequestDetails.map((detail) => (
                           <li key={detail.inStockRequestDetailId}>
                             {detail.equipment
                               ? detail.equipment.equipmentName
@@ -99,12 +99,12 @@ const StockRequestList = () => {
                     )}
                   </td>
                   <td>
-                    <BtnModal
+                    {/* <BtnModal
                       name={<i className="fa fa-edit"></i>}
                       iform="StockRequestEditForm"
                       style="warning"
-                      onClick={() => toggleModal(item)}
-                    />
+                      onClick={() => toggleModal(items)}
+                    /> */}
                   </td>
                 </tr>
               ))

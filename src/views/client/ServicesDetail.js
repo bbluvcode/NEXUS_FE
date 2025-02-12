@@ -34,7 +34,7 @@ const PlanDetail = () => {
 
         getAllPlanFees()
             .then((data) => {
-                console.log('Tất cả kế hoạch phí:', data);
+                // console.log('Tất cả kế hoạch phí:', data);
                 setAllPlanFees(data);
             })
             .catch((error) => {
